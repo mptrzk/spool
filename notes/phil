@@ -1,0 +1,26 @@
+
+an idiosyncratic software... stack? family? universe?
+
+the aesthetics
+
+	VM - tephra
+		what?
+			not a nock like vm
+			a vm that resembles a processor
+			why?
+				to understand compilers
+				so it can be kinda fast
+		maybe wasm? it is s-expy already?
+			meh, it has types and functions
+			I don't like going down with abstractions
+	kernel
+	shell
+	TUI lib
+	text editor
+		why?
+			both vim and emacs are bloated
+	debugger
+
+reinventing the wheel
+
+expression expanding lisp debugger

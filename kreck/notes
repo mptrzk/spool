@@ -1,34 +1,3 @@
-meta
-	a repo with pock, kreck and other stuff in it
-	programming language design stuff
-	
-
-c++ and doing it wrong
-
-the spool or whatever
-	what?
-		a softwars stack
-	kernel?
-		naah
-		sounds like not fun at all	
-	VM
-		what?
-			not a nock like vm
-			a vm that resembles a processor
-			why?
-				to understand compilers
-				so it can be kinda fast
-		maybe wasm? it is s-expy already?
-			meh, it has types and functions
-			I don't like going down with abstractions
-	shell
-	TUI lib
-	text editor
-		why?
-			both vim and emacs are bloated
-	debugger
-reinventing the wheel
-expression expanding lisp debugger
 
 can it beat forth at ease of primitive implementation
 
