@@ -1,26 +1,84 @@
 
-an idiosyncratic software... stack? family? universe?
+an idiosyncratic programming... environment?
+	project?
+		too narrow meaning?
+	stack?
+	toolchain?
+		pock and kreck are different
+	system?
+	family? 
+	infrastructure?
+
+it's not meant to be closed
+	i don't want to write an epub reader
+
+I want to write unrelated stuff in it some day
+
+idionsyncracy
+	idiosyncratic doesn't mean close-minded
+		openness
+	
+
+the big why
 
 the aesthetics
 
-	VM - tephra
-		what?
-			not a nock like vm
-			a vm that resembles a processor
-			why?
-				to understand compilers
-				so it can be kinda fast
-		maybe wasm? it is s-expy already?
-			meh, it has types and functions
-			I don't like going down with abstractions
-	kernel
-	shell
-	TUI lib
-	text editor
+
+theory as a scaffolding
+	messy stuff
+
+overthinking
+	what I did with refcounts
+
+reasons, justifications and rationality
+	bloat
+
+the natural language is for talking to myself and other
+people about this whole weird thing
+
+stuff that's not really mathematics
+messy
+stuff that a human cant easily define well
+by philosophy I mean
+
+justification is secondary to vision
+
+if stuff violates the principles, the principles might be wrong too
+
+[move to some other file?]
+	index?
+	meta?
+pock
+	deeply understanding machine-independent semantics of programming
+	axiomatic
+kreck
+	not axiomatic
+	low floor, high ceiling
+VM - tephra
+	what?
+		not a nock like vm
+		a vm that resembles a processor
 		why?
-			both vim and emacs are bloated
-	debugger
+			to understand compilers
+			so it can be kinda fast
+	maybe wasm? it is s-expy already?
+		meh, it has types and functions
+		I don't like going down with abstractions
+kernel
+shell
+TUI lib
+text editor
+	why?
+		vim, emacs and vscode are bloated
+	cool stuff!
+	files & trees
+debugger
 
 reinventing the wheel
 
 expression expanding lisp debugger
+
+is thinking about philosophy useful?
+
+
+

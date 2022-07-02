@@ -1,17 +1,11 @@
+error archtiecture
 
 can it beat forth at ease of primitive implementation
 
-kreck is low floor, high ceiling
-
-is thinking about philosophy useful?
-
-lispy ats?
-
-isa
-	registers
-		pc, flags, general purpose
-
-is link register necessary?
+C-level DSL in kreck
+	
+writing kreck interperter in kreck should be easier than in C
+	macros
 
 kreck the wackiest
 	what?
@@ -53,9 +47,14 @@ nilfill
 tree_size
 
 
+[move to C style file?]
 secondary return values passed as pointers with names ending in "_ret"
-	I don't like structs as return values, too much clutter
-	This way of doing things is ugly too, but oh well
+	yay
+		I don't like structs as return values, too much clutter
+		This way of doing things is ugly too, but oh well
+	nay
+		but it's confusing!
+
 
 operator functions take subj and arglist and return flag
 
@@ -140,3 +139,4 @@ wackier?
 	how?
 		always exec atoms without evaling args
 		evaling args must be compiled in the executed code
+

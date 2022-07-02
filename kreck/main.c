@@ -12,6 +12,11 @@ typedef struct Cell {
 
 typedef Cell* Root;
 
+typedef struct {
+	Root* root;
+	char* str;
+} Parse;
+
 int heap_cap;
 int rstack_cap;
 Cell* heap1;
@@ -122,28 +127,28 @@ Root* frame_return(Root* frame, Root* val) {
 }
 
 
-/*
-it looks terribly stateful
-I want it to not be stateful
-Root* parse_expr(char** strp);
-Root* parse_list(char** strp) {
+Parse make_parse(Root* root, char* str) {
+	Parse ret = {root, str};
+	return ret;
 }
 
-Root* parse_expr(char** strp) {
-	if (**strp == 0) {
-		printf(""
+Parse parse_expr(char* str);
+Parse parse_list(char* str) {
+	Root* frame = rstack_top;
+	if (!str[0]) {
+		printf("error - trying to parse empty expr");
+		exit(-1);
 	}
-	while (**strp <= ' ') (*strp)++;
+	if (str[0] <= ' ') return parse_list(str + 1);
+	if (str[0] == ')') return make_parse(atom(0), str + 1);
+	//frame_return for regularity?
+	Parse parse_car = parse_expr(str);
+	Parse parse_cdr = parse_list(parse_car.str);
+	Root* ret = cons(parse_car.root, parse_cdr.root);
+	return make_parse(frame_return(frame, ret), parse_cdr.str);
 }
-*/
 
-/*
-Root* parse_expr(char* str, char** str_ret);
-Root* parse_list(char* str, char** str_ret) {
-	
-}
-
-Root* parse_expr(char* str, char** str_ret) {
+Parse parse_expr(char* str) {
 	if (!str[0]) {
 		printf("error - trying to parse empty expr");
 		exit(-1);
@@ -152,19 +157,21 @@ Root* parse_expr(char* str, char** str_ret) {
 		printf("error - unexpected ')' in %s", str);
 		exit(-1);
 	}
-	if (str[0] <= ' ') return parse_expr(str + 1, str_ret);
+	if (str[0] <= ' ') return parse_expr(str + 1);
+	if (str[0] == '(') return parse_list(str + 1);
+	printf("error - trying to parse invalid atom %s, str");
+	exit(-1);
+	return make_parse(0, 0);
 }
 
-Root* read(char* str) {
-	char* str_left;
-	Root* ret =  parse_expr(str, &str_left);
-	if (str_left) {
-		printf("error - expression %s contains trailing chars: %s\n");
+Root* rread(char* str) {
+	Parse p = parse_expr(str);
+	if (p.str[0]) {
+		printf("error - expression %s contains trailing chars: %s\n",str, p.str);
 		exit(-1);
 	}
-	return ret;
+	return p.root;
 }
-*/
 
 int atomp(Cell* a) {
 	return a->cdr == atom_sen;
@@ -228,6 +235,7 @@ int main() {
 	tests();
 	init(100, 100);
 	writenl(cons(atom((uint64_t) main), cons(atom(0), atom(0))));
+	writenl(rread("((()) ())"));
 	deinit();
 }
 
