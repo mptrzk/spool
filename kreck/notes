@@ -1,0 +1,173 @@
+meta
+	a repo with pock, kreck and other stuff in it
+	programming language design stuff
+	
+
+c++ and doing it wrong
+
+the spool or whatever
+	what?
+		a softwars stack
+	kernel?
+		naah
+		sounds like not fun at all	
+	VM
+		what?
+			not a nock like vm
+			a vm that resembles a processor
+			why?
+				to understand compilers
+				so it can be kinda fast
+		maybe wasm? it is s-expy already?
+			meh, it has types and functions
+			I don't like going down with abstractions
+	shell
+	TUI lib
+	text editor
+		why?
+			both vim and emacs are bloated
+	debugger
+reinventing the wheel
+expression expanding lisp debugger
+
+can it beat forth at ease of primitive implementation
+
+kreck is low floor, high ceiling
+
+is thinking about philosophy useful?
+
+lispy ats?
+
+isa
+	registers
+		pc, flags, general purpose
+
+is link register necessary?
+
+kreck the wackiest
+	what?
+		if op is an atom, external fexpr call
+		if op is a list, kreck function application
+	why not function call atoms?
+		The interpreter would be more complicated
+		Fexprs generalize nicely
+		Eval the fexpr's arguments and you get a function call
+		Eval the result and you get a dynamic macro
+	why not fexpr call closures then?	
+		then it doesn't work as lisp and you'd have to put evals everywhere
+		
+atoms by pointer comparison?
+	yay
+		saves heap space
+	nay
+		possibly slower
+			rly?
+			it's one more reference to a cell, which may not be cached
+				I expect them to be cached, they are used frequently
+					for example when iterating over a list
+				On archs with a lot of registers such as RISC-V I would
+					even expect them to permanently sit in 2 registers
+						Would they?
+						are compilers smart enough?
+						What about arm?
+
+testing the gc
+	examples should include
+		trees where many pointers have the same value
+		trees containing cells from different frames
+	after the cleanup
+		all cell pointed to by roots are in the current heap
+		the trees are correct
+		tree sizes are the same
+			
+nilfill
+tree_size
+
+
+secondary return values passed as pointers with names ending in "_ret"
+	I don't like structs as return values, too much clutter
+	This way of doing things is ugly too, but oh well
+
+operator functions take subj and arglist and return flag
+
+why is refcounting slower than snc?
+	deallocation with refcounts needs to go through garbage
+
+snc
+	root_push(cell)
+	root_pop(new_top)
+returning?
+roots are double pointers to cells
+check implementations!
+	something imperative
+	lisp
+	Haskell
+just pop?
+	cons automatically pushes a root
+	but then functions manipulate roots not cells
+root stack/link in asm
+
+why bother with it in C/ASM?
+just write an ABC collector and then write SnC in kreck
+
+snc, but only roots in execution stack
+
+"Root" can be a struct and store stuff like generation
+	but what if 2 roots with different generations point to the same cell?
+
+consing non-roots?
+	atom
+	just cons?
+	cell_new?
+
+
+qemu arm
+
+
+static locals in asm
+	addresses relative to instruction pointer
+
+register machines aren't scary! you can just compile stupid code
+that doesn't move stuff between registers
+
+==================================================
+OLD
+
+
+atoms are just address sized numbers
+builtins and foreign functions are just atoms
+kreck functions are just lists
+pock + ldr, str, exe
+
+
+
+should arithmetic operations be inner or outer?
+what about floats?
+
+should calling outer stuff be explicit?
+	yay
+		it's dangerous
+	nay
+		it's done often
+
+interning
+
+design principles
+	pock but interacting with the machine
+
+an easy to write natively, deep metaprogramming language
+
+difference from pock
+	metacircular evaluator with atomic ops?
+
+write pock first, then do kreck
+
+lispier?
+	executing non-reserved atom causes lookup in the list stored at (car subject)
+	yay
+	nay
+
+wackier?
+	how?
+		always exec atoms without evaling args
+		evaling args must be compiled in the executed code

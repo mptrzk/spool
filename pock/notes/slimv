@@ -1,0 +1,46 @@
+CLEANING ENV
+
+add pock filetype
+
+why modifying [sdfdibjg] in ftplugins/[dggdfg] doesn't do anything?
+requote in swank.py
+making/hacking slime to print request info
+
+find out how slimv handles different filetypes
+
+does slime handle indentation?
+	implausible
+
+slimv.vim
+	SlimvEvalDefun
+		SlimvEvalTestDefun
+			SlimvEvalSelection
+	SlimvEvalExp
+		SlimvEvalTestExp
+			SlimvEvalSelection
+	SlimvEvalSend
+	SlimvSend
+swank.py
+	swank_input
+
+function! SlimvEvalTestExp( testform )
+    let outreg = v:register
+    let oldpos = winsaveview()
+    if !SlimvSelectForm( 1 )
+        return
+    endif
+    call SlimvFindPackage()
+    call winrestview( oldpos ) 
+    call SlimvEvalSelection( outreg, a:testform )
+endfunction
+
+function! SlimvEvalTestDefun( testform )
+    let outreg = v:register
+    let oldpos = winsaveview()
+    if !SlimvSelectDefun()
+        return
+    endif
+    call SlimvFindPackage()
+    call winrestview( oldpos ) 
+    call SlimvEvalSelection( outreg, a:testform )
+endfunction

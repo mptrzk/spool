@@ -1,0 +1,5 @@
+*.fasl
+obj
+bin
+deps
+*.out

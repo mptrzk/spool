@@ -1,0 +1,910 @@
+
+multi line list display style
+	check hoon
+
+encoding ops
+	numbers?
+
+
+I bet forth-like formalism can be done without using interpreter's stack
+	this would be helpful with TCO
+	but isn't #cons the only op requiring non-tail recursion?
+	hey! listen to uncle knuth!
+
+metalanguage and macro names
+	internal vs external	
+	the convention with # seems nice for external macros
+
+hashes and auras
+
+repl in c?
+	buuut I don't want to
+		buut you'll do it anyway
+			buut, i want it minimal, with no dynamic metalanguage
+
+external macro system
+	#token denotes an external macro
+
+code aura hack [???]
+
+should "!" be a SWC? [single char word?]
+	no, because internal macro syntax should be handled internally
+
+macros defined in terms of previous macros
+
+memory corruption tests
+string_to_cell
+	padding
+
+macros before string stuff
+
+code as proper lists?
+	pros:
+		more regularity
+	cons:
+		more brackets
+
+
+
+calling functions requires splicing [rly?]
+
+I bet that magical macro opcode from nock exploits the autocons
+	does it?
+
+subject for macro expansion
+gensym
+proper lisp from ground up is consistent with regularity of higher level code
+
+tape based tokenizer
+	how I came up with it?
+	why is it good?
+
+
+the new deal [the 2/3 rewrite]
+	cons
+	eqv
+	modules?
+		not preemptively?
+		not at all?
+	testing
+		module friendly?
+			just a header file with _tests at the end included at the end of each module
+
+are there improper lists in proper pock?
+	after auras and stuff they are possible
+	but the C interpreter is just a bootloader
+	I can implement them internally if I need them
+	I don't see any use case for them in order to do the above
+
+
+moronic native code
+	but I don't like x86!!!
+	maybe emulate a RISC using some x86 macros as opcodes?
+		that's just silly
+
+flash?
+	can it be done safely?
+		what is safe?
+		malware?
+		my stupidity?
+		booting up other machine?
+		io as just another device on a network?
+			running in circles?
+	hdl
+	nohdl
+		native/vm
+
+pots
+base arch with pots?
+	how to make it reliable?
+	do I need a smart interpreter?
+
+voodoo code?
+	from inside, just code with non-executable hints
+	optimization agnostic
+		unless info about optimization is provided as data
+			why?
+				heuristics only?
+		why?
+			pock is a pure function
+
+voodoo
+	takes code, arch metadata and optimizer
+	generates optimized code
+	proves it's equivalence to the original code
+	returns optimized code
+
+optimizing U32
+
+laziness
+
+veryfying equivalence of undecidable programs
+	pock interpreter
+	that paper
+	formalize that problem
+
+
+error handling
+	-1
+		aye:
+			simple
+		nay:
+			ill defined
+				TODO: elaborate
+	implicit invalid values
+		aye:
+			simplish
+			for some reason satisfying
+		nay:
+			ugly
+			hard to read
+			easy to fuck up
+			must be changed often
+	special leaf cell
+		aye:
+			it seems nice to separate global nullptr from the nullptr of our system
+			well defined
+			simple
+			more meaningful code
+		nay:
+			seemed ugly to alloc a dummy pointer
+				but that's the point
+
+special error cell?
+	an union of cell and error struct
+	would make leaf cell obsolete
+
+is error cell useful only for out-of-mem?
+	maybe pot errors?
+	even if, it still allows thorough testing
+
+error tape?
+
+2 arg pock?
+2 arg eval?
+change return type of get_free... to cell and return error_cell on error?
+	nah, superfluous pointer arithmetic
+
+should last alloc be collected?
+	yay
+	nay
+
+is it important if last alloc is collected?
+	yay
+		makes some tests slightly longer
+	nay
+		only useful in the case above
+		why would you collect the cell that was just created?
+
+
+	
+stupid mistake - didn't add some source files to the git repo before branching out
+
+should cons inc-ref new cell by default?
+	if I cons something, why would I want it GC'd right away?
+		not right away but in the future
+
+pock and refcounts
+	only cons case affects refcounts	
+	pwn
+		(cons (cons ...) (cons ...))
+		(cons (cons ...) (cons ...)) rewrite?
+		case 1
+			2nd cons mutates the pock argument
+			3rd cons gives incorrect results
+		case 2
+			3rd cons mutates the result of the 2nd cons 
+			how can it happen without filling up all memory?
+				the expression which evals to the argument of
+		case 3?
+			can preemptive sweep sweep the return value?
+				[' [~ ~]]
+				should quote inc_ref before returning?
+					or just not dec_ref?
+						but the quote symbol should be deallocated
+			can non-preemptive sweep also break things sometimes?
+	i'll pwn it once I Implement pock
+
+how did I come up with possible bugs
+	asking questions:
+		Is there anything useful left dangling when stuff gets consed?
+		When does the memory get deallocated anyway?
+
+why cons inc_refing it's result before returning is dumb?
+
+preemptive sweep
+	good
+	bad
+		breaks quote???
+	good, but looks bad
+		reliably breaks quote???
+	bad, but looks good
+		garbage disappears quicker
+			why bad?
+				doesn't really matter
+					why?
+			au contraire!
+				collecting an n-deep tree with non-preemtpive sweep would require the alloc pointer
+				to loop around the memory n (or n-1?) times.
+				
+
+error value
+	yay
+		not only pock uses cons
+	nay
+		you can still just check if not nil after cons in those functions
+
+(over?)zealous code justification
+	prove that all functions work as intended
+		they don't corrupt stuff
+
+alloc is safe if the following is impossible:
+	seggies
+	mutating trees
+	cycles
+	
+empty cell flood test
+	incref tested cells
+	alloc as many empty cells as possible
+	check_soundness of tested cells	
+
+what would've happened if I implemented the definition table in the original code?
+
+reflection on dayvan
+	trivialities
+
+why even bother refactoring?
+
+how off topic should these notes get?
+	universal programming insight should be somewhere else
+	should I publish that repo?
+		why not? I'm not a genius or anything, but if it's good, somebody might find it useful.
+		If it's bad, somebody might point that out
+
+separate clean?
+
+root bit?
+
+pwning if?
+
+new (wrong) way of thinking about garbage:
+	why?
+		the interpreter can (obviously) refer to the cell
+	how?
+		grab & drop
+		every function
+			starts by grabbing its arguments [???]
+		  ends by dropping grabbed cells it won't return
+			does not the cell it will return
+	but
+		quote?
+		what's the reason for grabbing arguments?
+			the reason in old, broken system
+
+it should work even if C evaluated function argumemts concurrently
+
+terminology
+	grabbed - referenced by interpreter/function
+	attached - referenced by another cell
+
+maybe the caller should drop arguments after the called function returns?
+	it feels like it makes sense since the arguments are passed by reference
+
+	
+non-c way
+	lvalues should be dropped after the result is evaluated
+
+another way
+	a primary function is that which returns a thing which wasn't returned by functions called by it
+		the retured cell is grabbed if
+			it was created - cons
+			it was extracted - head, tail, quote, subj???
+	secondary functions
+		pock - returs stuff returned by subj, quote, head, tail, eval, cond
+		cond - returns stuff returned by pock
+		eval - ditto
+	local cells are dropped
+
+old system with new tweaks and no concurrency?
+	seems like a terrible idea
+
+the story 
+	should cons increment its result?
+		inconvenience of nested cons
+		it kinda felt wrong
+	dangling stuff
+		analysis
+	too much patching
+	how would I make it work concurrently?
+	stuff shouldn't dangle anyway
+	revelation
+	new (wrong) way
+	doing it right
+	why didn't I think about it this way from the beginning
+
+how 'bout tracing GC
+
+cons_drop - cons and drop the arguments
+	
+merge cons with get alloc pointer thingy?
+
+error value
+	union of cell pointer and error structure pointers
+		should it be named "Cell"?
+		error log
+			an array
+			a list
+
+just using malloc for cons cells
+	syscalls are sloooow
+		are they?
+		 measure it
+
+TCO
+
+debug mode
+	preprocessor conditionals
+
+fix that branch
+
+is this a diary or something?
+
+MCell - maybe Cell
+	cell or error log
+	
+
+Elog - error count and array of errors
+
+Error - code, argc, arg1, arg2, arg3
+	code - string constant
+
+get_free_idx -> get_free_cell
+
+table of constants
+	reader problem
+		numbers
+		ASCII
+
+a million year language
+a fun exercise at impractical strife for elegance
+getting something to work
+
+switch to a different language?
+
+marble time
+	formalism
+		finite number of switches
+		a hole
+		switch has either of two states at one step
+	problem with reseting stuff	
+		what about the turing machine?
+	total physical seralism
+	travel time abstraction
+	
+headerology
+	all declarations in a single header?
+		yay
+			simple
+			almost no overhead
+		nay
+			includes stuff you won't use
+	interfaces and all?
+		yay
+		nay
+
+stack trace
+	both gc tco off?
+
+
+notes
+	soft?
+	hard?
+	philosophy?
+
+plan
+	reread
+		think if it really makes sense,
+	error log
+	tests
+	cons
+	head & tail
+	eqv
+	display
+	read
+	lus
+	pock
+
+		
+rice's theorem
+
+instantiable environment
+	yay
+		can compare multiple runs
+			meh
+	nay
+		more complicated
+		need additional arg in many functions
+
+just an error cell
+declaring globals
+allocation callback
+
+testing doctrine
+	each test is independent
+		but...
+
+cells never negative?
+
+flush
+	memsize of cons
+
+fill
+	memsize sized list
+
+detach and error cell???
+
+errors that should be possible should be handled
+errors that should be impossible should crash
+
+traceback error
+
+out of bounds errors?
+	shouldn't really happen
+
+should I bother with detaching stuff in tests?
+	nay
+		it's not relevant
+		memory gets deallocated anyway
+
+error args
+
+should eqv consider error cells?
+	how about head and stuff?
+	eqv is different
+
+should eqv be the same as the internal one
+	yay
+		pretty
+	nay
+		one more insturction
+			so?
+			quote is also just for practicality's sake
+
+output buffer
+	yay
+		can test functions that write to output
+	nay
+		messy
+
+skip_term?
+
+simplifying the error thingy
+
+really stupid error
+	didn't check error log
+
+simplify check_write to just check write?
+	yay
+	nay
+		almost made an error with write_nl
+
+initializing defs?
+
+is cons_d in read safe with definitions?
+	no!
+	when the 
+
+should cons work as cons_d?
+	yay
+		I don't see a single place in my code where using cons instead of cons_d would make sense
+		Other than tests...
+	nay
+		counterintuitive
+how would a sane language solve this problem?
+	a macro which decreases refcount on locally referenced variables which weren't returned?
+	C++ just calls destructors of all non-returned objects which were constructed in given scope
+		really?
+
+should get_def attach the returned definition?
+	should all other primitive cell-returning funcitons do the same?
+
+is rust's ownership really that bad?
+
+reference counting GC is kinda lousy
+	especially for functional stuff
+	especially for my highly abstract tree thing
+but stop'n'copy requires a table of stuff not to throw away
+
+cons_d problem with defs would persist if it was still cons
+
+bw_ prefix
+	beginning with
+bw_keyword
+bw_keyword_body
+bw_number
+this sucks^^
+	ez pz moron on acid can do
+
+tests, number of cells, defs
+detaching error cell conditional
+
+TODO
+	unsuck predicates
+	test them
+		why bother?
+			test everything
+
+iden, tru
+
+inner and outer defs
+	primitives
+
+philosophy
+	pock	
+		the kind of simplicity
+			McCarthy's lisp
+				function definition, application
+				scopes
+			unlambda/SKI
+				the whole lazy evaluation schtick
+			lambda calculus language????
+			nock
+				numbers
+					why do I care?
+					bignums and stuff
+	interpreter
+	design priorities
+		secure
+			no undefined behavior
+			all errors meaningfully reported
+		neat
+			readable, intuitive code
+			DRY
+		small
+	vm
+	jets
+	prover
+	pots
+
+def_add errors
+
+error_cell -> prim.err
+problems with primitives
+	attaching
+		attach(foo.prim)
+
+any function test
+if args and result get detached, the memory should remain unchanged
+how?
+	count cells
+		yay
+			simple
+		nay
+			can't detect equal quantity of garbage scenarios
+	deallocate defs and check if empty
+		yay
+		nay
+	check if mems after defs is empty
+	implement memory instantiation and compare images
+		yay
+		nay
+			requires adding a lot of complexity
+
+dissect the bugs with lus
+	cons, cons_d
+	detaching the argument in a loop
+		faulty heuristic
+		functions
+
+primitive access
+
+"wrong" predicate?
+
+intrinsic tru?
+
+I don't like how that def number stuff is unsafe
+
+ops by number of args
+0
+	subj
+		should it be just null?
+			no, it would be ugly
+			but it doesn't really matter
+			it's not the same as int the old pock
+1
+	quot
+		my small confusion
+			in nock, quote quotes rest
+	head
+	tail
+2
+	cons
+	eval
+3
+	cond
+n
+	iden?
+		should it really be variadic?
+			yay
+				it's cool and intuitive
+			nay
+				it's longer
+
+aura language
+	aura
+		a list of functions
+	aura generics
+		list of auras
+			last one repeated?
+				yay
+					simple
+					verification of list length should be done explicitly
+						rly?
+				nay
+					might be undesired for lists longer than expected
+		
+detaching stuff in pock function
+	head_d & tail_d?
+		yay
+			shorter code
+			can't come up with good names for arglist tails
+		nay
+			a bit more confusing
+				I did bugs while confused by this kind of stuff
+			possibly slower?
+	htail, httail, htttail?
+		yay
+		nay
+	C semantics
+		yay
+			easy to write
+			fast
+		nay
+			ugly safety code?
+	
+
+philosophy
+	prefix
+		knowing context
+	infix
+		easier to read sometimes
+	postfix
+		reading in order of execution
+
+clarify attachment and detachment, look up
+
+attach when
+
+detach when
+
+
+head, tail need not attach
+	often it's redundant
+
+error cells should never be written to main array
+	that's impossible - they are pointers with unique value ya dingus
+		is that an effect of writing too much in GCd languages?
+
+should subj have an unambiguous symbol?
+	candidates - @#$^&_;|
+
+really, write tests first if you know what you wanna do
+
+why forgetting to attach subj generated garbage?
+	shouldn't it cause the cells to be freed in excess, not left as garbage?
+
+the code looks awful
+	problem
+		it should be way safer than the previous version but boy is it long and ugly
+		it doesn't even report on all relevant error
+		probably python implementation would be faster
+	solution
+		refactor
+			yay
+				obvious
+				may help much later with low level stuff
+			nay
+				boring
+		rewrite in python
+			yay
+				easy
+				probably still faster than c
+			nay
+				wouldn't learn much
+				python is a bit meh
+		rewrite in lisp
+			yay
+				aliens
+				lisps are good at making lisps
+					rly?
+				slimv is neat
+			nay
+				dynamic typing
+		rewrite in haskell
+			yay
+				strong typing
+				probably fast
+				will learn a lot
+			nay
+				haskell is hard
+
+read
+	SectorLisp
+	SectorForth
+	GC implementations
+
+I really should learn high-level error handling stuff
+
+ABC GC
+	can it do hashlife
+		don't copy stuff below A
+
+modified ABC GC
+	copy_or_link:
+		if child in B region:
+			copy the child
+			modify pointer to point to copied child
+			return address of the copied child
+		if child in C region:
+			return address of the child
+
+adding indent rules to slimv
+
+lisp voodoo
+	integrate (the boring stuff) more with lisp:
+		use default reader and writer
+
+haskell
+	I really want to write the code with strong typing
+
+building type systems
+
+& in lisp
+
+reverse engineering challenge
+	modify slime and slimv to evaluate pock in .pock files
+
+heresy
+	non-virtual ?subject-oriented? language
+		wouldn't explicit context be slow
+		how would it be better than lisp?
+			easier debug macros?
+				but that's hidden in normal system
+			learn hoon, maybe you'll find out
+			
+programming languages
+	prefix, infix suffix [probably somewhere in the notes]
+	functional vs imperative
+		functional cooking recipe
+		giving orders - example of "map"
+		is functional easier to turn parallel/concurrent?
+			parallel vs concurrent
+	dynamic and static typing
+	implicit type conversion
+	lazy and eager evaluation
+	call by value and reference
+
+optimizations
+	possible optimization feedback
+
+saner debugging
+	logging
+	slime debugger
+
+symbols and stuff
+	noun-gensym
+
+noun package?
+
+inefficiency of modified ABC-GC
+
+how does urbit's hashing thingy avoid collisions?
+
+an advanced optimization - O(1) n-th element list modification
+	the original list must never be used again
+	special mutable dsl?
+	monads???
+
+pock -> lisp????
+
+qq on l-nouns
+	first checking if car matches the uq symbol
+
+![foo x y z] = [* [[: Z [: Y [: Z [' ~]]]]]]
+^^ too complicated, 
+call [code expr] = [* [: code [: foo [' ~]]] code]
+
+that sugary core opcode doesn't look that sugary
+
+mapcar in C!
+
+conditional auras?
+
+that subj thing needs another way of thinking
+or not?
+
+the lispier deal
+
+operator :== opcode | core
+opcode :== [n ~]
+core :== [code env]
+
+*[subj [:: x . rest]] = [*[subj x] *[subj [:: rest]]]
+
+*[subj [[env-expr code-expr] . args]] 
+= *[[*[subj [:: . args]]
+      *[subj env-expr]
+	  *[subj code-expr] 
+
+new impl
+	just using symbols at first?
+	copying useful stuff?
+	just forkin?
+
+lazy call by value
+
+env as cdr?
+
+even simpler combinator
+
+*[subj [[code-expr . env] . args]] 
+= *[[*[subj [:: . args]]
+      *[subj env-expr]]
+	  *[subj code-expr] 
+
+*/[subj [x . rest]] = [*[subj x] less]
+or more informally
+*/[subj [x y z ...]] = [*[subj x] *[subj y] *[subj z]...]
+
+*[subj [[code . env] . args]]
+= *[[*/[subj args] . */[subj env]] *[subj code]]
+
+[diagram]
+
+even more powerful combinator?
+	args aren't evlisted, but a pock expression is applied to them?
+	naaah, that's too kooky and looks useless
+
+consider different combinators
+	1-adic
+		*[subj [comb . args]]
+		= *[[[*/[subj args] . >*/[subj comb]] <*/[subj comb]]]
+	2-adic
+	n-adic
+
+"list" in 1-adic combinator
+	[' [[< [$]]]]
+
+I'll do number aura and then number reader
+and then the same with strings
+
+why 1-adic is better than 2-adic?
+	both code and env can be computed using a single argument list
+
+sane env modification
+	it should flow downward
+	threading macro???
+	! |->
+
+naming unevaled stuff
+	(eval stuff%) = stuff
+
+I want something like an optional argument that works only inside function definition
+
+tree compression
+	hash and count every node
+	sort by frequency
+	encode positions
+		2 bits - a ternary digit or stop
+		higher bases?
+	write
+
+SnC?
+	frame list
+
+what can be thrown away given a good enough start image?
+	pock
+		everything except eval, noun_to_ascii, ascii_to_noun and image loader
+		primitives
+	kreck
+

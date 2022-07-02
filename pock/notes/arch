@@ -1,0 +1,604 @@
+T = [lam lam val 2]
+F = [lam lam val 1]
+AND = [lam lam [[[val 2] [val 1] F]]]
+AND T F = [[lam lam [[[val 2] [val 1] F]]] T F]
+= [[lam lam [[[val 2] [val 1] F]]] T F]
+= [[clo T] [lam [[[val 2] [val 1] F]]] F]
+= [[clo T] [clo F] [[[val 2] [val 1]]]]
+
+*[a val] = a
+*[[a b] val] = a
+*[[a env] out xpr] = *[env xpr]
+
+*[env xpr1 xpr2] = *[*[env xpr1] xpr2]
+*[env lam xpr] = [[~ xpr] env]
+
+*[env [lam xpr] foo]
+= *[*[env lam xpr] foo]
+= *[[[~ xpr] env] foo]
+= *[[[foo ~] xpr] env] // here env is treated like formula
+
+*[env [lam xpr] arg]
+= *[[[~ lam xpr] env] arg] // coś przejebane
+
+seems that implicit apply/?eval? is a bad idea
+
+maybe laziness by default doesn't make sense in nock-like systems?
+
+effects of using improper lists?
+
+Is autoconsing an aspect of nock, or just notation
+
+tock - a noun-noun function describing a turing machine
+
+axioms of incrementation:
+	+0 := 1
+	+1 := [0 1]
+	+[1 a] := [0 +a]
+	+[0 a] := [1 a]
+	otherwise 0
+
+1 = [0 0]
++0 := 1 = [0 0]
++1 := [0 1] = [0 [0 0]]
++[1 a] := [0 +a]
++[0 a] := [1 a]
+
+
+1 = +0 = [0 0]
+2 = +1 = +[0 0] = [0 1] = [0 0 0]
+3 = +2 = +[0 1] = [1 1] = [[0 0] 0 0]
+4 = +3 = +[1 1] = [0 +1] = [0 0 1] = [0 0 0 0]
+5 = +4 = +[0 0 1] = [1 0 1] = [[0 0] 0 0 0]
+6 = +5 = +[1 0 1] = [0 +[0 1]] = [0 1 1] = [0 [0 0] 0 0]
+
+^^ this sucks, because a pair of 2 zeros is 1 
+
+
+how about 0 not being null?
+
+0 = [~ ~]
+1 = [~ 0] = [~ ~ ~]
++0 := 1 = [~ ~ ~]
++1 := [0 1]
++[1 a] := [0 +a]
++[0 a] := [1 a]
+
+stunning beauty of segfault-oriented language:
+	notice after 20 minutes that you're working on memory that you just freed
+
+should I write parser for words other than "~"?
+
+~ => ~
+[ => error
+] => error
+[~] => error
+[~ ~] => [~ ~]
+[[~ ~] ~] => [[~ ~] ~]
+[~ [~ ~] => error
+[~ [~ ~]] => [~ ~ ~]
+
+Since 0 is a valid plant, maybe 1 should be a parse error?
+
+parsing top down or bottom up?
+yacc?
+microlisp parser?
+
+f-expression:
+	what it is:
+		forth-like tree construction syntax
+		rpn
+		only special word is cons
+	what it looks like:
+		[a [b c]] => c b | a |
+	how to do it:
+		input text:
+			[[foo bar] baz]
+		reverse word order:
+			] baz ] bar foo [ [
+		omit right delimiters:
+			baz bar foo [ [
+		reduce (queuee -- stack):
+			baz bar foo [ [ --
+			bar foo [ [ -- baz 
+			foo [ [ -- baz bar 
+			[ [ -- baz bar foo 
+			[ -- baz (cons foo bar)
+			-- (cons (cons foo bar) baz)
+
+			
+
+guess:
+	right delimiters are vital for auto-consing
+	in shunting yard they mean "don't auto-cons before next symbol"
+	compare [foo [bar baz]], [foo bar baz], [[foo bar] baz]
+
+input:
+	[foo bar baz]
+reverse:
+	] baz bar foo [
+reduce:
+	] baz bar foo [ --
+	baz bar foo [ -- ] 
+	bar foo [ -- ] baz 
+	foo [ -- ] baz bar				 	// x y z => (cons y x) z			//auto cons
+	[ -- ] (cons bar baz)	foo  	// ] x y [ => (cons y x)
+	-- (cons (cons bar baz))
+
+input:
+	[foo [bar baz]]
+reverse:
+	] ] baz bar [ foo [
+reduce:
+	] ] baz bar [ foo [ -- 
+	] baz bar [ foo [ -- ] 
+	baz bar [ foo [ -- ] ] 
+	bar [ foo [ -- ] ] baz 
+	[ foo [ -- ] ] baz bar 
+	foo [ -- ] (cons bar baz)
+	[ -- ] (cons bar baz) foo 
+	[ exp1 exp2 ] => (cons exp1 exp2)
+	[ exp1 exp2 . args => (parse-list (list exp
+	-- (cons foo (cons bar baz))
+
+input:
+	[[foo bar] baz]
+reverse:
+	] baz ] bar foo [ [
+reduce:
+	] baz ] bar foo [ [ -- 
+	baz ] bar foo [ [ -- ] 
+	] bar foo [ [ -- ] baz 
+	bar foo [ [ -- ] baz ] 
+	foo [ [ -- ] baz ] bar 
+	[ [ -- ] baz ] bar foo 
+	[ -- ] baz (cons foo bar)
+	-- (cons (cons foo bar) baz)
+
+tokenizer:
+	implement longer tokens
+
+I haven't noticed an off by one for day or so
+
+how about a top-down parser?
+
+
+parse tok:
+	'[' => parse_list(tok + 1)
+	'~' => 0
+	_ => error
+
+parse_list tok:
+	list_tail = next_expr(tok)
+	if tail:
+		ret tok
+	ret cons(parse(tok), parse_list(list_tail))
+	
+(num? n) == (or (null? (car n)) (null? (caar n)))
+
+how about numbers as lists of bools?
+
+#t = [~ ~ ~]
+#f = [~ ~]
+0 = [[~ ~] ~]
+1 = [[~ ~ ~] ~]
+2 = [[~ ~] [~ ~ ~] ~]
+3 = [[~ ~ ~] [~ ~ ~] ~]
+4 = [[~ ~] [~ ~] [~ ~ ~] ~]
+...
+
+
+
+endianness:
+	little-endian is faster, because the list doesn't have to be traversed in the beginning
+
+
+finding new alloc pointer:
+	done, just write the tests for god's sake
+
+great pock conjecture:
+	pock can run any computation with the same time complexity as ?fully-sequential? computer
+
+time complexity of carry-lookahead adder
+
+the bump:
+	lousy use of "read"?
+		almost certainly not
+	gc starting to work?
+		maybe, but why it goes to 2/3 full?
+	dump1k - 633
+	dump2k - 1264
+	dump3k - 1895
+	
+1 char token list?
+continuity of special chars in ASCII?
+
+tokenizer kerfuffle
+the big bug:
+	...argument instead of previous token
+
+too much tests for token_get?
+
+how much of a tarpit do I want to have?
+
+crutches?
+	reader macros	
+		words
+		strings
+		numbers
+	writer macros
+		same as above?
+
+types and predicates
+not pattern-matching data
+
+code should know about data's description only if it's necessary
+but doesn't following it all the way down give us shitty assembly?
+	slot
+
+trace
+trunk
+let Ta be the set of all valid traces of a
+	"a" is a trunk of "b" if .A t .e Ta: t(a) = t(b)
+
+
+proper list, leaf falsity
+
+$ - cell
+_ - noun
+~ - leaf
+T = [~ ~]
+
++[~ a] = [[~ ~] a]
++[$ a] = [~ +a]
++~ = [[~ ~] ~]
+
+0 = ~
+1 = +~ = [[~ ~] ~]
+2 = +[[~ ~] ~] = [~ +~] = [~ [~ ~] ~]
+3 = +[~ [~ ~] ~] = [[~ ~] [~ ~] ~]
+4 = +[[~ ~] [~ ~] ~] = [~ +[~ ~] ~] = [~ ~ +~] = [~ ~ [~ ~] ~]
+
+slot 
+	*[[a b] / formula rest] =
+		*[a rest] if ?*[[a b] formula]
+		*[a rest] if ?*[[a b] formula]
+	
+formula is a pair of opcode and another formula or leaf
+
+lisp-like?
+*[subj ~] = subj
+*[subj #head a] = <*[subj a]
+*[subj #tail a] = >*[subj a]
+*[subj #cons a b] = [*[subj a] *[subj b]]
+*[subj #cond $ a b] = *[subj a]
+*[subj #cond ~ a b] = *[subj b]
+*[subj #quot a] = a
+*[subj #eval a] = **[subj a]
+
+can lus be derived?
+*[subj #lus form] = +*[subj form]
+
+forth-like?
+	program
+	stack
+	ret stack
+	last eval?
+*[subj ~] = subj //halt?
+*[subj #call form rest] = *[[*[subj form] subj] rest]
+*[[subj stack] #subs
+
+
+..
+*[subj #eval form] = **[subj form]
+
+*[[a b] #head ~]
+*[[a b] #head (*[[a b] #subj])]
+*[[a b] #head ([a b])]
+a
+
+
+<[a b] = a
+>[a b] = b
+
+*[subj ~] = subj
+*[subj < a] = <*[subj a]
+*[subj > a] = >*[subj a]
+*[subj . a b] = [*[subj a] *[subj b]]
+*[subj ? [x y] a b] = *[subj a] //TODO!!!
+*[subj ? ~ a b] = *[subj b]
+*[subj ' a] = a
+*[subj * a] = **[subj a]
+
++~ = [[~ ~] ~]
++[~ a] = [[~ ~] a]
++[[x y] a] = [~ +a]
+
+*[[data code] ...] = *[[data code] code]
+*[[data code] * . ~ > ~] = *[[data code] code]
+
+
+*[[data code] * . ~ > ~]
+**[[data code] . ~ > ~]
+*[*[[data code] ~] *[[data code] > ~]]
+*[[data code] >*[[data code] ~]]
+*[[data code] >[data code]]
+*[[data code] code]
+
+#call = @ = [* . ~ > ~]
+*[[data code] #call] = *[[data code] code]
+
+*[[~ +] +] = [[~ ~] ~]
+*[[[~ a] +] +] = [[~ ~] a]
+*[[[[x y] a] +] +] = [~ *[[a +] +]]
+
+#data = [< ~]
+#code = [> ~]
+
++ =
+[? #data
+	 [? [< #data]
+			[. [' ~]
+				 * . [. [> #data] #code] #code]
+			. [' [~ ~]] > #data]
+	 ' [[~ ~] ~]]
+????
+
+
+
+*[[~ +]
+ 	[? #data
+     [? [< #data]
+				[. [' ~]
+				   * . [. [> #data] #code] #code]
+				. [' [~ ~]] > #data]
+		 ' [[~ ~] ~]]
+
+*[[~ +]
+	' [[~ ~] ~]]
+
+[[~ ~] ~]
+
+
+	
+*[[[[~ ~] ~] +]
+ 	[? #data
+     [? [< #data]
+				[. [' ~]
+				   * . [. [> #data]
+					        #code]
+					     #code]
+				. [' [~ ~]] > #data]
+		 ' [[~ ~] ~]]]
+
+*[[[[~ ~] ~] +]
+	[? [< #data]
+		 [. [' ~]
+				* . [. [> #data]
+							 #code]
+						#code]
+		 . [' [~ ~]] > #data]]
+
+*[[[[~ ~] ~] +]
+	[. [' ~]
+		 * . [. [> #data]
+		        #code]
+		     #code]]
+
+
+[*[[[[~ ~] ~] +]
+   ' ~]
+ *[[[[~ ~] ~] +]
+   * . [. [> #data]
+				  #code]
+		    #code]]
+
+[~
+ **[[[[~ ~] ~] +]
+    . [. [> #data]
+				  #code]
+		    #code]]
+
+[~
+ *[*[[[[~ ~] ~] +]
+      . [> #data]
+				 #code]
+	 *[[[[~ ~] ~] +]
+			#code]]]
+
+[~
+ *[[*[[[[~ ~] ~] +]
+      > #data]
+	  *[[[[~ ~] ~] +]
+		  #code]]
+	 +]]
+
+[~ *[[~ +] +]]
+
+[~ [~ ~] ~]
+
+
+
+*[[[~ [~ ~] ~] +]
+ 	[? #data
+     [? [< #data]
+				[. [' ~]
+				   * . [. [> #data]
+					        #code]
+					     #code]
+				. [' [~ ~]]
+					> #data]
+		 ' [[~ ~] ~]]]
+
+*[[[~ [~ ~] ~] +]
+     [? [< #data]
+				[. [' ~]
+				   * . [. [> #data]
+					        #code]
+					     #code]
+				. [' [~ ~]]
+				  > #data]]
+
+*[[[~ [~ ~] ~] +]
+	. [' [~ ~]]
+	  > #data]
+
+[[~ ~] [~ ~] ~]
+
+
+too much pain in the ass with the list thingies
+
+
+increment beyond 4 bug
+	print core data after each eval
+	done, just checked the code
+		"~ >" instead of "> ~"
+
+*[subj #apply ([data code]) arg] = [[*[subj arg] data] code]
+
+
+eqv core
+
+[? [< #data]
+	 [? [> #data]
+	    [? [* . [. [. [< < #data]
+			              < > #data]
+						     #code]
+			        #code]
+				 [? [* . [. [. [> < #data]
+									     > > #data]
+								    #code]
+							   #code]
+						[' ~ ~]
+						' ~]
+				 ' ~]
+			' ~]
+	 ? [> #data]
+	   [' ~]
+		 [' ~ ~]]
+
+[* . [. data
+        #code]
+		 #code]
+
+internal macro
+
+[[[transformed transformation] #macro] #call]
+
+[? [< #data]
+	 [? [* . [. [. [< < #data]
+				  			 ' !]
+						  #eqv]
+					 #eqv]
+		  [* . [. [> < #data]
+			        > #data]
+					 > #data]
+		  ? [* . [. [. [< < #data]
+			 						 ' ?]
+							  #eqv]
+						 #eqv]
+			  [. [* . [. [. [> < #data]
+				              > #data]
+			             #code]
+								#code]
+					 . [* . [. [. [> > < #data]
+											> #data]
+									 #code]
+								#code]
+						 * . [. [. [> > > < #data]
+				               > #data]
+			              #code]
+							   #code]
+		    ? [* . [. [. [< < #data]
+			 	  					 ' .]
+					  		  #eqv]
+						   #eqv]
+          [. [* . [. [. [> < #data]
+				                > #data]
+			               #code]
+						  	  #code]
+					   . [* . [. [. [> > < #data]
+						 			  	    > #data]
+									     #code]
+								    #code]]
+          
+          . * . [. [. [> < #data]
+				                > #data]
+			               #code]
+						  	  #code]
+	 ~ ~]
+^^ too long, too repetitive
+?????
+
+
+recur as external macro using double eval?
+
+#recur = [. [' .] . [. [' .] . [' ~] . [' '] #code] . [' '] #code]
+[[data code] * * . dataform recur]
+???
+***[[data code] . dataform . [' .] . [. [' .] . [' ~] . [' '] #code] . [' '] #code]
+**[data2 . [. ~ ' code] ' code]
+*[[data2 code] code]
+
+^^that's lousy
+
+eval, slow macro-like calls
+
+after macros, you also need quasiquotes
+
+more sane strategy:
+	implement macro expander for branchless code first, test it, then do the rest
+
+[? [< #data]
+	 [? [* . [. [. [< < #data]
+				  			 ' !]
+						  #eqv]
+					 #eqv]
+		  [* . [. [> < #data]
+			        > #data]
+					 > #data]
+			[* . [. [. [> < #data]
+			           > #data]
+					    #code]
+					 #code]]
+	~]
+
+need a sane source loader
+
+the bug that could've been easily avoided
+
+including core loader in core code?
+	somebody divided by zero
+
+*[code #make-gate] = gate
+*[data gate] = *[[data code] code]
+
+gate = [* . [. ~ ' code] ' code]
+
+make-gate = [. [' *] . [' .] . [. [' .] . [' ~] . [' '] ~] . [' '] ~]
+
+
+ugliness in nock definition
+rewrite
+code reuse
+parser
+	1 function?
+		dumb, but why?
+			only lists or ovecomplication?
+	skip_parens or skip_subexp?
+
+version control shenanigans
+	branches and stuff?
+	dayvan it?
+		nah, it's pock but better
+	I want to have all of the old code for reading
+
+auras
+	atomic
+		number
+		string
+		opcode
+		aura
+	compound
+		pair?
+		list

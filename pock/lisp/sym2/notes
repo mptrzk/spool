@@ -1,0 +1,284 @@
+TODO:
+string aura
+reading strings
+gensym
+library
+	list of symbol - expression pairs
+	opcodes match themselves
+arithmetic
+	usub
+	mul
+	div
+	mod
+	fractions
+"compiling"
+	evaluating statically what can be done so
+	"static" and "dynamic" symbols
+	would it make the distinction between static and dynamic macros obsolete?
+		maybe, but a macro shouldn't be unintentionally dynamic
+			why would one write code where it wouldn't be obvious?
+				
+Now it really needs some refactoring and deeper thought and testing and stuff
+the hades, the pots and all
+and the TCO
+
+==================================================
+
+MISC:
+
+auras:
+  op
+  code = (op (rest code))
+  bool
+  num
+  string
+  tree
+	defs?
+
+(list aura1 aura2)? - applies consecutive auras to respective members,
+	applies the last aura to the rest of members
+	why not (list aura1 aura2 . aura-rest)?
+		auras will be internalized
+			pock has problems with improper lists
+				type
+
+(pair aura1 aura2) - applies the first aura to car and the 2nd one to cdr
+
+aura is either a symbol or an expression
+	symbols are looked up
+
+aura quote problem
+
+
+
+?? how did I manage to make it work for the first time?
+argument count verification?
+auras?
+
+
+adding specific implementations of library generics?
+TODO inefficiencies with redundant make-noun and such
+  CLOS???
+  case with generic predicate and a lambda?
+
+memoization
+
+packages instead of def/aura tables?
+
+integrating lisp with a text editor
+	lines
+
+
+move to the lisp stuff
+	,L vs ,b?
+		check disassembly
+
+	irregularities in lisp
+
+listing special operators, functions and macros
+
+the "the" operator
+	compilation
+
+sharpsign colon
+
+read hyperspec
+
+why is ":" a constituent?
+
+conditional auras for the new thingy
+
+why no @
+	multiple args
+
+
+tracing debugger
+auras after quote
+leave apply for later
+
+auras and other metadata in redundant arguments?
+	would need to gensym some auras
+
+would need to move stuff aboug
+
+conditional piping?
+	(pipe-if predicate function expression)
+
+making auras only internally-coded?
+	yay
+		simpler code
+		removing a redundancies
+		closer to internalization
+	nay
+		a bit slower
+			talking about speed, aye?
+		might be ugly with all the conditional aura stuff
+			can't encode predicate
+		they aren't code though
+		@?, @bool, @uint and stuff
+			@? can't work
+			it can only work with defined auras
+
+understanding functions I wrote previously
+
+*(subj fun) = (fun-code . fun-env)
+*/(subj arglist) = *arglist
+
+*(subj (apply fun arglist))
+== *(subj (fun . arglist))
+= *((*arglist . fun-env) fun-code)
+;the hard part comes because arglist is evaluated
+
+*(subj (apply fun arglist))
+= *((((fun-code . fun-env) *arglist))
+    (* (c arg2 (> arg1)) (< arg1)))
+= *((*arglist . fun-env) fun-code)
+
+stuff that can be evaluated statically
+
+roll back with compound definition of "l"
+	yay
+		the principle with opcodes
+	nay
+		it's kinda nifty
+
+various debug flags
+
+(rec-env (args) (env-bindings...))
+
+macros
+	dynamic macros???
+		"!!" works like apply, but with an explicit opcode and the arg list is not evaluetd
+	(! arg/env/rec n)?
+	just static macros???
+		I don't see a good application for dynamic ones
+			but the power is there!!! ...probably
+		eventually I want static macros
+		they have to be unambiguous
+			"!" is static, "!!" is dynamic
+			but I'll do "!"
+	no hardwired macros?
+		preprocessing with an expression that quotes args and wraps eval around
+		but dynamic macro impl is very similar to apply
+
+macro keyowrds?
+	symbols meant to be whangjangled by macros?
+	they begin with and @
+
+env modification
+	consing new onto old?
+		yay
+		nay
+	appending new at the back of old?
+		yay
+		nay
+	
+you need to capture args too
+
+"env-n is closures"?
+
+a macro that changes "$" into "old"? let's say "^"
+	yay
+		seems cool
+	nay
+		will be obsolete with syms
+
+
+let
+	let in lambdas
+	let without binding?
+
+closure layout
+(args funs locals captured)
+
+it gives a nice separation between the new and old scope
+
+old2 and (not) nesting macros
+
+! gate (l1 l2 l3) 
+	code
+
+! let (l1 l2 l3)
+	code
+
+"gate" macro no longer variadic
+
+should "let" bindings be locals or args?
+	locals
+	args
+
+is local/arg distinction stupid?
+	yay
+		it makes stuff more confusing
+	nay
+		it's meaningful when something has to be passed only from within the function
+
+what "let" does
+	evals the bindings with old subject and puts it into new locals
+	puts the old subject into captured
+	evals the code with the new subject
+
+quasiquote first
+
+TESTS!!!
+
+door
+a gate is a fancier door
+
+cdars and stuff
+
+strucureee
+
+better auras?
+	aura specifier symbols
+	as an additional arg to q
+
+recur with locals
+
+gensym needed for qq/uq/uqs
+
+0 should be ~!!!
+
+pock code is explosive
+
+sbcl does the TCO automatically
+	does the gcc do it aswell?
+		depends on when you call the GC
+			When you call the gc before returning, the pock call stops being a tail call
+
+a tail call is the call which is the last thing evaluated in a function before it returns
+a tail call is the call which evaluates to the last unique value in the function
+TCO works by...
+
+mutual TCO?
+
+tail recursion
+
+gc with only evcon/evlist?
+	naah
+
+
+gc frames with tali & non-tail calls
+	tail
+		remains the same
+	non tail
+		becomes the top
+
+the gc shouldn't copy stuff from below the frame!!!
+
+... gc
+	how
+		if the op is not tail-recursive, the result is GCd and returned
+		otherwise the new subject and formula are prepared
+		then the cons of them is GCd
+		then the tail call happens
+
+gc before eval
+	how
+		pock arg is gc'd with respect to frame passed in
+		tail calls are evaluated with current frame
+		non-tail calls are evaluated with top of the cell stack
+	but but but
+		non-tail calls won't ever collect garbage
+
+

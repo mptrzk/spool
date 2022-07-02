@@ -1,0 +1,418 @@
+; disassembly for POCK-EVAL
+; Size: 1659 bytes. Origin: #x53690B29                        ; POCK-EVAL
+; 0B29:       498B4510         MOV RAX, [R13+16]              ; thread.binding-stack-pointer
+; 0B2D:       488945F8         MOV [RBP-8], RAX
+; 0B31:       488B45E8         MOV RAX, [RBP-24]
+; 0B35:       83E807           SUB EAX, 7
+; 0B38:       A80F             TEST AL, 15
+; 0B3A:       0F8530060000     JNE L22
+; 0B40:       488B45E8         MOV RAX, [RBP-24]
+; 0B44:       4C8B40F9         MOV R8, [RAX-7]
+; 0B48:       418D40F9         LEA EAX, [R8-7]
+; 0B4C:       A80F             TEST AL, 15
+; 0B4E:       0F8519060000     JNE L21
+; 0B54:       4D8B40F9         MOV R8, [R8-7]
+; 0B58:       4981F817011050   CMP R8, #x50100117             ; NIL
+; 0B5F:       0F85B8050000     JNE L20
+; 0B65:       4883EC10         SUB RSP, 16
+; 0B69:       488B55E8         MOV RDX, [RBP-24]
+; 0B6D:       B902000000       MOV ECX, 2
+; 0B72:       48892C24         MOV [RSP], RBP
+; 0B76:       488BEC           MOV RBP, RSP
+; 0B79:       B8A2393950       MOV EAX, #x503939A2            ; #<FDEFN VALUES-LIST>
+; 0B7E:       FFD0             CALL RAX
+; 0B80:       0F83FA050000     JNB L24
+; 0B86:       83F906           CMP ECX, 6
+; 0B89:       0F86FB050000     JBE L25
+; 0B8F:       488B43E0         MOV RAX, [RBX-32]
+; 0B93:       488945B8         MOV [RBP-72], RAX
+; 0B97: L0:   488BE3           MOV RSP, RBX
+; 0B9A:       48897DC8         MOV [RBP-56], RDI
+; 0B9E:       488975C0         MOV [RBP-64], RSI
+; 0BA2:       488955E0         MOV [RBP-32], RDX
+; 0BA6:       488B45C8         MOV RAX, [RBP-56]
+; 0BAA:       488945D8         MOV [RBP-40], RAX
+; 0BAE:       488B45C0         MOV RAX, [RBP-64]
+; 0BB2:       488945D0         MOV [RBP-48], RAX
+; 0BB6:       4883EC10         SUB RSP, 16
+; 0BBA:       488B55E0         MOV RDX, [RBP-32]
+; 0BBE:       488B3DC3FEFFFF   MOV RDI, [RIP-317]             ; '$
+; 0BC5:       B904000000       MOV ECX, 4
+; 0BCA:       48892C24         MOV [RSP], RBP
+; 0BCE:       488BEC           MOV RBP, RSP
+; 0BD1:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0BD6:       FFD0             CALL RAX
+; 0BD8:       480F42E3         CMOVB RSP, RBX
+; 0BDC:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0BE3:       740A             JEQ L2
+; 0BE5:       488B55F0         MOV RDX, [RBP-16]
+; 0BE9: L1:   488BE5           MOV RSP, RBP
+; 0BEC:       F8               CLC
+; 0BED:       5D               POP RBP
+; 0BEE:       C3               RET
+; 0BEF: L2:   4883EC10         SUB RSP, 16
+; 0BF3:       488B55E0         MOV RDX, [RBP-32]
+; 0BF7:       488B3D92FEFFFF   MOV RDI, [RIP-366]             ; 'Q
+; 0BFE:       B904000000       MOV ECX, 4
+; 0C03:       48892C24         MOV [RSP], RBP
+; 0C07:       488BEC           MOV RBP, RSP
+; 0C0A:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0C0F:       FFD0             CALL RAX
+; 0C11:       480F42E3         CMOVB RSP, RBX
+; 0C15:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0C1C:       0F85F2040000     JNE L19
+; 0C22:       4883EC10         SUB RSP, 16
+; 0C26:       488B55E0         MOV RDX, [RBP-32]
+; 0C2A:       BF8F642450       MOV EDI, #x5024648F            ; <
+; 0C2F:       B904000000       MOV ECX, 4
+; 0C34:       48892C24         MOV [RSP], RBP
+; 0C38:       488BEC           MOV RBP, RSP
+; 0C3B:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0C40:       FFD0             CALL RAX
+; 0C42:       480F42E3         CMOVB RSP, RBX
+; 0C46:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0C4D:       0F858B040000     JNE L17
+; 0C53:       4883EC10         SUB RSP, 16
+; 0C57:       488B55E0         MOV RDX, [RBP-32]
+; 0C5B:       BF1F652450       MOV EDI, #x5024651F            ; >
+; 0C60:       B904000000       MOV ECX, 4
+; 0C65:       48892C24         MOV [RSP], RBP
+; 0C69:       488BEC           MOV RBP, RSP
+; 0C6C:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0C71:       FFD0             CALL RAX
+; 0C73:       480F42E3         CMOVB RSP, RBX
+; 0C77:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0C7E:       0F8524040000     JNE L15
+; 0C84:       4883EC10         SUB RSP, 16
+; 0C88:       488B55E0         MOV RDX, [RBP-32]
+; 0C8C:       488B3D15FEFFFF   MOV RDI, [RIP-491]             ; 'C
+; 0C93:       B904000000       MOV ECX, 4
+; 0C98:       48892C24         MOV [RSP], RBP
+; 0C9C:       488BEC           MOV RBP, RSP
+; 0C9F:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0CA4:       FFD0             CALL RAX
+; 0CA6:       480F42E3         CMOVB RSP, RBX
+; 0CAA:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0CB1:       0F856C030000     JNE L12
+; 0CB7:       4883EC10         SUB RSP, 16
+; 0CBB:       488B55E0         MOV RDX, [RBP-32]
+; 0CBF:       BFEF642450       MOV EDI, #x502464EF            ; =
+; 0CC4:       B904000000       MOV ECX, 4
+; 0CC9:       48892C24         MOV [RSP], RBP
+; 0CCD:       488BEC           MOV RBP, RSP
+; 0CD0:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0CD5:       FFD0             CALL RAX
+; 0CD7:       480F42E3         CMOVB RSP, RBX
+; 0CDB:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0CE2:       0F85D5020000     JNE L11
+; 0CE8:       4883EC10         SUB RSP, 16
+; 0CEC:       488B55E0         MOV RDX, [RBP-32]
+; 0CF0:       BF7F622450       MOV EDI, #x5024627F            ; *
+; 0CF5:       B904000000       MOV ECX, 4
+; 0CFA:       48892C24         MOV [RSP], RBP
+; 0CFE:       488BEC           MOV RBP, RSP
+; 0D01:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0D06:       FFD0             CALL RAX
+; 0D08:       480F42E3         CMOVB RSP, RBX
+; 0D0C:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0D13:       0F853E020000     JNE L10
+; 0D19:       4883EC10         SUB RSP, 16
+; 0D1D:       488B55E0         MOV RDX, [RBP-32]
+; 0D21:       488B3D98FDFFFF   MOV RDI, [RIP-616]             ; '?
+; 0D28:       B904000000       MOV ECX, 4
+; 0D2D:       48892C24         MOV [RSP], RBP
+; 0D31:       488BEC           MOV RBP, RSP
+; 0D34:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0D39:       FFD0             CALL RAX
+; 0D3B:       480F42E3         CMOVB RSP, RBX
+; 0D3F:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0D46:       0F85B1010000     JNE L8
+; 0D4C:       4883EC10         SUB RSP, 16
+; 0D50:       488B55E0         MOV RDX, [RBP-32]
+; 0D54:       488B3D6DFDFFFF   MOV RDI, [RIP-659]             ; 'H
+; 0D5B:       B904000000       MOV ECX, 4
+; 0D60:       48892C24         MOV [RSP], RBP
+; 0D64:       488BEC           MOV RBP, RSP
+; 0D67:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0D6C:       FFD0             CALL RAX
+; 0D6E:       480F42E3         CMOVB RSP, RBX
+; 0D72:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0D79:       0F8567010000     JNE L7
+; 0D7F:       4883EC10         SUB RSP, 16
+; 0D83:       488B55E0         MOV RDX, [RBP-32]
+; 0D87:       488B3D42FDFFFF   MOV RDI, [RIP-702]             ; 'L
+; 0D8E:       B904000000       MOV ECX, 4
+; 0D93:       48892C24         MOV [RSP], RBP
+; 0D97:       488BEC           MOV RBP, RSP
+; 0D9A:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0D9F:       FFD0             CALL RAX
+; 0DA1:       480F42E3         CMOVB RSP, RBX
+; 0DA5:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0DAC:       0F8519010000     JNE L6
+; 0DB2:       4883EC10         SUB RSP, 16
+; 0DB6:       488B55E0         MOV RDX, [RBP-32]
+; 0DBA:       488B3D17FDFFFF   MOV RDI, [RIP-745]             ; '!
+; 0DC1:       B904000000       MOV ECX, 4
+; 0DC6:       48892C24         MOV [RSP], RBP
+; 0DCA:       488BEC           MOV RBP, RSP
+; 0DCD:       B862D34050       MOV EAX, #x5040D362            ; #<FDEFN NOUN-EQUAL>
+; 0DD2:       FFD0             CALL RAX
+; 0DD4:       480F42E3         CMOVB RSP, RBX
+; 0DD8:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0DDF:       0F8583000000     JNE L3
+; 0DE5:       4D8B8598050000   MOV R8, [R13+1432]             ; tls: *STANDARD-OUTPUT*
+; 0DEC:       4183F861         CMP R8D, 97
+; 0DF0:       4C0F44042580E82350 CMOVEQ R8, [#x5023E880]      ; *STANDARD-OUTPUT*
+; 0DF9:       4C8945D8         MOV [RBP-40], R8
+; 0DFD:       4883EC10         SUB RSP, 16
+; 0E01:       488B15E0FCFFFF   MOV RDX, [RIP-800]             ; "invalid opcode - "
+; 0E08:       488B7DD8         MOV RDI, [RBP-40]
+; 0E0C:       B904000000       MOV ECX, 4
+; 0E11:       48892C24         MOV [RSP], RBP
+; 0E15:       488BEC           MOV RBP, RSP
+; 0E18:       B802133550       MOV EAX, #x50351302            ; #<FDEFN WRITE-STRING>
+; 0E1D:       FFD0             CALL RAX
+; 0E1F:       4883EC10         SUB RSP, 16
+; 0E23:       488B55E0         MOV RDX, [RBP-32]
+; 0E27:       488B7DD8         MOV RDI, [RBP-40]
+; 0E2B:       B904000000       MOV ECX, 4
+; 0E30:       48892C24         MOV [RSP], RBP
+; 0E34:       488BEC           MOV RBP, RSP
+; 0E37:       B8C2CF3450       MOV EAX, #x5034CFC2            ; #<FDEFN PRINC>
+; 0E3C:       FFD0             CALL RAX
+; 0E3E:       4883EC10         SUB RSP, 16
+; 0E42:       BA4D0A0000       MOV EDX, 2637
+; 0E47:       488B7DD8         MOV RDI, [RBP-40]
+; 0E4B:       B904000000       MOV ECX, 4
+; 0E50:       48892C24         MOV [RSP], RBP
+; 0E54:       488BEC           MOV RBP, RSP
+; 0E57:       B822D03450       MOV EAX, #x5034D022            ; #<FDEFN WRITE-CHAR>
+; 0E5C:       FFD0             CALL RAX
+; 0E5E:       BA17011050       MOV EDX, #x50100117            ; NIL
+; 0E63:       E981FDFFFF       JMP L1
+; 0E68: L3:   488B45E8         MOV RAX, [RBP-24]
+; 0E6C:       4C8B4001         MOV R8, [RAX+1]
+; 0E70:       418D40F9         LEA EAX, [R8-7]
+; 0E74:       A80F             TEST AL, 15
+; 0E76:       7550             JNE L5
+; 0E78:       498B78F9         MOV RDI, [R8-7]
+; 0E7C:       488B45E8         MOV RAX, [RBP-24]
+; 0E80:       4C8B4001         MOV R8, [RAX+1]
+; 0E84:       418D40F9         LEA EAX, [R8-7]
+; 0E88:       A80F             TEST AL, 15
+; 0E8A:       7403             JEQ L4
+; 0E8C:       CC49             INT3 73                        ; OBJECT-NOT-LIST-ERROR
+; 0E8E:       20               BYTE #X20                      ; R8(d)
+; 0E8F: L4:   498B7001         MOV RSI, [R8+1]
+; 0E93:       4883EC10         SUB RSP, 16
+; 0E97:       488B55F0         MOV RDX, [RBP-16]
+; 0E9B:       B906000000       MOV ECX, 6
+; 0EA0:       48892C24         MOV [RSP], RBP
+; 0EA4:       488BEC           MOV RBP, RSP
+; 0EA7:       B8E2D44050       MOV EAX, #x5040D4E2            ; #<FDEFN POCK-APPLY>
+; 0EAC:       FFD0             CALL RAX
+; 0EAE:       480F42E3         CMOVB RSP, RBX
+; 0EB2:       488BFA           MOV RDI, RDX
+; 0EB5:       488B55F0         MOV RDX, [RBP-16]
+; 0EB9:       B904000000       MOV ECX, 4
+; 0EBE:       FF7508           PUSH QWORD PTR [RBP+8]
+; 0EC1:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0EC6:       FFE0             JMP RAX
+; 0EC8: L5:   CC49             INT3 73                        ; OBJECT-NOT-LIST-ERROR
+; 0ECA:       20               BYTE #X20                      ; R8(d)
+; 0ECB: L6:   488B45E8         MOV RAX, [RBP-24]
+; 0ECF:       488B7801         MOV RDI, [RAX+1]
+; 0ED3:       488B55F0         MOV RDX, [RBP-16]
+; 0ED7:       B904000000       MOV ECX, 4
+; 0EDC:       FF7508           PUSH QWORD PTR [RBP+8]
+; 0EDF:       B8C2D44050       MOV EAX, #x5040D4C2            ; #<FDEFN POCK-EVLIST>
+; 0EE4:       FFE0             JMP RAX
+; 0EE6: L7:   488B55F0         MOV RDX, [RBP-16]
+; 0EEA:       488B7DC0         MOV RDI, [RBP-64]
+; 0EEE:       B904000000       MOV ECX, 4
+; 0EF3:       FF7508           PUSH QWORD PTR [RBP+8]
+; 0EF6:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0EFB:       FFE0             JMP RAX
+; 0EFD: L8:   4883EC10         SUB RSP, 16
+; 0F01:       488B55F0         MOV RDX, [RBP-16]
+; 0F05:       488B7DD8         MOV RDI, [RBP-40]
+; 0F09:       B904000000       MOV ECX, 4
+; 0F0E:       48892C24         MOV [RSP], RBP
+; 0F12:       488BEC           MOV RBP, RSP
+; 0F15:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0F1A:       FFD0             CALL RAX
+; 0F1C:       480F42E3         CMOVB RSP, RBX
+; 0F20:       4881FA17011050   CMP RDX, #x50100117            ; NIL
+; 0F27:       7517             JNE L9
+; 0F29:       488B55F0         MOV RDX, [RBP-16]
+; 0F2D:       488B7DB8         MOV RDI, [RBP-72]
+; 0F31:       B904000000       MOV ECX, 4
+; 0F36:       FF7508           PUSH QWORD PTR [RBP+8]
+; 0F39:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0F3E:       FFE0             JMP RAX
+; 0F40: L9:   488B55F0         MOV RDX, [RBP-16]
+; 0F44:       488B7DC0         MOV RDI, [RBP-64]
+; 0F48:       B904000000       MOV ECX, 4
+; 0F4D:       FF7508           PUSH QWORD PTR [RBP+8]
+; 0F50:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0F55:       FFE0             JMP RAX
+; 0F57: L10:  4883EC10         SUB RSP, 16
+; 0F5B:       488B55F0         MOV RDX, [RBP-16]
+; 0F5F:       488B7DD8         MOV RDI, [RBP-40]
+; 0F63:       B904000000       MOV ECX, 4
+; 0F68:       48892C24         MOV [RSP], RBP
+; 0F6C:       488BEC           MOV RBP, RSP
+; 0F6F:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0F74:       FFD0             CALL RAX
+; 0F76:       480F42E3         CMOVB RSP, RBX
+; 0F7A:       4C8BC2           MOV R8, RDX
+; 0F7D:       4C8945E0         MOV [RBP-32], R8
+; 0F81:       4883EC10         SUB RSP, 16
+; 0F85:       488B55F0         MOV RDX, [RBP-16]
+; 0F89:       488B7DD0         MOV RDI, [RBP-48]
+; 0F8D:       B904000000       MOV ECX, 4
+; 0F92:       48892C24         MOV [RSP], RBP
+; 0F96:       488BEC           MOV RBP, RSP
+; 0F99:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0F9E:       FFD0             CALL RAX
+; 0FA0:       480F42E3         CMOVB RSP, RBX
+; 0FA4:       4C8B45E0         MOV R8, [RBP-32]
+; 0FA8:       488BFA           MOV RDI, RDX
+; 0FAB:       498BD0           MOV RDX, R8
+; 0FAE:       B904000000       MOV ECX, 4
+; 0FB3:       FF7508           PUSH QWORD PTR [RBP+8]
+; 0FB6:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0FBB:       FFE0             JMP RAX
+; 0FBD: L11:  4883EC10         SUB RSP, 16
+; 0FC1:       488B55F0         MOV RDX, [RBP-16]
+; 0FC5:       488B7DD8         MOV RDI, [RBP-40]
+; 0FC9:       B904000000       MOV ECX, 4
+; 0FCE:       48892C24         MOV [RSP], RBP
+; 0FD2:       488BEC           MOV RBP, RSP
+; 0FD5:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 0FDA:       FFD0             CALL RAX
+; 0FDC:       480F42E3         CMOVB RSP, RBX
+; 0FE0:       4C8BC2           MOV R8, RDX
+; 0FE3:       4C8945E0         MOV [RBP-32], R8
+; 0FE7:       4883EC10         SUB RSP, 16
+; 0FEB:       488B55F0         MOV RDX, [RBP-16]
+; 0FEF:       488B7DD0         MOV RDI, [RBP-48]
+; 0FF3:       B904000000       MOV ECX, 4
+; 0FF8:       48892C24         MOV [RSP], RBP
+; 0FFC:       488BEC           MOV RBP, RSP
+; 0FFF:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 1004:       FFD0             CALL RAX
+; 1006:       480F42E3         CMOVB RSP, RBX
+; 100A:       4C8B45E0         MOV R8, [RBP-32]
+; 100E:       488BFA           MOV RDI, RDX
+; 1011:       498BD0           MOV RDX, R8
+; 1014:       B904000000       MOV ECX, 4
+; 1019:       FF7508           PUSH QWORD PTR [RBP+8]
+; 101C:       B802D54050       MOV EAX, #x5040D502            ; #<FDEFN NOUN-IDEN>
+; 1021:       FFE0             JMP RAX
+; 1023: L12:  4883EC10         SUB RSP, 16
+; 1027:       488B55F0         MOV RDX, [RBP-16]
+; 102B:       488B7DD8         MOV RDI, [RBP-40]
+; 102F:       B904000000       MOV ECX, 4
+; 1034:       48892C24         MOV [RSP], RBP
+; 1038:       488BEC           MOV RBP, RSP
+; 103B:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 1040:       FFD0             CALL RAX
+; 1042:       480F42E3         CMOVB RSP, RBX
+; 1046:       4C8BCA           MOV R9, RDX
+; 1049:       4C894DE0         MOV [RBP-32], R9
+; 104D:       4883EC10         SUB RSP, 16
+; 1051:       488B55F0         MOV RDX, [RBP-16]
+; 1055:       488B7DD0         MOV RDI, [RBP-48]
+; 1059:       B904000000       MOV ECX, 4
+; 105E:       48892C24         MOV [RSP], RBP
+; 1062:       488BEC           MOV RBP, RSP
+; 1065:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 106A:       FFD0             CALL RAX
+; 106C:       480F42E3         CMOVB RSP, RBX
+; 1070:       4C8B4DE0         MOV R9, [RBP-32]
+; 1074:       4C8BC2           MOV R8, RDX
+; 1077:       4D896D28         MOV [R13+40], R13              ; thread.pseudo-atomic-bits
+; 107B:       498B5548         MOV RDX, [R13+72]              ; thread.mixed-tlab
+; 107F:       488D4210         LEA RAX, [RDX+16]
+; 1083:       493B4550         CMP RAX, [R13+80]
+; 1087:       0F870A010000     JNBE L26
+; 108D:       49894548         MOV [R13+72], RAX              ; thread.mixed-tlab
+; 1091: L13:  4C890A           MOV [RDX], R9
+; 1094:       4C894208         MOV [RDX+8], R8
+; 1098:       80CA07           OR DL, 7
+; 109B:       4D316D28         XOR [R13+40], R13              ; thread.pseudo-atomic-bits
+; 109F:       7402             JEQ L14
+; 10A1:       CC09             INT3 9                         ; pending interrupt trap
+; 10A3: L14:  E941FBFFFF       JMP L1
+; 10A8: L15:  4883EC10         SUB RSP, 16
+; 10AC:       488B55F0         MOV RDX, [RBP-16]
+; 10B0:       488B7DD8         MOV RDI, [RBP-40]
+; 10B4:       B904000000       MOV ECX, 4
+; 10B9:       48892C24         MOV [RSP], RBP
+; 10BD:       488BEC           MOV RBP, RSP
+; 10C0:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 10C5:       FFD0             CALL RAX
+; 10C7:       480F42E3         CMOVB RSP, RBX
+; 10CB:       8D42F9           LEA EAX, [RDX-7]
+; 10CE:       A80F             TEST AL, 15
+; 10D0:       7509             JNE L16
+; 10D2:       488B5201         MOV RDX, [RDX+1]
+; 10D6:       E90EFBFFFF       JMP L1
+; 10DB: L16:  CC49             INT3 73                        ; OBJECT-NOT-LIST-ERROR
+; 10DD:       08               BYTE #X08                      ; RDX(d)
+; 10DE: L17:  4883EC10         SUB RSP, 16
+; 10E2:       488B55F0         MOV RDX, [RBP-16]
+; 10E6:       488B7DD8         MOV RDI, [RBP-40]
+; 10EA:       B904000000       MOV ECX, 4
+; 10EF:       48892C24         MOV [RSP], RBP
+; 10F3:       488BEC           MOV RBP, RSP
+; 10F6:       B8A2D44050       MOV EAX, #x5040D4A2            ; #<FDEFN POCK-EVAL>
+; 10FB:       FFD0             CALL RAX
+; 10FD:       480F42E3         CMOVB RSP, RBX
+; 1101:       8D42F9           LEA EAX, [RDX-7]
+; 1104:       A80F             TEST AL, 15
+; 1106:       7509             JNE L18
+; 1108:       488B52F9         MOV RDX, [RDX-7]
+; 110C:       E9D8FAFFFF       JMP L1
+; 1111: L18:  CC49             INT3 73                        ; OBJECT-NOT-LIST-ERROR
+; 1113:       08               BYTE #X08                      ; RDX(d)
+; 1114: L19:  488B55C8         MOV RDX, [RBP-56]
+; 1118:       E9CCFAFFFF       JMP L1
+; 111D: L20:  488B45E8         MOV RAX, [RBP-24]
+; 1121:       4C8B40F9         MOV R8, [RAX-7]
+; 1125:       4C8945E0         MOV [RBP-32], R8
+; 1129:       488B45E8         MOV RAX, [RBP-24]
+; 112D:       488B7801         MOV RDI, [RAX+1]
+; 1131:       4883EC10         SUB RSP, 16
+; 1135:       488B55F0         MOV RDX, [RBP-16]
+; 1139:       B904000000       MOV ECX, 4
+; 113E:       48892C24         MOV [RSP], RBP
+; 1142:       488BEC           MOV RBP, RSP
+; 1145:       B8C2D44050       MOV EAX, #x5040D4C2            ; #<FDEFN POCK-EVLIST>
+; 114A:       FFD0             CALL RAX
+; 114C:       480F42E3         CMOVB RSP, RBX
+; 1150:       4C8B45E0         MOV R8, [RBP-32]
+; 1154:       488BF2           MOV RSI, RDX
+; 1157:       488B55F0         MOV RDX, [RBP-16]
+; 115B:       498BF8           MOV RDI, R8
+; 115E:       B906000000       MOV ECX, 6
+; 1163:       FF7508           PUSH QWORD PTR [RBP+8]
+; 1166:       B8E2D44050       MOV EAX, #x5040D4E2            ; #<FDEFN POCK-APPLY>
+; 116B:       FFE0             JMP RAX
+; 116D: L21:  CC49             INT3 73                        ; OBJECT-NOT-LIST-ERROR
+; 116F:       20               BYTE #X20                      ; R8(d)
+; 1170: L22:  488B45E8         MOV RAX, [RBP-24]
+; 1174:       CC49             INT3 73                        ; OBJECT-NOT-LIST-ERROR
+; 1176:       00               BYTE #X00                      ; RAX(d)
+; 1177: L23:  FF24256000A052   JMP QWORD PTR [#x52A00060]     ; LIST-ALLOC-TRAMP
+; 117E:       CC10             INT3 16                        ; Invalid argument count trap
+; 1180: L24:  BF17011050       MOV EDI, #x50100117            ; NIL
+; 1185:       8BF7             MOV ESI, EDI
+; 1187:       488BDC           MOV RBX, RSP
+; 118A: L25:  48C745B817011050 MOV QWORD PTR [RBP-72], #x50100117  ; NIL
+; 1192:       E900FAFFFF       JMP L0
+; 1197: L26:  6A10             PUSH 16
+; 1199:       E8D9FFFFFF       CALL L23
+; 119E:       5A               POP RDX
+; 119F:       E9EDFEFFFF       JMP L13

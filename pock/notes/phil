@@ -1,0 +1,179 @@
+==================================================
+PURPOSE
+
+An ?excrept? from old notes
+
+What do I want?
+	"An easy to write function evaluating a language in which
+	it is easy to write"
+
+
+a language for an immortal hermit
+
+a functional metaprogramming language designed to
+be implementable with a simplest interpreter possible
+	simplest in terms of the interpreter's code being
+		as easy to understand as possible
+
+that weird property
+	blab
+	"another layer of homiconicity"?
+	contrast with LC and the like
+		why is LC unwieldy
+	in pock, the environment within which the non-primitive,
+	expression is evaluated, is a result of a pock expression
+		
+
+executable specification language
+
+basically lisp with almost no types
+
+no implicit environment
+whole environment is accessible in the same way as any data
+recursion, closures, library calls and (soon)types are implemented in the
+interpreted language.
+
+everything is a list
+
+==================================================
+DESIGN PRINCIPLES
+
+
+this list describes an aesthetic sense
+
+design principles are there to consider and possibly reject
+the bad and ugly, not to obsess about
+
+good enough exceptions from these principles are... good enough
+
+what can be bootstrapped should not be in interpreter...
+	rly...
+		quote?
+		apply?
+
+
+At no level should the code be semantically
+	and no, the ocode encoding just makes it visually arcane
+	auras are simple
+
+an internal function is better than opcode
+
+external bootstrapping is better than modifying interpreter
+	unless it makes the final internal code more complicated the interpreter impl
+
+explicit is better than implicit unless the implicit is obvious
+
+generality 
+	the original string ops should work on alien charsets
+
+simplest possible eval function and its dependencies
+
+computational simplicity?
+
+not leaking architecture
+	no arbitrary sized intigers
+
+simple in a sane assembly
+
+if you implemented it in some opcode already, then it should be an opcode
+	rly? but doing it like that leads to reduncancies
+
+==================================================
+CHOICES
+
+acros in interpreter or by bootstrapping?
+
+misadventures with reference counting
+
+improper arbitrary length lists would require atom wrappers
+
+bignums are meh
+	external arithmetic is also meh
+	having to have jets to do addition or decrement faster than log(n) is meh^3
+
+regularity
+
+==================================================
+THE AMBITION ????
+
+jets?
+	an advanced interpreter would pick up hints
+	feels iffy
+
+==================================================
+THE WHY
+
+==================================================
+MISC
+
+on hoon
+macros all the way
+
+
+don't want to implement type system in parent language
+
+
+comparison with other tarpits
+	binary coded LC with Krivine machine
+		Krivine machine is call by name, which I don't like
+			not "arguably even more homoiconic"
+			Maybe it can be done as call by value
+			"all data is code" seems confusing
+	SKI
+		also needs continuations
+	sectorlisp
+		symbols make it a bit more complicated
+		not "arguably even more homoiconic"
+	nock
+		correct interpreter needs bignums
+
+
+but quote is not needed!
+	but quote is trivial to implement
+
+mathematical simplicity
+
+sugary opcodes?
+
+
+proper vs improper lists
+advantage of proper lists over improper ones:
+	no ambiguity whether cdr is a list or the last element
+triviality?
+
+are improper lists implementable safely with single-value atoms?
+
+I'm not completely bullish on whether that type of lisp thingy is the best way
+to achieve my goal
+
+
+aggressively optimizing compiler
+
+
+irregularities in lisp
+
+that hooney-runey vertical nesting stuff makes sense now
+
+Whippity wops
+wheps
+
+It's for messing around 
+It's for figuring out intuitions behind abstractions
+
+It will pray to the hypervisor to update it
+
+The "blowpill"
+	functional languages are ultimately impractical
+	it's hard to express computationally simple stuff in them
+	they make it tempting to use more expensive abstractions
+		closures
+
+implicit objects
+
+mathy and engineery programming
+
+C level sexp language
+
+procedure
+
+kreck seems more promissing

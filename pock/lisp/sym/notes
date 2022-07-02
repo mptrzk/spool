@@ -1,0 +1,59 @@
+auras:
+  op
+  code = (op (rest code))
+  bool
+  num
+  string
+  tree
+	defs?
+
+(list aura1 aura2)? - applies consecutive auras to respective members,
+	applies the last aura to the rest of members
+	why not (list aura1 aura2 . aura-rest)?
+		auras will be internalized
+			pock has problems with improper lists
+				type
+
+(pair aura1 aura2) - applies the first aura to car and the 2nd one to cdr
+
+aura is either a symbol or an expression
+	symbols are looked up
+
+aura quote problem
+
+
+
+?? how did I manage to make it work for the first time?
+argument count verification?
+auras?
+
+
+adding specific implementations of library generics?
+TODO inefficiencies with redundant make-noun and such
+  CLOS???
+  case with generic predicate and a lambda?
+
+memoization
+
+packages instead of def/aura tables?
+
+integrating lisp with a text editor
+	lines
+
+
+move to the lisp stuff
+	,L vs ,b?
+		check disassembly
+
+	irregularities in lisp
+
+listing special operators, functions and macros
+
+the "the" operator
+	compilation
+
+sharpsign colon
+
+read hyperspec
+
+why is ":" a constituent?

@@ -1,0 +1,166 @@
+with_gc callback?
+
+ABC GC
+	how
+		[A, B) is filled
+		return value is copied to [B, C)
+		[B, C] is copied to [A, A + C - B)
+		TODO check on an example
+	but...
+		"C" pointer is left dangling. Is it important?
+			yay
+				it's ugly
+			nay
+				obsessing over temporarily erroneous state in imperative code is pointless
+					Imperative code is impossible without it
+						is it really?
+
+copy_up
+	
+copy_down
+
+gc with frame arg or curr_frame?
+
+returning from a function
+	merging frames?
+
+Check sectorlisp!!! TODO
+	and it's obviously much nicer there
+
+Frame and top pointerbhols
+
+sizes of integer intervals:
+	[A, B] => B - A + 1
+	[A, B) => B - A
+	(A, B] => B - A
+	(A, B) => B - A - 1
+
+
+so gc fun args were in wrong order in some tail calls
+	maybe that's why they didn't break?
+	but why weren't the results bonkers?
+	maybe they were?
+
+tail call after a tail call?
+
+
+
+writing tests never hurts
+ok, it hurts me, but it shouldn't
+especially in C
+tests, tests, tests
+explicit beats implicit
+	especially in complicated and brittle stuff
+stuff shouldn't work when function args are in the wrong order
+
+
+wordcmp
+	just compares string, but stuff ends when (c <= ' ') instead when !c
+
+refactor
+	pointers to indices?
+		later
+	split into modules by functionality
+		noun
+			mem
+			cons
+			car
+			cdr
+			gc
+		reader
+			defs?
+			parsing
+			def_add
+		writer
+			auras
+		eval
+		defs?
+			defs
+			def_add_noun
+			gensym
+		prim?
+			gensym
+			prim
+		tests
+
+new code written in main
+should main have its own header file?
+deflist and mem structs?
+arithmetic functions
+thing.first?
+
+anonymous structs & count as a macro
+
+frame getter
+	I don't like getters
+
+count, max_count
+count, max
+count, size
+count, cap
+
+structs in elf?
+
+type foo[1] vs type* as reserved address
+	array thingy should be constant pointer
+
+pointer-aware noun stuff should be only exported to tests
+
+should've written tests first
+
+debug header?
+
+init_prim?
+what about non-prim defs?
+is it overtesting?
+that test with flushing with a list
+
+figuring out a sane header file convention seems pointless
+
+remove debug info?
+	yay
+		it's clutter
+	nay
+		stuff might still be buggy
+
+externing all?
+	is it for tests?
+
+it seems even kreck would be a lot bigger than sectorlisp
+	or would it?
+
+bloat
+
+pock uses only prims
+
+prims don't need reader to be defined, just gensym and stuff
+
+noun
+	depends on
+	has
+		noun struct
+		mem
+		gc
+		cons, car, cdr
+defs
+	depends on
+	has
+		prim
+			prims are just defs that are quicker to access
+reader
+	depends on
+	has
+writer
+	depends on
+	has
+eval
+	depends on
+	has
+
+but defs can be defined using a reader
+	should it be in reader or defs module?
+
+reading simple defs doesn't depend on gc
+
+test dependencies don't reflect module dependencies
+	I don't think they should
