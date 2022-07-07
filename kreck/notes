@@ -1,23 +1,45 @@
-error archtiecture
+car, cdr, roots
 
-can it beat forth at ease of primitive implementation
+error archtiecture
+	error sentinel & log
+
+can it beat forth at the ease of primitive implementation?
 
 C-level DSL in kreck
 	
 writing kreck interperter in kreck should be easier than in C
 	macros
 
-kreck the wackiest
-	what?
-		if op is an atom, external fexpr call
-		if op is a list, kreck function application
-	why not function call atoms?
-		The interpreter would be more complicated
-		Fexprs generalize nicely
-		Eval the fexpr's arguments and you get a function call
-		Eval the result and you get a dynamic macro
-	why not fexpr call closures then?	
-		then it doesn't work as lisp and you'd have to put evals everywhere
+is iterating improper lists easy after all?
+
+nil
+	null pointer
+		yay
+			simpler iteration
+			empty lists look like empty lists when printed naively
+			less confusing
+				is it?
+				[to phil] is this question approachable in a good way?
+		nay
+	zero atom
+		yay
+			simpler predicates
+		nay
+			naive writer writes 0 for an empty list
+			type "list of numbers or a number" impossible to define naively
+				is that a problem?
+	"nil" string pointer
+		nay
+			cumbersome
+	"nil" symbol pointer?
+		nay
+			cumbersome
+	how about version with bound checked atoms?
+
+to define a type naively
+	the instance of such type does not have metadata
+	pock
+
 		
 atoms by pointer comparison?
 	yay
@@ -33,6 +55,11 @@ atoms by pointer comparison?
 						Would they?
 						are compilers smart enough?
 						What about arm?
+		I want atoms to be gc'd aswell
+			"I want everything that I would find in normal lisp code to be GCd"
+				strings & symbols
+			external memory management for stuff like arithmetic would be a hassle
+
 
 testing the gc
 	examples should include
@@ -46,6 +73,17 @@ testing the gc
 nilfill
 tree_size
 
+kreck the wackiest
+	what?
+		if op is an atom, external fexpr call
+		if op is a list, kreck function application
+	why not function call atoms?
+		The interpreter would be more complicated
+		Fexprs generalize nicely
+		Eval the fexpr's arguments and you get a function call
+		Eval the result and you get a dynamic macro
+	why not fexpr call closures then?	
+		then it doesn't work as lisp and you'd have to put evals everywhere
 
 [move to C style file?]
 secondary return values passed as pointers with names ending in "_ret"
@@ -101,6 +139,12 @@ that doesn't move stuff between registers
 ==================================================
 OLD
 
+
+testing for full heap inside gc function body or outside?
+	inside
+		condition is not duplicated in different functions that use 
+			it shouldn't be!!! [unexpected refactor]
+	outside
 
 atoms are just address sized numbers
 builtins and foreign functions are just atoms

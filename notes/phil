@@ -1,28 +1,60 @@
 
-an idiosyncratic programming... environment?
-	project?
-		too narrow meaning?
-	stack?
-	toolchain?
-		pock and kreck are different
-	system?
-	family? 
-	infrastructure?
+
+
+==================================================
+UNDISTILLED
+
+in pock you don't have to deal with improper lists
+
+my own programming... infrastructure?
+	name?
+		project?
+			too narrow meaning?
+		stack?
+		toolchain?
+			pock and kreck are different
+		system?
+		family? 
+		infrastructure? ***
+	
+	
+
+not for a team
+not for a customer
+not for the customer
 
 it's not meant to be closed
 	i don't want to write an epub reader
 
+idiocentric
+
+my limitations
+
+"less confusing design choice"
+	matters of taste
+	matters of non-taste
+
 I want to write unrelated stuff in it some day
 
+idiocentric vs egocentric?
+	it's for me by me
+	bolstering ego
+
+VV change to "my own?"
 idionsyncracy
 	idiosyncratic doesn't mean close-minded
 		openness
+
+idiocentric doesn't mean close-minded
+	openness
 	
+does it please God?
 
 the big why
 
 the aesthetics
 
+the small picture
 
 theory as a scaffolding
 	messy stuff
@@ -30,26 +62,88 @@ theory as a scaffolding
 overthinking
 	what I did with refcounts
 
-reasons, justifications and rationality
+distilling notes
+
+avoiding stuff that's good but complicated
+
+note taking for the sake of note taking is cringe.
+	it's fake knowledge
+
+Being too self-conscious
+
+If I think I could figure it out by doing it, I shouldn't try to figure it out by thinking about it.
+Doing it on a computer is just thinking, but more robust.
+
+
+reasons, justifications
 	bloat
+	justifying justifications
+	justifying justifications of justifications
+
+design vs philosophy?
+	check pock
+
+overdoing stuff
+
+overnoting
+	justifications take time to write, read and think about
+	evaluating against principles takes time
+	it takes time
+	having too many note files makes 
+
+overdesigning
+	urbit's 4-letter naming convention
+
+orphaning thoughts
+
+
+Writing style
+	simple language
+		"my own" instead of "idiocentric"
+	"I" vs. "you", "we", "one"
+	"It suddenly feels different even if I didn't intend it"	
+
+	formal & informal
+
+doing philosophy diligently is harder than programming diligently
+
+if you keep recompiling a program, you know you've been wasting time
+
+if you do it with philosopy, you might trick youreslf into believing that things
+make more sense now than they used to.
+This may or may not be true, but it's hard to notice when you start just convincing
+yourself of your own BS
+
+FizzBuzz Wittgenstein edition
+
+the topic might change
+
+move to meta?
+move to meta-meta?
 
 the natural language is for talking to myself and other
 people about this whole weird thing
 
 stuff that's not really mathematics
 messy
-stuff that a human cant easily define well
+stuff that I can't easily define well
 by philosophy I mean
 
 justification is secondary to vision
 
+fun
+
 if stuff violates the principles, the principles might be wrong too
+
+is thinking about philosophy useful?
+	thinking about what?
 
 [move to some other file?]
 	index?
 	meta?
 pock
-	deeply understanding machine-independent semantics of programming
+	for deeply understanding machine-independent semantics of programming
+	to keep the interpreter simple
 	axiomatic
 kreck
 	not axiomatic
@@ -78,7 +172,6 @@ reinventing the wheel
 
 expression expanding lisp debugger
 
-is thinking about philosophy useful?
-
-
-
+proving that which is reasonably easy to prove
+	reasonably easy
+		YMMV

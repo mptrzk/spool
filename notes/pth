@@ -1,0 +1,16 @@
+
+programming patterns?
+	aren't patterns mostly just missing features?
+		mostly, but probably not always
+			when not?
+				the patterns not implemented by Norvig?
+				simple structural thingies?
+					structural?
+						like what sits where in an s-exp
+
+
+tests
+	in language without proofs tests are mostly concerned with making sure that
+		the program doesn't do what we wouldn't want it to do
+	natural language descriptions before tests
+
