@@ -1,0 +1,67 @@
+iden should've been written in the beginning
+
+serious bugs
+	kreck subj gc thingy
+		write better test
+
+
+what to do with this buggy mess?
+	rewrite in ats and then translate
+	dbg global and printouts/asserts
+	describe the whole deal thoroughly
+	rstack dump
+	test for heap bounds
+	gdb
+	qira
+
+
+
+using roots and cells in functions
+	necessity
+		consing stuff should use roots
+	convenience
+		writenl & stuff
+	predicates?
+	naming
+		"foo" for roots
+		"cell_foo" for cells
+	necessity
+		consing stuff should use roots
+	convenience
+		writenl & stuff
+	predicates?
+	naming
+		"foo" for roots
+		"cell_foo" for cells
+
+snc
+	root_push(cell)
+	root_pop(new_top)
+returning?
+roots are double pointers to cells
+check implementations!
+	something imperative
+	lisp
+	Haskell
+just pop?
+	cons automatically pushes a root
+	but then functions manipulate roots not cells
+root stack/link in asm
+
+why bother with it in C/ASM?
+just write an ABC collector and then write SnC in kreck
+
+snc, but only roots in execution stack
+
+"Root" can be a struct and store stuff like generation
+	but what if 2 roots with different generations point to the same cell?
+
+consing non-roots?
+	atom
+	just cons?
+	cell_new?
+
+
+
+make_root?
+

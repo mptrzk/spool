@@ -1,0 +1,19 @@
+the problem of implicit logic
+
+throwaway languages
+	changing gc is not changing language semantics
+	writing a lisp interpreter and just using it instead would be such
+compilation?
+
+
+is doing SnC in C sane?
+	no macros
+	no good checking facilities
+	speed is not that important in the first interpreter
+
+the island challenge
+	why not asm
+		The best way to do it would be to write in a higher level
+			programming language and transcribe it to asm
+		I'm preparing for an island
+		I can use w

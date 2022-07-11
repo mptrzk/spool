@@ -1,0 +1,31 @@
+writing it quiclky
+
+heap
+cons
+gc
+iden
+car
+cdr
+defs
+kreck
+
+
+naming stuff well
+	cells, nouns, words, atoms, nils
+	how about this?	
+		what?
+			Cell is cell
+			Noun is *Cell
+		yay
+		nay
+
+should def_add gc?
+
+test gcing nil
+
+errors & primitive language philosophy
+	what?
+		errors should be handled to prevent undefined behavior
+	non-fatal errors?
+		making testing within executable possible
+		non-existant defs?

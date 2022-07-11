@@ -1,3 +1,88 @@
+making it usable
+	repl
+	source file reading
+	server
+
+internal deflist, internal parser
+
+separating the interpreter from the rest
+
+auras?
+
+[on source edition clutter in C]
+
+exop sets
+	basic
+		subj
+		car
+		cdr
+		quot
+		cons
+		cond
+		eval
+		macro
+	wordwise
+		ldr
+		str
+		add
+		sub
+		mul
+		div
+		mod
+		bit-not
+		bit-and
+		bit-or
+		bit-xor
+
+
+
+ops & defs
+	another file?
+
+multi-defines, internal defines, is using external deflist internally OK?
+
+exop macros?
+
+exop
+	a fexpr...
+	it's fexpr not fun to allow the ops to be general
+inop
+	a funcall
+		it's funcall not fexp, to make expressions simple
+	but don't I want generality from internal stuff also?
+		buut that would require explicit evals in the closures
+		and another call to put it in the subj
+		and it would have to be done almost always, which is ugly
+		but isn't it ugly for exops also?
+	
+
+an exop
+
+a case for dynamic variable name resolution
+		no need for auras
+		might make things easier
+	but
+		shallower metaprogrammability 
+			type system becomes external
+			building an internal type system becomes ugly
+
+less lispy kreck is simpler kreck
+	only atomp
+		or wordp
+	0 atom is nil
+
+car & cdr of atom & nil
+	always error
+		yay
+		nay
+	error for atom, nil for nil
+		yay
+		nay
+	always nil
+		yay
+		nay
+
+
 car, cdr, roots
 
 error archtiecture
@@ -15,12 +100,15 @@ is iterating improper lists easy after all?
 nil
 	null pointer
 		yay
+			one less LDR
 			simpler iteration
 			empty lists look like empty lists when printed naively
 			less confusing
 				is it?
 				[to phil] is this question approachable in a good way?
 		nay
+			although nils are atoms, they have to be dealt with very differently
+			since kreck is untyped, 
 	zero atom
 		yay
 			simpler predicates
@@ -98,34 +186,6 @@ operator functions take subj and arglist and return flag
 
 why is refcounting slower than snc?
 	deallocation with refcounts needs to go through garbage
-
-snc
-	root_push(cell)
-	root_pop(new_top)
-returning?
-roots are double pointers to cells
-check implementations!
-	something imperative
-	lisp
-	Haskell
-just pop?
-	cons automatically pushes a root
-	but then functions manipulate roots not cells
-root stack/link in asm
-
-why bother with it in C/ASM?
-just write an ABC collector and then write SnC in kreck
-
-snc, but only roots in execution stack
-
-"Root" can be a struct and store stuff like generation
-	but what if 2 roots with different generations point to the same cell?
-
-consing non-roots?
-	atom
-	just cons?
-	cell_new?
-
 
 qemu arm
 

@@ -1,0 +1,57 @@
+todo
+	eval
+	mark 'n sweep
+
+what
+	rpn lisp thing
+
+
+???
+	a b . b a . a . λ ~
+	a b . ~ b a . ~ a . λ ~
+
+
+definition of swap
+	(a b) (b a) λ ~ 
+
+
+consing
+quoting
+stack
+queue
+dict
+
+addition defined in terms of sum of cons?
+
+does symbol type need to be different than string?
+	common lisp
+	scheme
+
+reverse-lisp list seems good for non-preemptive rpn
+	It might even work for preemptive rpn?
+		but mur is not preemptive
+			mur always runs stuff when 
+debugging
+multi-labelness
+
+oop sucks in this case
+		i don't know about this one
+	cons implementation should be label-agnostic
+	[counter] 
+		debug stuff should be in env class?
+			Why would I need that though?
+				Isn't that a global context?
+				Why would I encapsulate everything
+
+errs
+	bidict collision stuff
+		can I caus collision nevertheless
+
+crossing in bidict
+	example
+		a:b
+		c:d
+		---
+		a:-
+		c:b
+		-:d

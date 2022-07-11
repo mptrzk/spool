@@ -3,4 +3,26 @@ c++ and doing it wrong
 
 ats with s-exps?
 
+[paste programming language comparison stuff]
 
+functional languages and garbage
+
+what C and Forth do to assembly
+
+mathematical & engineering side
+
+assembly language
+	it's not just machine code
+
+garbage
+	GC
+	refcounts
+	?deterministic automatic management?
+		the thing that rust & ats do
+
+the bug with SnC and the feature that would fix it
+	Can't use this function without assignment
+	or maybe that's just C's fault?
+	or imperative langauages' fault?
+state & return value
+mutation as implicit return value
