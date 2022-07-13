@@ -1,3 +1,79 @@
+
+
+using the heap to return pairs?
+	yay
+		not neading superficial structs
+		more similar to the inner code
+	nay
+		slower
+			hardly a problem?
+
+parser that also generates a symlist
+	yay
+		heap can be smaller
+	nay
+		finding in list is O(n)
+			hash tables can solve
+		executable kreck doesn't preserve variable names
+			should it?
+				it would become lisp with a subject then
+					would it be bad?
+
+is interning necessary for internal parser?
+	can't do hashes
+
+how about interning using word-sized atoms?
+	ugly?
+
+fexpr variant can be made to differ by just one line
+with ifdef to switch between them
+
+kreck with
+	fexpr inops
+		(code . env) = *inop
+		*(subj . (inop args)) = *((args . env) . code) //dots
+	function inops
+		(code . env) = *inop
+		*(subj . (inop args)) = *((*/args . env) . code)
+		
+
+can internal macro be a fexpr?
+
+macros with same syntax as fns/fexprs?
+	I can always all them starting with a "!"
+	& call fexprs starting with something else
+		but non single char quote would look ugly
+
+malloc as an exop in kreck?
+
+keeping big stuff in the metaspace
+	requires the big stuff to have deallocators
+	it also requires the language to call the deallocators
+
+counting snc collections in roots?
+	only the number in the root with the lowest index matters
+	but a program can return the higher root instead
+	no, it can't be done
+
+
+long atoms
+	atom is a (sentinel . length) pair
+	and the stuff [length] after it
+	atoms are printed in hex by default
+
+length in words or bytes?
+
+printing without leading zeros
+	find most significant word
+	find most significant nibble
+	print all significant nibbles
+
+
+string problem
+	parse to symbols?
+		but the symbol list must still contain strings
+	
+
 making it usable
 	repl
 	source file reading
@@ -45,7 +121,7 @@ exop macros?
 
 exop
 	a fexpr...
-	it's fexpr not fun to allow the ops to be general
+	it's a fexpr and not a function to allow the ops to be general
 inop
 	a funcall
 		it's funcall not fexp, to make expressions simple
@@ -54,7 +130,9 @@ inop
 		and another call to put it in the subj
 		and it would have to be done almost always, which is ugly
 		but isn't it ugly for exops also?
-	
+			for inops it's just some calls appended on top of the code
+			for exops it's a complicated expression with an eval
+				is it really complicated?
 
 an exop
 

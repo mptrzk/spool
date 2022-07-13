@@ -279,10 +279,10 @@ Opval make_opval(Noun* noun, int tail) {
 
 Noun* kreck_eval(Noun* subj, Noun* form);
 Noun* kreck_evlist(Noun* subj, Noun* forms) {
-	if (*forms == 0) return forms;
+	if (!forms) return forms;
 	Noun* frame = make_frame();
 	Noun* ret = cons(kreck_eval(subj, car(forms)), kreck_evlist(subj, cdr(forms)));
-	return frame_return(frame, ret);
+	return gc(ret, frame);
 }
 
 Noun* kreck_eval(Noun* subj, Noun* form) {
@@ -290,70 +290,90 @@ Noun* kreck_eval(Noun* subj, Noun* form) {
 	while(1) {
 		Noun* op = car(form); //TODO should those be cells?
 		Noun* args = cdr(form);
-		if (atomp(*op)) {
-			Op f = (Op) (*op)->car;
+		if (wordp(op)) {
+			Op f = (Op) op->car;
 			Opval opval = f(subj, args);
 			Noun* ret = opval.noun;
-			frame_return(frame, ret); //TODO fix in SnC
+			ret = gc(ret, frame); //TODO fix in SnC
 			if (!opval.tail) return ret;
 			subj = car(ret);
 			form = cdr(ret);
 			continue;
 		}
-		/*
 		Noun* eform = kreck_evlist(subj, form);
 		Noun* clos = car(eform);
 		Noun* eargs = cdr(eform);
 		Noun* newsubj = cons(eargs, cdr(clos));
 		Noun* newform = car(clos);
-		Noun* tcall = frame_return(frame, cons(newsubj, newform));
+		Noun* tcall = gc(cons(newsubj, newform), frame);
 		subj = car(tcall);
 		form = cdr(tcall);
-		*/
 	}
 }
 
 Noun* kreck(char* subj, char* form) {
 	Noun* frame = make_frame();
-	return frame_return(frame , kreck_eval(rread(subj), rread(form)));
+	return gc(kreck_eval(rread(subj), rread(form)), frame);
 }
 
 Opval subj_op(Noun* subj, Noun* args) {
 	return make_opval(subj, 0);
 }
 
-/*
+Opval quot_op(Noun* subj, Noun* args) {
+	return make_opval(car(args), 0);
+}
+
 Opval car_op(Noun* subj, Noun* args) {
-	Noun* frame = make_frame();
 	Noun* earg = kreck_eval(subj, car(args));
-	Noun* ret = frame_return(frame, car(earg));
+	Noun* ret = car(earg);
 	return make_opval(ret, 0);
 }
 
 Opval cdr_op(Noun* subj, Noun* args) {
-	Noun* frame = make_frame();
 	Noun* earg = kreck_eval(subj, car(args));
-	Noun* ret = frame_return(frame, cdr(earg));
+	Noun* ret = cdr(earg);
 	return make_opval(ret, 0);
 }
 
 Opval cons_op(Noun* subj, Noun* args) {
-	Noun* frame = make_frame();
-	printf("cons_op:\n");
-	printf("%ld\n", rstack_sz());
 	Noun* earg1 = kreck_eval(subj, car(args));
-	printf("before:\n");
-	writenl(earg1);
-	gc();
-	//Noun* earg2 = kreck_eval(subj, car(cdr(args)));
-	printf("after:\n");
-	writenl(earg1);
-	//Noun* earg2 = kreck_eval(subj, car(cdr(args)));
-	Noun* ret = frame_return(frame, earg1);
+	Noun* earg2 = kreck_eval(subj, car(cdr(args)));
+	Noun* ret =	cons(earg1, earg2); 
 	return make_opval(ret, 0);
 }
-*/
 
+Opval eval_op(Noun* subj, Noun* args) {
+	Opval ret = cons_op(subj, args);
+	return make_opval(ret.noun, 1);
+}
+
+Opval cond_op(Noun* subj, Noun* args) {
+	Noun* earg1 = kreck_eval(subj, car(args));
+	Noun* arg2 = car(cdr(args));
+	Noun* arg3 = car(cdr(cdr(args)));
+	Noun* ret = cons(subj, earg1 ? arg2 : arg3);
+	return make_opval(ret, 1);
+}
+
+Opval list_op(Noun* subj, Noun* args) {
+	return make_opval(kreck_evlist(subj, args), 0);
+}
+
+void init_defs() {
+	Noun* frame = make_frame();
+	def_add("~", 0); 
+	def_add("$", word((uint64_t) subj_op));
+	def_add("'", word((uint64_t) quot_op));
+	def_add("<", word((uint64_t) car_op));
+	def_add(">", word((uint64_t) cdr_op));
+	def_add(":", word((uint64_t) cons_op));
+	def_add("*", word((uint64_t) eval_op));
+	def_add("?", word((uint64_t) cond_op));
+	def_add("::", word((uint64_t) list_op));
+	//def_add("!", word((uint64_t) macro_op));
+	deflist = gc(deflist, frame);
+}
 
 void init(int noun_cap) {
 	heap.cap = noun_cap;

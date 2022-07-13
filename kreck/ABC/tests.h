@@ -159,6 +159,26 @@ void test_read_defs() {
 	deinit();
 }
 
+void test_kreck() {
+	init(1000);
+	init_defs();
+	kreck("(1 2 3)", "(: (> (> ($))) (< ($)))");
+	assert(iden(kreck("(1 2 3)", "($)"), rread("(1 2 3)")));
+	assert(iden(kreck("(1 2 3)", "(' (4 5 6))"), rread("(4 5 6)")));
+	assert(iden(kreck("(1 2 3)", "(< ($))"), rread("1")));
+	assert(iden(kreck("(1 2 3)", "(> ($))"), rread("(2 3)")));
+	assert(iden(kreck("(1 2 3)", "(: ($) ($))"), rread("((1 2 3) 1 2 3)")));
+	assert(iden(kreck("(1 2 3)", "(: (> (> ($))) (< ($)))"), rread("((3) . 1)")));
+	assert(iden(kreck("(1 2 3)", "(: (> (> ($))) (< ($)))"), rread("((3) . 1)")));
+	assert(iden(kreck("(1 2 3)", "(* (' (4 5 6)) (' (< (> ($)))))"), rread("5")));
+	assert(iden(kreck("((1 2 3) (< (> ($))))", "(* (< ($)) (< (> ($))))"), rread("2")));
+	assert(iden(kreck("(1 2 3)", "(? (' 7) (< ($)) (> ($)))"), rread("1")));
+	assert(iden(kreck("(1 2 3)", "(? (' ()) (< ($)) (> ($)))"), rread("(2 3)")));
+	assert(iden(kreck("(1 2 3)", "(:: ($) (< ($)) (> ($)) (' 4))"), rread("((1 2 3) 1 (2 3) 4)"))); 
+	assert(iden(kreck("(1 2 3)", "((' (($))) (< ($)) (> ($)))"), rread("((1 (2 3)))")));
+	deinit();
+}
+
 void tests() {
 	test_init_heap();
 	test_cons();
@@ -169,5 +189,6 @@ void tests() {
 	test_read();
 	test_defs();
 	test_read_defs();
+	test_kreck();
 	printf("All tests passed!\n");
 }

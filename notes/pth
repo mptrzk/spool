@@ -13,4 +13,21 @@ tests
 	in language without proofs tests are mostly concerned with making sure that
 		the program doesn't do what we wouldn't want it to do
 	natural language descriptions before tests
+	describe input and output
+		in imperative languages - including state
 
+bugs
+	tests!!!
+	learn from important bugs
+		how did I make it?
+		how did I find it?
+	learn from bugs tha
+
+big bugs
+	that thread bug
+	big ABC bug
+	big SnC bug
+
+small bugs that could've been big
+	SnC defs bug
+		similar to big SnC bug
