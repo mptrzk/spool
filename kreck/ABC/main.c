@@ -39,12 +39,12 @@ uint64_t heap_sz() {
 	return heap.top - heap.bot;
 }
 
-Noun* car(Noun* noun) {
-	return noun->car;
+Noun* car(Noun* a) {
+	return a->car;
 }
 
-Noun* cdr(Noun* noun) {
-	return noun->cdr;
+Noun* cdr(Noun* a) {
+	return a->cdr;
 }
 
 
@@ -66,16 +66,16 @@ uint64_t word_val(Noun* word) {
 	return (uint64_t) word->car;
 }
 
-int wordp(Noun* noun) {
-	return noun && noun->cdr == word_sen;
+int wordp(Noun* a) {
+	return a && a->cdr == word_sen;
 }
 
-int listp(Noun* noun) {
-	return !noun || noun->cdr != word_sen;
+int listp(Noun* a) {
+	return !a || a->cdr != word_sen;
 }
 
-int atomp(Noun* noun) {
-	return !noun || noun->cdr == word_sen;
+int atomp(Noun* a) {
+	return !a || a->cdr == word_sen;
 }
 
 
@@ -141,7 +141,6 @@ void noun_write_list(Noun* a, FILE* f) {
 }
 
 void noun_write(Noun* a, FILE* f) {
-	if (dbg) printf("reached\n");
 	if (wordp(a)) {
 		fprintf(f, "%ld", (uint64_t) a->car);
 	} else {
@@ -193,9 +192,9 @@ int word_equal(char* a, char* b) {
 	return !is_word_char(b[i]);
 }
 
-void def_add(char* name, Noun* noun) {
+void def_add(char* name, Noun* value) {
 	Noun* frame = make_frame();
-	Noun* new_def = cons(word((uint64_t) name), noun);
+	Noun* new_def = cons(word((uint64_t) name), value);
 	deflist = gc(cons(new_def, deflist), frame);
 }
 
@@ -360,6 +359,22 @@ Opval list_op(Noun* subj, Noun* args) {
 	return make_opval(kreck_evlist(subj, args), 0);
 }
 
+Opval macro_op(Noun* subj, Noun* args) {
+	Noun* margs = cdr(args);
+	Noun* clos = kreck_eval(subj, car(args));
+	Noun* newsubj = cons(margs, cdr(clos));
+	Noun* newform = car(clos); //better names
+	Noun* ret = cons(subj, kreck_eval(newsubj, newform));
+	return make_opval(ret, 1);
+}
+
+Opval iden_op(Noun* subj, Noun* args) {
+	Noun* earg1 = kreck_eval(subj, car(args));
+	Noun* earg2 = kreck_eval(subj, car(cdr(args)));
+	Noun* ret =	iden(earg1, earg2) ? word(1) : 0; 
+	return make_opval(ret, 0);
+}
+
 void init_defs() {
 	Noun* frame = make_frame();
 	def_add("~", 0); 
@@ -371,9 +386,16 @@ void init_defs() {
 	def_add("*", word((uint64_t) eval_op));
 	def_add("?", word((uint64_t) cond_op));
 	def_add("::", word((uint64_t) list_op));
-	//def_add("!", word((uint64_t) macro_op));
+	def_add("!", word((uint64_t) macro_op));
+	def_add("=", word((uint64_t) iden_op));
+	def_add("nil", 0); 
+	def_add("q", def_get("'"));
+	def_add("c", def_get(":"));
+	def_add("l", def_get("::"));
+	#include "defs.h"
 	deflist = gc(deflist, frame);
 }
+
 
 void init(int noun_cap) {
 	heap.cap = noun_cap;

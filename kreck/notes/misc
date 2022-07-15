@@ -1,3 +1,99 @@
+infinite loop test with SnC
+	it seggies :(
+
+separate preprocessing layer? 
+	static macro expansion
+
+definitions are kinda like let*
+
+when are "let" bindings evaluated?
+
+lazy let?
+
+"let" is a preprocessing macro
+	it appends new bindings to a symlist and expands the body using it
+
+final code is name invariant
+
+
+the flow of data when evaluating an expression using an internal system
+
+definitions as threaded lets?
+
+step back and think about the island?
+	read the notes
+	learn some hoon & haskell
+			
+constants, variables, identifiers
+
+problem of substrings
+	allocating new mem for new substring seems wasteful
+		copying them even more so
+
+[to phil?]
+problems of wishy-washiness
+	usually speed vs sanity
+
+linking dependent definitions
+a non-interning parser
+
+concurrent parsing and conflicting symlists
+
+"def" op interpreted by parser?
+	yay
+	nay
+		clusterfuck
+
+the master subject
+	symlist
+
+internal parsing
+	subject updating?
+
+keeping the old parser?
+	needed for bootstrap
+
+symbols can be locally bound aswell
+
+new parser
+	str, symlist ->  expr, str' symlist' ?
+	stuff:rest symlist -> (assoc symlist stuff word_equal), rest, symlist'
+	"stuff" -> string("stuff"); //the other stuff
+	n=1A2B3C -> atom(&n, 3);
+
+evaluation
+	same as before, but with extra cdr
+		rly???
+
+what's opval then?
+	opres
+
+opname
+opval
+opres
+	
+
+do symbols really break layer separation?
+	it's just a pair!
+		is it really?
+
+"noun" vs "a"?
+	generic names can be 1 letter
+	in opval or parse it should be "noun"
+	in "noun_copy", each argument has different purpose
+		what?
+		contrast with "cons"
+	how about when arguments with other types are present
+		defadd
+			should be value
+				maybe even void pointer
+		write?
+			"a" seems sensible
+				it's just a noun
+
+ops with metadata
+	it's just one more dereference when done naively
+	might make debugging much easier	
 
 
 using the heap to return pairs?

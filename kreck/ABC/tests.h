@@ -160,8 +160,10 @@ void test_read_defs() {
 }
 
 void test_kreck() {
-	init(1000);
+	//init(1000); why does this break the heap? shouldn't assertion fail first?
+	init(2000);
 	init_defs();
+	printf("%ld\n", heap_sz());
 	kreck("(1 2 3)", "(: (> (> ($))) (< ($)))");
 	assert(iden(kreck("(1 2 3)", "($)"), rread("(1 2 3)")));
 	assert(iden(kreck("(1 2 3)", "(' (4 5 6))"), rread("(4 5 6)")));
@@ -176,6 +178,13 @@ void test_kreck() {
 	assert(iden(kreck("(1 2 3)", "(? (' ()) (< ($)) (> ($)))"), rread("(2 3)")));
 	assert(iden(kreck("(1 2 3)", "(:: ($) (< ($)) (> ($)) (' 4))"), rread("((1 2 3) 1 (2 3) 4)"))); 
 	assert(iden(kreck("(1 2 3)", "((' (($))) (< ($)) (> ($)))"), rread("((1 (2 3)))")));
+	writenl(kreck("(1 2 3)", "((! gate () (map (! gate () (: arg1 arg1) ) arg3)) ($) (< ($)) (> ($)))"));
+	//writenl(kreck("(1 2 3)", "((! gate () (rec1)))"));
+	//TODO empty exprs
+	//TODO is it really tail recursive?
+	//it is, because it can run the infinite loop below:
+	dbg = 1;
+	writenl(kreck("()", "((' (((:: (< (> ($))) (< (> ($))))) ((:: (< (> ($))) (< (> ($))))))) )" ));
 	deinit();
 }
 

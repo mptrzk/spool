@@ -1,4 +1,4 @@
-(defparameter *dbg* nil)
+(defparameter *code* '((defparameter *dbg* nil)
 
 (defmacro dump (expr &optional (fun '(lambda (x) x))) 
   `(progn (if *dbg*
@@ -67,8 +67,8 @@
                                   noun)))
                  noun))))
 
-;TODO better arg name? expr?
-(defun make-noun (noun) ;TODO proof that it's idempotent
+
+(defun make-noun (noun) 
   (cond ((listp noun) 
          (mapcar #'make-noun noun))
         ((uintp noun)
@@ -113,19 +113,19 @@
 (defun assoc-err (item alist) 
   (if (null alist)
       (progn (format t "item ~a not found in the alist~%" item)
-             (cons item 'err)) ;change to dump-error or an exception or something
+             (cons item 'err)) 
       (if (equal item (caar alist)) 
           (car alist) 
           (assoc-err item (cdr alist)))))
 
-(defun aura-def (noun symlist) ;error handling !! (let* n' stuff)
+(defun aura-def (noun symlist) 
   (let ((deflist (mapcar (lambda (sym) 
                        (cons (def-get sym) sym)) 
                      symlist))) 
-    (cdr (assoc-err noun deflist)))) ;assoc with error
+    (cdr (assoc-err noun deflist)))) 
 
 
-;TODO naming kerfuffle
+
 (defun aura-list (noun auras) 
   (if noun 
       (cons (aura-apply (car noun) (car auras)) 
@@ -169,12 +169,12 @@
 (aura-add 'opcode '(def ! $ q < > c * ? l h))
 (aura-add 'bool '(def T ~))
 (aura-add 'code '(list opcode code))
-;(aura-def (make-noun '((~))) '(? $))
+
 (aura-apply (make-noun '?) '(def ? $))
-;(aura-apply (make-noun '(~ (~) ~)) '(list (def ~ T)))
-;(aura-apply (make-noun '(((~)) (~) ~)) '(list opcode (def ~ T)))
+
+
 (aura-apply (make-noun '(c (> ($)) ($))) 'code)
-;(aura-list (make-noun '(T * T)) '(opcode))
+
 
 (defun corep (noun) (if (car noun) T nil))
 
@@ -200,7 +200,7 @@
             (pock-eval subj arg)) 
           args))
 
-;TEST
+
 (defun pock-apply (subj fun args) 
   (let* ((fun* (pock-eval subj fun)) 
          (code (car fun*)) 
@@ -211,13 +211,13 @@
   (if (equal a b)
       (def-get 'T) 
       (def-get '~)))
-;defun pock-eval (subj form &optional (tracing nil)) 
+
 (defun pock-eval (subj form) 
   (if (caar form)
       (pock-apply subj
                   (car form)
                   (pock-evlist subj (cdr form)))
-      (mbind (op arg1 arg2 arg3) ;borken indentation
+      (mbind (op arg1 arg2 arg3) 
              (values-list form)
              (case-noun op 
                ('$ subj) 
@@ -245,7 +245,7 @@
 (defun pock (subj form &optional (aura 'tree)) 
   (aura-apply (pock-eval (make-noun subj) (make-noun form)) aura))
 
-;TODO modify for the new spec
+
 (defun make-gate (code &rest env) 
   (let ((code* (make-noun code)))
     (list (def-get 'q) 
@@ -256,7 +256,6 @@
 
 
 
-;(def-add 'list '((q ~) (q (< ($)))))
 (def-add 'args '(< ($)))
 (def-add 'arg1 '(< (< ($))))
 (def-add 'arg2 '(< (> (< ($)))))
@@ -268,17 +267,17 @@
 (def-add 'loc2 '(< (> locs)))
 (def-add 'loc3 '(< (> (> locs))))
 (def-add 'olds '(< (> (> (> ($))))))
-;(def-add 'l '(q (args)))
+
 (def-add 'rec1 '(l fun1 (l fun1)))
-;(def-add 'l (make-gate 'args))
+
 (pock '(T T T) '(l (> ($)) ($)))
+(aura-apply (make-gate 'args) 'code)
 
 (def-add 'door '(q ((l (q q) (l arg1)))))
 (pock '() 
       '(door (q args))
       'code)
 
-(aura-apply (make-gate 'args) 'code)
 
 (def-add 'gate '(q ((l (q q)
                        (l arg2
@@ -291,7 +290,7 @@
                           (l arg2)
                           arg1))))
 
-;TODO move to tests or something
+
 (equal (pock '()
              '(gate (q ~) (q args))
              'code)
@@ -326,7 +325,7 @@
                 ((l fun1 (l fun1) (inc locs)) (> arg1)) 
                 locs)))
 
-;TODO rec2 recn? better names?
+
 
 (pock '(T T (T T) ~ T ~)
       '(len ($))
@@ -336,8 +335,8 @@
                   (? arg2
                      (c (arg1 (< arg2))
                         (rec1 arg1 (> arg2))) 
-                     (q ~)))) ;arg2 and not (l arg2) ???
-; it's 'cause it's quoted!!!
+                     (q ~)))) 
+
 
 (def-add 'foldl '(! gate ()
                     (? arg3 
@@ -346,13 +345,13 @@
                              (> arg3))
                        arg2)))
 
-;local functions?
-;the list is evaluated in scope where "apply" is called
-;in env
+
+
+
 (def-add 'apply '(q ((* (c arg2 (> arg1)) (< arg1)))))
 (pock '() '(apply inc (q ((T)))))
 
-;is apply even (that) needed?
+
 
 
 
@@ -409,9 +408,9 @@
                    (q fun1)
                    (q (l fun1))
                    (c (q l) args))))
-;^^ why doesn't it have (q q)s like "let"?
-; is it lower level of metaprogramming?
-;^^ uqs arg1?
+
+
+
 
 
 (def-add 'count 
@@ -448,7 +447,7 @@
          (q (h arg1))) 
       'code)
 
-;TODO test old stuff in let
+
 (pock '(T T T)
       '(! let ((q T) (q T))
           ($)))
@@ -491,10 +490,10 @@
       'uint)
 
 
-;TODO subst with other predicates
+
 (def-add 'subst '(? (= )))
 
-;Is qq uncopyable because of single value atoms?
+
 
 (def-add 'qq 
          '(! gate () 
@@ -512,33 +511,28 @@
 
 (pock '(T T T)
       '(! qq (~ ((uqs ($))) ~))
-      )
+      )))
+
+(defun gen-def (def)
+  (let ((name (cadr def)) 
+        (value (caddr def)))
+    (format nil "def_add(\"~(~a~)\", rread(\"~(~a~)\"));"
+            (cadr name)
+            (cadr value))))
+
+(defun convert-defs (code)
+  (let ((defs (remove-if (lambda (x) 
+                           (not (eq (car x) 'def-add)))
+                         code))) 
+    (format nil "~{~a~^~%~}"
+            (mapcar #'gen-def defs))))
+
+(convert-defs *code*)
 
 
-;TODO 
 
-; test for let - 
-
-;TODO TODO TODO arg binding macro!!!
-;should rec be a macro?
-; there's not much in rec1
-; but can make stuff nicer when it comes to env
-; rec should eval with whole env by default, with optional modification
-; maybe let-like
-;TODO move to notes
-;mul2, div2, mul 
-;! bind args (a b c)
-;subsubstt
-;TODO lambdas, any/all, or/and
-;count (with optional predicate)
-;equal op???
-;binary? n-ary?
-;why not fold?
-;redefinition?
-;TODO fix aura error messages
-;better arg-n
-;removing redundant make-noun in def-gate?
-;is it really redundant?
-
-;passing functions and evaluation
-
+(with-open-file (file "dump" 
+                      :direction :output 
+                      :if-exists :supersede
+                      :if-does-not-exist :create) 
+  (format file "~a" (convert-defs *code*)))
