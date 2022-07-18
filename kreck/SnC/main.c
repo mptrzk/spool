@@ -37,6 +37,7 @@ Root* deflist;
 //sentinel values
 Cell atom_sen[1];
 Cell copied_sen[1];
+int dbg = 0;
 
 uint64_t heap_sz() {
 	return heap_top - heap_bot;
@@ -85,7 +86,7 @@ void gc() {
 	for (Root* r = rstack_bot; r != rstack_top; r++) {
 		*r = cell_copy(*r);
 	}
-	if (heap_top == heap_bot + heap_cap) {
+	if (heap_top >= heap_bot + heap_cap) {
 		printf("can't alloc - both heaps full\n");
 		exit(-1);
 	}
@@ -324,7 +325,10 @@ Root* kreck_evlist(Root* subj, Root* forms) {
 
 Root* kreck_eval(Root* subj, Root* form) {
 	Root* frame = make_frame();
+	int ctr = 0;
 	while(1) {
+		//gc();
+		if (dbg) printf("kreck %d %d %d!\n", ctr++, heap_sz(), rstack_sz());
 		Root* op = car(form); //TODO should those be cells?
 		Root* args = cdr(form);
 		if (atomp(*op)) {

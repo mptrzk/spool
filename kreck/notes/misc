@@ -1,8 +1,155 @@
+let and quote
+	not lisp like
+		let is kinda another layer
+	that's not what I mean by let
+		let binds names to stuff evaluated at runtime
+		quoted code could end up stupid
+			let and quoted closure
+
+symbolic quotation
+	symbolic quasiquotation too?
+
+non-symbolic quotation resembles lispy quasiquotation
+
+does aremhicity make it so that the quote has to be the way it is and not like in lisp?
+	in lisp eval is evil
+	in aremhic languages itb
+
+aremhicity without dynamism?
+	dynamism
+		dynamic what?
+			typing
+			?binding?
+				is that "late binding"?
+
+let's think about static macros later
+	but "let" must be static
+
+quote as a parsing macro that creates a literal whose value is a stripped expression
+	but quote has runtime semantics aswell
+		is this ugly?
+	but quoted defs should be expanded anyway!
+		at least pock/kreck do it like that already
+		is Lisp like that?
+			yeah, probably using boxed/lazy symbols
+			that's what happens when you (eval (quote stuff))
+
+are dynamic macros not feasible?
+
+completely stripped version first
+
+reading pipeline
+	parsing into sexps
+	macro expansion
+	symbol expansion
+	stripping
+
+On the island I would've just done the symbol sentinel to avoid the hassle
+
+symbols in lisp
+
+p- n- s- expressions, different layers of internality
+	p-exp - cell or nil
+	n-exp - cell or atom (which can be a nil or not)
+		non-nil atoms are an abstractions of what would be lists in p-world
+	s-exp - cell, symbol or literal
+		symbols are an abstractions of what would be lists in p-world
+
+problem of symbols in internal environment
+	gc?
+
+proper lists & avoiding ambiguity?
+
+is quote a macro?
+quote & macroexpand
+
+s-quote?
+
+are macros more difficult now?
+	mqq muq muqs?
+
+those are sexps!
+	the stuf I've been doing earlier were just trees
+
+
+proving inambiguity when transforming between parsing domains
+
+on substrings
+	origin start end
+
+what seems like a stupid trick
+	what?
+		before next code packet
+		find string lengths
+		sum them
+		malloc & copy
+	meh
+
+externality using metadata
+	interning before stripping
+
+internal interning
+	or is it external interning?
+	metaspace interning
+	internal list of mallocs
+
+is dale completely nogc?
+
+kreck in lisp?
+seggies are a waste of time
+	that's the whole point
+
 infinite loop test with SnC
-	it seggies :(
+	it seggies
+		it fills up the heap and then does weird stuff
+		is it really tail recursive
+			it doesn't seggie if gc get's called every loop
 
 separate preprocessing layer? 
 	static macro expansion
+
+TODO
+	describe different approaches and the levels
+
+		
+
+source alloc problem
+	intern strings as a last step of reading
+
+stripping
+	optional?
+
+separating levels makes ambiguities impossible
+	why?
+
+intern, intern-words as malloc & copy
+	I don't want GC to move big pieces of data about
+
+stuff can be parsed to (metadata . stuff) in general
+	things like malloc pointers
+	which can be collected and stored at some step
+		doesn't it lead to ambiguity?
+
+symbols get parsed to a (name . sym_sen)
+	why not (name . def) ?
+		nil for literals
+^^ wouldn't it create ambiguity with pairs?
+	no, nil -> (nil . nil)
+strings get parsed to (string  . lit_sen)
+nums go (num . lit_sen)
+
+using sentinels as literals doesn't break anything, because it becomes (sentinel . sentinel)
+what about quotes?
+	if the expander doesn't expand quoted stuff, what does it return?
+		all this could be avoided it there was no expander and just symbols
+	it might expand quoted stuff, it won't matter
+
+symbol sentinels as pairs and possible ambiguity //as pairs on which level? what are the levels?
+	it seems like stuff won't break, but symbols would have another meaning than in lisp
+		symbols with the same name would not necessarily be eq
+			doesn't it kinda happen in lisp when symbols are in different packages?
+
+difference in parsing strings and syms?
 
 definitions are kinda like let*
 

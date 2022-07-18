@@ -32,5 +32,10 @@ small bugs that could've been big
 	SnC defs bug
 		similar to big SnC bug
 
+just bugs
+	ABC off by one
+		what?
+			allocating when heap full
 stumps
 	big bugs	
+

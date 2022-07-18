@@ -176,7 +176,7 @@ void test_rread() {
 
 //TODO fix reading nil
 void test_kreck() {
-	init(1000, 100);
+	init(400, 100);
 	init_defs();
 	kreck("(1 2 3)", "(: (> (> ($))) (< ($)))");
 	assert(iden(kreck("(1 2 3)", "($)"), rread("(1 2 3)")));
@@ -192,6 +192,7 @@ void test_kreck() {
 	assert(iden(kreck("(1 2 3)", "(? (' ()) (< ($)) (> ($)))"), rread("(2 3)")));
 	assert(iden(kreck("(1 2 3)", "(:: ($) (< ($)) (> ($)) (' 4))"), rread("((1 2 3) 1 (2 3) 4)"))); 
 	assert(iden(kreck("(1 2 3)", "((' (($))) (< ($)) (> ($)))"), rread("((1 (2 3)))")));
+	dbg = 1;
 	printf("reached\n");
 	writenl(kreck("()", "((' (((:: (< (> ($))) (< (> ($))))) ((:: (< (> ($))) (< (> ($))))))) )" ));
 	deinit();
@@ -199,7 +200,7 @@ void test_kreck() {
 
 void tests() {
 	test_init();
-	test_gc();
+	//test_gc();
 	test_write(); //TODO it kinda tests read too, sort that out
 	test_word_equal();
 	test_iden(); //TODO why didn't I write tests thorough enough the first time?

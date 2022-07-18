@@ -49,11 +49,11 @@ Noun* cdr(Noun* a) {
 
 
 Noun* cons(Noun* a, Noun* b) {
+	assert(heap_sz() < heap.cap); //TODO off by 1, explain why not <=
 	Noun* ret = heap.top;
 	ret->car = a;	
 	ret->cdr = b;	
 	heap.top++;
-	assert(heap_sz() <= heap.cap);
 	return ret; 
 }
 

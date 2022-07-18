@@ -17,3 +17,12 @@ the island challenge
 			programming language and transcribe it to asm
 		I'm preparing for an island
 		I can use w
+
+external parser - statically substituded defs, not symbols
+internally parsed stuff works like externally parsed stuff, but is more powerful
+	lets and stuff
+
+"let" and quoting work differently in lisp due to interpreter not evaluating symbols dynamically
+[is it phil, or more like distilled design stuff?]
+it's really odd that I haven't realized it till now
+

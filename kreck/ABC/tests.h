@@ -183,7 +183,7 @@ void test_kreck() {
 	//TODO empty exprs
 	//TODO is it really tail recursive?
 	//it is, because it can run the infinite loop below:
-	dbg = 1;
+	//dbg = 1;
 	writenl(kreck("()", "((' (((:: (< (> ($))) (< (> ($))))) ((:: (< (> ($))) (< (> ($))))))) )" ));
 	deinit();
 }
