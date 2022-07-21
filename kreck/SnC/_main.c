@@ -58,6 +58,7 @@ void heap_swap() {
 
 void gc();
 Cell* cell_new(Cell* a, Cell* b) {
+	if (heap_top == heap_bot + heap_cap) gc(); //corrupts arguments?
 	heap_top->car = a;
 	heap_top->cdr = b;
 	Cell* ret = heap_top;
@@ -99,7 +100,6 @@ Root* make_root(Cell* a) {
 }
 
 Root* cons(Root* a, Root* b) {
-	if (heap_top == heap_bot + heap_cap) gc(); //corrupts arguments?
 	return make_root(cell_new(*a, *b));
 }
 
@@ -108,7 +108,6 @@ Root* nil() { //TODO to make root
 }
 
 Root* atom(uint64_t value) {
-	if (heap_top == heap_bot + heap_cap) gc(); //corrupts arguments?
 	return make_root(cell_new((Cell*) value, atom_sen));
 }
 
@@ -326,7 +325,10 @@ Root* kreck_evlist(Root* subj, Root* forms) {
 
 Root* kreck_eval(Root* subj, Root* form) {
 	Root* frame = make_frame();
+	int ctr = 0;
 	while(1) {
+		//gc();
+		if (dbg) printf("kreck %d %d %d!\n", ctr++, heap_sz(), rstack_sz());
 		Root* op = car(form); //TODO should those be cells?
 		Root* args = cdr(form);
 		if (atomp(*op)) {

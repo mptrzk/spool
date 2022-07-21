@@ -26,7 +26,13 @@ bugs
 big bugs
 	that thread bug
 	big ABC bug
+		what?
+		how I made it
+			trying to be smart before figuring out how ABC really works
+		how I found it
 	big SnC bug
+		calling gc in function that has "Cell" type arguments, which got corrupted
+			also because of premature optimization?
 
 small bugs that could've been big
 	SnC defs bug

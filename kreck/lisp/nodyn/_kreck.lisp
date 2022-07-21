@@ -49,18 +49,18 @@
 (pseudo-parse '((aa "bb") 12 e))
  
 
-(defun def-get (str alist) 
-  (if alist
-      (if (equal str (caar alist)) 
-          (car alist)
-          (def-get str (cdr alist)))))
-(def-get "b" '(("a" . 1) ("b" . 2) ("c" . 3)))
+(defun def-get (deflist str) 
+  (if deflist
+      (if (equal str (caar deflist)) 
+          (car deflist)
+          (def-get (cdr deflist) str))))
+(def-get '(("a" . 1) ("b" . 2) ("c" . 3)) "b")
 
 
 (defun sym-expand (sym deflist) 
   (if (car sym)
       (cons (car sym) 
-            (cdr (def-get (car sym) deflist)))
+            (cdr (def-get deflist (car sym))))
       sym))
 
 (sym-expand '("b") '(("a" . 1) ("b" . 2) ("c" . 3)))
@@ -98,7 +98,63 @@
   (def-add $$ "a" 1) 
   (def-add $$ "b" '(a a)) 
   (def-add $$ "c" '(a b b)) 
-  (def-get "c" $$) 
+  (def-get $$ "c") 
   (strip $$))
+
+(defun kreck-evlis (subj forms)
+  (mapcar (fn (f) (kreck-eval subj f))
+          forms))
+
+(defun kreck-eval (subj form)
+  (let ((op (car form)) 
+        (args (cdr form)))
+    (if (atom op)
+        (funcall op subj args)
+        (let ((eform (kreck-evlis subj form))) 
+          (kreck-eval (cons (cdr eform)
+                            (cdar eform))
+                      (car eform))))))
+
+(defun subj-op (subj args) 
+  subj)
+
+(defun quot-op (subj args) 
+  (car args))
+
+(defun car-op (subj args)
+  (car (kreck-eval subj (car args))))
+
+(defun cdr-op (subj args)
+  (car (kreck-eval subj (car args))))
+
+(defun cons-op (subj args)
+  (cons (kreck-eval subj (car args))
+        (kreck-eval subj (cadr args))))
+
+(defun eval-op (subj args)
+  (kreck-eval (kreck-eval subj (car args))
+              (kreck-eval subj (cadr args))))
+
+(defun cond-op (subj args) 
+  (if (kreck-eval subj (car args))
+      (kreck-eval subj (cadr args))  
+      (kreck-eval subj (caddr args))))
+
+(defun list-op (subj args) 
+  (kreck-evlis subj args)) 
+
+($$-> '()
+  (def-add $$ "$" #'subj-op) 
+  (def-add $$ "q" #'quot-op)
+  (strip $$))
+
+;parse - read & bind
+;expand -> bind
+;pseudo-parse -> read
+
+;indenting when (arg1 arg2 &body body)
+
+;TCO 
+
 
 

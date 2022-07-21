@@ -1,3 +1,52 @@
+symbols in pock
+going symbolic
+	code is an slist, symbol or literal?
+		
+	same as before but atoms get searched when evaled?
+
+	
+literals as just atoms?
+	but then lists have to be proper
+		isn't code just proper lists anyway?
+
+???
+	atoms are evaluated by being searched in subj
+	no symbols
+	quotes are
+
+dynamic binding & static typing?
+
+"search" fun
+	finds a cell whose car is the argument
+	would require the subj to be a sexp
+
+symbol as a 2-element list instead of a pair?
+	yay
+		consistent with pock convention
+		easier to read when displayed naively
+	nay
+		one more pointer dereference
+			so what?
+
+"in" function? macro?
+env returning functions
+	is this monad related stuff?
+
+fast versions with proofs
+fast interpreter before a compiler
+
+probably should learn urbity names for stuff
+
+rec is calling stuff "in" current subj
+
+dynamic "method" names?
+
+progn
+
+literals and quote in kreck
+
+OOP like stuff in hoon
+
 let and quote
 	not lisp like
 		let is kinda another layer
@@ -10,6 +59,8 @@ symbolic quotation
 	symbolic quasiquotation too?
 
 non-symbolic quotation resembles lispy quasiquotation
+
+evaluating data happens almost everywhere, with every inop
 
 does aremhicity make it so that the quote has to be the way it is and not like in lisp?
 	in lisp eval is evil

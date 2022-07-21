@@ -1,0 +1,13 @@
+pseudo-parser?
+string representation
+
+symp & stack overflow
+	not using maptree?
+		dedicated function that maps over sexps & handles errors
+
+deflist sanely
+	function to do it all in bulk
+		doesn't quite cut it
+
+
+
