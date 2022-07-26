@@ -1,3 +1,56 @@
+very lispy
+	subj is an alist
+	closure is (code argnames . env)
+		argnames and args are pairlis-ed onto env
+			problem - low flexibility
+	alternative
+		(code acode . env)
+		acode is arg processing code
+			isn't it impossibly self-referential?
+	another one
+		args get aconsed as "args"
+			bindings are done internally
+
+eval with current subj op
+
+dyn, but simpler
+	parser just translates symbols to (@ key)
+	@ is find and eval
+		not just find?
+			ponder the "too many evals" thing
+		(@ key) 
+	subj = (args ctx . dict)
+	dict is a list of alists
+		why not an alist?
+			append is meh
+				but pairlis?
+
+parser with syms & substitution macros
+	how
+		submacs begin with #
+	nay
+		submacs are to be thrown away eventually
+
+let
+	generates a inop call
+	old args get tucked into env
+		figured that out for pock already!
+	"olds"
+	expands lets inside
+		can eval them, with old deflist in olds
+problem of nested lets
+
+//
+pock?
+	syms are parsed as [~ string]
+		can be done in kreck aswell as (~ str)
+	defs by macro expansion
+		macro written using old parser
+
+interpreter with symbols & literals?
+
+interpreter which looks up every atom is probably slower than pock
+
 symbols in pock
 going symbolic
 	code is an slist, symbol or literal?

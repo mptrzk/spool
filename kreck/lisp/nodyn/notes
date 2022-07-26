@@ -8,6 +8,21 @@ symp & stack overflow
 deflist sanely
 	function to do it all in bulk
 		doesn't quite cut it
+	it's just an alist, duh
 
+"scope" parser macro
+	
 
+what let does
+	takes
+		as args:
+			bindings, which consist of
+				names
+				expression
+		from env:
+			deflist, innermost binding slot
+	appends
 
+you have to strip parser macros before running them...
+do they have a separate deflist for stripping?
+	too complicated too fast?

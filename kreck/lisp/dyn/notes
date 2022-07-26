@@ -12,3 +12,164 @@ never invent anything
 		and it's not completely a lisp
 
 ponder that additional evaluation of op
+
+subj exop
+	after name reduction
+
+doing stuff using names or functions?
+
+implicit "args" face?
+	yay
+	nay
+
+"args" face as part of arugment name augmentation
+
+fexpr inops?
+
+stuff that's inefficient but easy to optimize internally
+
+debugging
+	adding caller info
+
+search is wrong
+
+explicit subdicts?
+
+(key isdict content)
+(key content . isdict)
+
+(key isrec . content)
+
+record
+	key
+	value - dictionary | literal
+
+expand or eval op?
+	expand
+		evaling creates the need for additional quotes most of the time
+		then you could do more with literal expression
+		but doesn't it interfere with exops?
+	eval
+		mixing levels of abstraction is meh
+
+substitution equivalence vs subject getter
+substitutive vs referential semantics
+	getter is better?
+		for args
+			lets, mathematics & stuff
+				but
+					getters can be in deflist, values in other parts of subj
+	substitutive
+		op evaluation is less confusing
+
+kreck-apply
+	evals the op
+	calls an exop if atom
+	calls an inop otherwise, that is:
+		evals the inop, which yields code and env
+
+why the inop has to be evaled after being expanded
+
+find better word for expanded
+	found
+	substituted
+	looked-up
+	dereferenced
+	aliased
+
+inop evaluates to a closure
+
+why so many evals when dealing with an inop
+	recursion is impossible otherwise (without explicit fixed-point combinator or cyclic subj)
+
+		
+keyword argument for test macro
+or maybe make it detect test-macros?
+
+explicit nil in test macro
+	yay
+		explicit is better than implicit
+	nay
+		saves a little bit of space
+			pfft!
+
+testing search
+	against atomic records
+
+query & find
+
+entry
+	table
+	record
+
+when is implicit "nil" ok?
+	if, cond
+when is it not?
+	format
+	
+
+test macros
+	keep it simple
+	no message for passing
+
+test descriptions
+	query
+		nothing
+		just a record
+		record within a table
+		table within a table
+		not crawling through records
+	find
+
+find is already a thing
+query-value?
+
+should subj be a well formed entry?
+	nay
+		it requires inop impl to add "args" entry
+
+making it search only in cdr of subj?
+	yay
+		inop impl is simpler
+	nay
+		messy
+
+arbitrary tree search
+	how?
+		works on arbitrary trees
+		looks for entries
+		when finds records, checks if they are tables
+			if so, searches through them
+			else, returns nil
+
+a less structured way
+	do-not-crawl
+
+I want name-free code to be runnable
+	that's impossible when all atoms are queried on evaluation
+
+names all the way
+	how
+		basic exops for manipulating names
+		inop names arglist
+			(code argnames . env) => (("subj" (subj) "t")
+	is it a good solution for the island?
+
+doesn't it become a throwaway lang then?
+
+a way for name-free code
+	preprocessor translates "symbols" to queries
+		but ops complicate things
+			they don't that much
+			it's still 3 evals
+	atoms eval to themselves
+		exop then can be just an atomic literal
+
+fn macro handles arg getters
+
+	
+it has to search "quote" every time now
+	slow but general
+
+tru symbols?
+

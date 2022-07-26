@@ -61,6 +61,9 @@
   (+ (kreck-eval subj (car args))
      (kreck-eval subj (cadr args))))
 
+(defun search-op (subj args) 
+  (+ (kreck-eval subj (car args))))
+
 (defun kreck (subj form deflist) 
   (kreck-eval (parse subj deflist) (parse form deflist)))
 
@@ -162,6 +165,7 @@
 (let ((defs
         ($$-> '()
           (def-add $$ "$" #'subj-op) 
+          (def-add $$ "@" #'search-op) 
           (def-add $$ "q" #'quot-op) 
           (def-add $$ "<" #'car-op)
           (def-add $$ ">" #'cdr-op)

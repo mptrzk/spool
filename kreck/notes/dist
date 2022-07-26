@@ -1,0 +1,13 @@
+
+problem of defs
+pock origins
+substitution macros
+need for internal system
+design considerations
+	variable scopes
+difference between static & dynamic def resolution
+static resolution
+dynamic resolution
+	substitution semantics
+	variable semantics
+	an example of difference

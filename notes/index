@@ -5,6 +5,8 @@ pth
 
 generic note files:
 	meta
+	dist
+		distilled
 	phil
 	misc
 	old
