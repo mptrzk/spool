@@ -10,6 +10,8 @@
   (reduce #'thread-sub (cons input exprs)))
 
 
+(defvar *test-macros* '(test test-equal))
+
 ;macrolet & stuff?
 (defun test-1 (expr) 
   `(if ,expr 
@@ -28,64 +30,22 @@
                exprs)))
 
 
-(test nil
-  (= ($$-> '(1 2 3) 
-       (mapcar (fn (x) (+ 1 x)) $$) 
-       (reduce #'+ $$)
-       (- $$ 4))
-     5))
-
-
-
-;query
-
-(defun entryp (expr)
-  (and (consp expr)
-       (consp (cdr expr))))
-
-(defun recordp (expr)
-  (and (entryp expr) (cadr expr)))
-
-(defun tablep (expr)
-  (and (entryp expr) (not (cadr expr))))
-;assume validated?
-
-;where validate?
-(defun kreck-query (entry key)
-  (cond ((not (entryp entry)) nil) ;error?
-        ((equal (car entry) key)
-         entry)
-        ((tablep entry)
-         (mapcar #'kreck-query (cddr entry))))) ;not mapcar!
-;query-table?
- 
-
-(defun kreck-query-val (subj key)
-  (if (atom key)
-      (let ((res (kreck-query subj key)))
-        (if res
-            (cdr res)
-            (format t "key ~s not found in ~s~%"
-                    key ;^^dump to error log
-                    subj)))
-      key))
 
 ;kreck
-(defun kreck-evlis (subj forms)
-  (mapcar (fn (f) (kreck-eval subj f))
-          forms))
 
 (defun kreck-apply (subj op args)
   (if (atom op)
       (funcall op subj args)
       (let ((clos (kreck-eval subj op))) 
-        (kreck-eval (cons args
-                          (cdr clos))
+        (kreck-eval (acons "args" 
+                           args
+                           ;(kreck-evlis subj args)
+                           (cdr clos))
                     (car clos)))))
 
 (defun kreck-eval (subj form)
   (if (atom form)
-      (kreck-query-val subj form)
+      form
       (kreck-apply subj
                    (kreck-eval subj (car form))
                    (cdr form))))
@@ -119,50 +79,96 @@
       (kreck-eval subj (caddr args))))
 
 (defun list-op (subj args) 
-  (kreck-evlis subj args)) 
+  (mapcar (fn (f) (kreck-eval subj f))
+          args))
 
-(defun query-op (subj args) 
-  (kreck-query subj (kreck-eval subj (car args))))
+(defun evlis-op (subj args) 
+  (let ((esubj (kreck-eval subj (car args))))
+    (mapcar (fn (f) (kreck-eval subj f))
+          args)))
+
+(defun assoc-op (subj args)
+  (assoc (kreck-eval subj (car args))
+         (kreck-eval subj (cadr args))
+         :test #'equal))
+
+(defun getvar-op (subj args)
+  (let* ((key (kreck-eval subj (car args)))
+         (res (assoc key subj :test #'equal)))
+    (if res
+        (cdr res)
+        (error (format nil "var ~a not found~%" key)))))
 
 
 ;defs
 
-(defparameter *defs* `("defs"
-                       ("$" . ,#'subj-op)
-                       ("q" . ,#'quot-op)  
-                       ("<" . ,#'car-op)  
-                       (">" . ,#'cdr-op)  
-                       ("c" . ,#'cons-op)  
-                       ("*" . ,#'eval-op)
-                       ("?" . ,#'if-op)
-                       ("l" . ,#'list-op)
-                       ("@" . ,#'query-op)))
 
-(defun ploo (expr)
+
+(defun parse (expr)
   (cond ((null expr) nil)
-        ((symbolp expr) (string-downcase expr))
-        ((consp expr) (cons (ploo (car expr))
-                            (ploo (cdr expr))))
+        ((symbolp expr) (list #'getvar-op
+                              (string-downcase expr)))
+        ((consp expr) (cons (parse (car expr))
+                            (parse (cdr expr))))
         (t expr)))
 
+(defun def-make (name &rest expr)
+  (cons name (parse (car expr))))
 
-(defun kreck (subj form)
-  (kreck-eval (cons (ploo subj) *defs*) (ploo form)))
+(defun kreck (args form)
+  (kreck-eval (acons "args" (parse args) *defs*)
+              (parse form)))
+
+(defparameter *defs*
+  `(("$" . ,#'subj-op)
+    ("q" . ,#'quot-op)  
+    ("<" . ,#'car-op)  
+    (">" . ,#'cdr-op)  
+    ("c" . ,#'cons-op)  
+    ("*" . ,#'eval-op)
+    ("?" . ,#'if-op)
+    ("l" . ,#'list-op)
+    ("@" . ,#'assoc-op)
+    ("@$" . ,#'getvar-op)
+    ,(def-make "*l"
+               '(c (q (* (* (> ($))
+                            (< args))
+                         (c (q l)
+                            (* (> ($))
+                               (< (> args))))))
+                   ($)))
+    ,(def-make "apply" ;flipping subjs?
+               '(c (q (* (> ($))
+                         (c (* (> ($))
+                               (< args))
+                            (* (> ($))
+                               (c (q l)
+                                  (* (> ($))
+                                     (< (> args))))))))
+                   ($)))
+
+    ,(def-make "dup"
+               '(c (q (apply (q (c (q (c (> args)
+                                         (> args)))
+                                   ($)))
+                             args))
+                   ($)))
+    ))
+
+;exop quote trap problem
+;*$
+;!*$ ?
+;%*$ ?
+;fexpr-apply?
+;sign-letter runes
 
 
 ;tests
+;default aura
 
 (test "all" ;no "in all"?
-  (test "entry-predicates"
-    (not (entryp "a"))
-    (not (entryp '("a")))
-    (entryp '("a" ()))
-    (entryp '("a" () "foo"))
-    (tablep '("a" () "foo"))
-    (not (tablep '("a" "t" "foo")))
-    (not (recordp '("a" () "foo")))
-    (recordp '("a" "t" "foo"))
-    )
-  (test-equal "kreck-query"
-    ((kreck-query "t") )))
-
+  (test-equal "kreck"
+    ((kreck '(1 2 3) '(> (< ($)))) '(1 2 3))
+    ;((kreck '(1 2 3) '(ooo (q 1) 2 3)) '(1 2 3))
+    ))
+(kreck '(1 2 3) '(*l ($) (q (4 (> args) 6))))

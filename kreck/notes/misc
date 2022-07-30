@@ -1,3 +1,57 @@
+proofs
+	safety of mutation
+	correctness of macro output
+
+implicit fixed point recursion is possible with 2 eval inop, but the closure
+must be synthesized before
+	the  looks like this:
+		(("args" . args) ("rec" code . ctx) . ctx)
+
+dsl for doing things fast
+
+a fun vm
+	register
+		3 argument regs, result reg, pc, sp, fp
+		link register?
+	stack
+		call stack & ?operation? stack?
+		call stack only?
+		single stack and link register?
+
+
+the fundamental slowdown of massively internal language
+
+cool name for operators that work on caller's subj
+	are they impossible using 2 eval inop?
+		the caller's args
+			
+against 2-eval inops:
+	^^
+	literal op is more powerful than symbolized op, which is ugly
+
+
+
+minimal version
+	$ ' < > : * ? #
+	[formal descriptions of exops & inops]
+	op getter => inop | exop
+	*(subj, inop) = closure = (code . ctx)
+	@(closure, args) = *((args . ctx), code) 
+	
+
+evlis is redundant for interpreter with 
+evlis
+list
+another fork?
+
+better testing
+	always equal?
+	showing the result that failed
+	READ practical common lisp
+
+against fexpr inops
+	losing the subj
+
 very lispy
 	subj is an alist
 	closure is (code argnames . env)
@@ -10,6 +64,24 @@ very lispy
 	another one
 		args get aconsed as "args"
 			bindings are done internally
+
+parser doing sym -> (< (@ "sym" ($))?
+	yay
+		cool
+		minimizes number of exops
+	nay
+		complicated
+			that expression must be parsed or hardcoded
+				cons(prim.car, cons(cons(prim.assoc, cons(atom("sym"), cons(cons(prim.subj, nil()), nil()))), nil()))
+	alt
+		getvar exop
+			???
+				runic name?
+				@$
+			yay
+				simple
+			nay
+				a bit ugly
 
 eval with current subj op
 
