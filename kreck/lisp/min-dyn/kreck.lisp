@@ -92,6 +92,11 @@
         (cdr res)
         (error (format nil "var ~a not found~%" key)))))
 
+(defun debug-op (subj args)
+  (format t "evaluating ~a:~%" (cons '!d (unparse args)))
+  (let ((res (kreck-eval subj (car args))))
+    (format t "  ~a~%" (unparse res))
+    res))
 
 ;defs
 
@@ -131,6 +136,26 @@
     ("*" . ,#'eval-op)
     ("?" . ,#'if-op)
     ("#" . ,#'getvar-op)
+    ("!d" . ,#'debug-op)
+    ("l" . ,(parse '(c (q (? args
+                             (c (* old
+                                   (< args))
+                                (* old
+                                   (c (c code ($))
+                                      (> args))))
+                             ~))
+                       (c (c "code"
+                             (q (? args
+                                   (c (* old
+                                         (< args))
+                                      (* old 
+                                         (c (c code ($))
+                                            (> args))))
+                                   ;^evals 
+                                   ~)))
+                          (c (c "old"
+                                ($))
+                             ($))))))
     ("l" . ,(parse '(c (q (? args
                              (c (* (> ($))
                                    (< args))
@@ -139,24 +164,15 @@
                                       (> args))))
                              ~))
                        ($))))
-    ("gate" . ,(parse '(c (q (l (q c)
-                                (l (q q) (< args))
-                                (l (q c)
-                                   (l (q c)
-                                      "rec"
-                                      (l (q q) (< args)))
-                                   (< (> args)))))
-                          ($))))
     ))
-;^ with acons
-;(c (q (? (* (> ($)) args)) (q 1) (q 0))
-;                       ($)  would seggie in c
-
-;name-based recursion and problem of cycles after substitution
 
 
 
 
 
 (kreck '(1 2 3) '(l (> args) 1))
-(unparse (kreck '(1) '(gate (c args args) ($))))
+;bad approach
+;write code by hand first
+;^this is the closuwee
+; no, that's an inop!
+;evalating gate ctx arg?

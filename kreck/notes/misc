@@ -1,4 +1,66 @@
+exotic def-add
+	expanding
+	macro
 
+in pock (~ . stuff) must eval to itself
+	why?
+		quoting the quote?
+
+so the substitutive semantics aren't substitutive after all?
+	they aren't substitutive for 1st member of a call
+		rly?
+			they are if atoms eval to themselves
+
+on the island I would write getdef as an inop
+
+(args . ctx)
+(args loc . defs)
+
+quote can be an inop!
+
+$<>:*?
+
+*(subj, (inop args)) = *((args . ctx), code)
+	where clos = *(subj, inop)
+				code = <(clos)
+				ctx = >(clos)
+
+
+subst semantics
+	saner arg getter
+	detachment from def stuff
+		less manipulation
+
+quoted code substitution problem
+
+I want runic hash tables and stuff
+
+improper list function
+
+safety isssue
+	1 in (1 2 3) is a valid exop
+	exop checking
+		do ordered C functions have ordered addresses?
+			nah
+	exop array and bounds checking?
+
+substitutive semantics, unnamed args
+
+named vs unnamed args
+	named
+		getvar behaves nicely
+			"old" is just (> ($))
+				but
+					dynamic scoping is rarely used
+						how about lets?
+							is it dynamic?
+					"old" can be a function
+		  not needing to mess with the deflist
+	unnamed
+		eval doesn't mess with names
+		args, arg1, etc are all functions
+
+		
 
 proofs
 	safety of mutation

@@ -411,5 +411,6 @@ void deinit() {
 #include "tests.h"
 
 int main() {
+	printf("%d\n", foo);
 	tests();
 }

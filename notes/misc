@@ -10,3 +10,13 @@ when concepts don't quite make sense in their original meaning, but seem somewha
 
 re-understanding recursion
 	it's better with names
+
+debugger for lispy stuff
+	- adjustable pretty-printing
+	- return value tracing
+	- timeless root tracing
+
+
+a tail call is an evaluation such that in it's implementation, it is redundant to push a frame
+	
+frontend slime server

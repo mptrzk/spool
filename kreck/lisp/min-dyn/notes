@@ -1,0 +1,53 @@
+debug exop
+	evaluates first arg with the subj
+	contains a note
+	prints out subj and return value
+
+cleaner?
+	but list is just so basic
+
+more bootstrappy?
+	ez list
+	useful stuff that requires list
+	better list using the useful stuff
+		cycle?
+
+bootstrapping by static macros
+	
+
+the alist and cycle creation
+
+adding a definition changes semantics of older defs that use it
+
+are cycles really a problem?
+	yes, they cannot be easily traversed
+		don't traverse them then!
+		you don't want to naively traverse code anyway
+			the tree gets really wide really fast
+	heard something about GC
+		my gc should deal with cycles just ok
+			no, it won't
+				cell get's marked after it gets copied, not before
+	the def expansion won't halt!
+
+expander cycle detection
+	list of already expanded symbols
+
+memoization in expander
+
+SnC that allocs before writing
+	how?
+		children pointers are stored in locals
+		new cell is allocated
+		old cell set to a redirection
+	whatever, cycles are meh
+
+another strategy
+	write defs in a dumb way
+	write a functioning internal system
+		which is?
+			a stateful interpreter?
+
+I still want to write at least "list" the right way
+
+"write dumb as long as it makes it easier to write smart"
