@@ -1,3 +1,50 @@
+seamless def removal
+	static substitution of deterministic defs
+
+notation for pure exops
+distilling rh whole pock/kreck deal?
+
+non-rec-fexpr-ctx?
+
+subj layout problems
+	single deflist everywhere?
+	multiple deflists
+		impl will change
+
+inop as an argument in substitutive semantics
+	it gets evaluated to a closure when it's an argument
+	it gets evalueated again when accessed before application
+		no, it doesn't
+			arg "getter" gets evaluated
+	
+
+^^maybe solutions are more obvious with a type system
+
+maybe I should learn haskell/ats first
+
+problem of different deflists
+
+design is hard
+
+
+the return/write problem
+
+it's worthless to write it when it evals in the same context where it's expanded
+	why?
+
+doing stuff the smart way is doing it defless right away
+doing it the way I've been trying to is premature optimization
+
+current plan
+	simple stuff, the dumb way
+	?monadic? interpreter
+	dumbness detection
+	everything but less stupid
+
+small deflist contexts
+
+metaprogramming using macros & fexprs
+
 exotic def-add
 	expanding
 	macro
@@ -10,6 +57,7 @@ so the substitutive semantics aren't substitutive after all?
 	they aren't substitutive for 1st member of a call
 		rly?
 			they are if atoms eval to themselves
+	no, it's just that the old pock didn't evaluate stuff
 
 on the island I would write getdef as an inop
 

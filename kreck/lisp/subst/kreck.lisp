@@ -148,23 +148,24 @@
     ("w" . ,(parse '(c (q (c (*^ arg1) ~))
                        non-rec-fexpr-ctx)))
 
-    ("l" . ,(parse '(c (q (* ($) this))
-                       (c (c (q (? args
-                                   (c (* calr arg1)
-                                      (* (c (> args)
-                                            ctx)
-                                         this))))
-                             (c ($)
-                                ~))
-                          defs)))) 
-    ("fexpr-gate" . ,(parse '(c (q (c (q (* ($) this))
-                                         (c (c arg1)
-                                            (c (* calr (q ($)))
-                                               ~)
-                                            defs)))
-                                   non-rec-fexpr-ctx)))
-    ))
+     
+    ("l" . ,(parse '(c (q (? args
+                             (c (*^ arg1)
+                                (*^ (c (q l) (> args))))))
+                       non-rec-fexpr-ctx)))
+    ("fex-gate" . ,(parse '(c (q (l (q c)
+                                  (l (q q) arg1)
+                                  (l (q c)
+                                     (l (q l)
+                                        (l (q q) arg1)
+                                        (q ($)))
+                                     (q defs))))
+                            non-rec-fexpr-ctx)))
+    
+    ))                ;^^context capturing problem?
 ;evaluating in caller context - deflist ambiguity
+;is non-deflist context capture a problem?
+;is it desirable?
 
 ; recursion with context change macro
 ;^* - eval in caller scope
@@ -174,5 +175,7 @@
 (kreck '(1 2 3) '($))
 ;(kreck '(1 2 3) '(w (> args)))
 (kreck '(1 2 3) '(l (> args) 1))
-(kreck '(1 2 3) '(fexpr-gate (c arg1 arg2)))
+(unparse (kreck '(1 2 3) '(fex-gate (c arg1 arg2))))
+(unparse (kreck '(1 2 3) '(* ($) (fex-gate (c arg1 arg2)))))
+(unparse (kreck '(1 2 3) '((* ($) (fex-gate (c arg1 arg1))) 1)))
 ;^nope

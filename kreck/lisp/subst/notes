@@ -1,4 +1,40 @@
-evaluation in defget
+code should be as easy to write as possible using a given layer of "goodness"
+
+gen 0 - recursion dependent on dynamic binding 
+gen 1 - no dynamic binding
+gen 2 - typesafe
+gen ? - compiled
+
+dyn-defs?
+
+
+(c (q ())
+   (c ($) exops-base))
+
+
+define-eval
+how macrolet works?
+
+skill roadblock
+	I cannot design well stuff I'm not proficient with
+
+type system
+monads
+hoonisms
+
+"l" in (c l arg1)
+should closures be boxed?
 	yay
+		solves the above problem
+			is it really a problem?
+				shouldn't that "l" be necessarily quoted?
 	nay
-		breaks unparse
+
+should code be always paired with a deflist?
+	what? it is
+
+explain evaluation in:
+		(unparse (kreck '(1 2 3) '((* ($) (f-gate (c arg1 arg1))) 1)))
+	def generation where getter would be
+
+fex-gate

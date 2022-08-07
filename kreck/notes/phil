@@ -1,3 +1,5 @@
+simpler than lisp
+
 the problem of implicit logic
 
 throwaway languages
@@ -6,6 +8,7 @@ throwaway languages
 compilation?
 
 
+[move?]
 is doing SnC in C sane?
 	no macros
 	no good checking facilities
