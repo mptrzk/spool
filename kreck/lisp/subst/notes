@@ -8,8 +8,6 @@ gen ? - compiled
 dyn-defs?
 
 
-(c (q ())
-   (c ($) exops-base))
 
 
 define-eval
@@ -38,3 +36,8 @@ explain evaluation in:
 	def generation where getter would be
 
 fex-gate
+
+
+((* ($) (fex-gate (l arg1 (*^ (q arg1))))) (> arg1))
+^^ why quote?
+	nooo!

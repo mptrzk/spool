@@ -1,3 +1,8 @@
+why word checking
+	just "eq" requires interning
+	interning requires consing onto previous deflist
+	the parser would have to thread the deflist through each subexpression parsing
+
 seamless def removal
 	static substitution of deterministic defs
 

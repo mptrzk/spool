@@ -112,9 +112,9 @@
   (cons name (parse (car expr))))
 
 (defun kreck (args form)
-  (kreck-eval (cons (parse args)
-                    (cons nil *defs*))
-              (parse form)))
+  (unparse (kreck-eval (cons (parse args)
+                             (cons nil *defs*))
+                       (parse form))))
 
 
 (defparameter *defs*
@@ -175,7 +175,10 @@
 (kreck '(1 2 3) '($))
 ;(kreck '(1 2 3) '(w (> args)))
 (kreck '(1 2 3) '(l (> args) 1))
-(unparse (kreck '(1 2 3) '(fex-gate (c arg1 arg2))))
-(unparse (kreck '(1 2 3) '(* ($) (fex-gate (c arg1 arg2)))))
-(unparse (kreck '(1 2 3) '((* ($) (fex-gate (c arg1 arg1))) 1)))
+(kreck '(1 2 3) '(fex-gate (c arg1 arg2)))
+(kreck '(1 2 3) '(* ($) (fex-gate (c arg1 arg2))))
+(kreck '(1 2 3) '((* ($) (fex-gate (c arg1 arg1))) (> arg1)))
+(kreck '((1 2) 3 4)
+       '((* ($) (fex-gate (l arg1 (*^ arg1)))) (> arg1)))
+
 ;^nope
