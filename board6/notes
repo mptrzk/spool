@@ -1,0 +1,21 @@
+bead
+	form
+	input
+
+threaded access
+	dependence
+	encapsulation?
+		yay
+		nay
+			why bother
+
+dependency break warning
+resolution by resetting
+
+are cycles evil here?
+
+each component can be in focus
+	automatic transition to next element in a chain
+
+grid thingy
+	nice grid thingy

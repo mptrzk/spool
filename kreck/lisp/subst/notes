@@ -1,3 +1,60 @@
+noob mistake - listp instead of consp
+
+pretty print
+	n elements, then "..."
+	using format language?
+		nah, let's keep it more lispy than not
+			even docs for simple stuff is a mess
+	how
+		printing each element returns indent
+		lists
+			data
+				(foo
+				 bar
+				 baz)
+			code
+				(foo bar
+				     baz)
+		semi-auras
+			stuff like indentation, nesting, length
+			atoms are left to common lisp
+			
+			number of elements in first line, indent
+
+parenthesised op indenting
+((foo) bar
+ 			 baz)
+
+modify aura-list?
+	(list first-line indent aura1 auras)
+
+interactive debug
+	an exop that:
+		according to options
+			eval, eval-rec, eval-rec-skip <- bonus - write in kreck as a DSL
+				displays subj and formula to be evaled
+					subj optional?
+		asks for input, which is
+			eval
+			eval-rec
+			eval-rec-skip
+			skip
+		if eval
+			a -> (d a)
+			(a . b) -> ((d a) . b)
+		if eval-rec
+			a -> (d a "rec")
+			(a . b) -> ((d a "rec") . b)
+		if eval-rec-skip
+			a -> (d a "rec-skip")
+			(a . b) -> ((d a 1) . b) << continue
+
+
+"defs" should be used cautiously when specifying inop's deflist
+	 
+rename *defs*
+	there will be many different deflists
+
 code should be as easy to write as possible using a given layer of "goodness"
 
 gen 0 - recursion dependent on dynamic binding 
@@ -21,12 +78,14 @@ monads
 hoonisms
 
 "l" in (c l arg1)
-should closures be boxed?
-	yay
-		solves the above problem
-			is it really a problem?
-				shouldn't that "l" be necessarily quoted?
-	nay
+	should closures be boxed?
+		yay
+			solves the above problem
+				is it really a problem?
+					shouldn't that "l" be necessarily quoted?
+		nay
+	just consider l as an arg
+
 
 should code be always paired with a deflist?
 	what? it is
@@ -41,3 +100,18 @@ fex-gate
 ((* ($) (fex-gate (l arg1 (*^ (q arg1))))) (> arg1))
 ^^ why quote?
 	nooo!
+		arg1 was an atom
+
+non-stupid recursion with name
+	add (name . rec) to defs
+		problem in nested functions
+			wrong context
+
+gates and deflist capturing
+
+macrofy fexpr-gates
+
+smarter "l" seems more dangerous when bootstrapping without expansion
+	dumb "l" calls its own name only in branch
+
+

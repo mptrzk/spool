@@ -37,7 +37,8 @@
 ;kreck
 
 (defun kreck-eval (subj form)
-  (if (atom form)
+  (if (or (atom form)
+          (null (car form)))
       form
       (let ((op (kreck-eval subj (car form)))
             (args (cdr form)))
@@ -148,20 +149,30 @@
     ("w" . ,(parse '(c (q (c (*^ arg1) ~))
                        non-rec-fexpr-ctx)))
 
-     
+    ("l" . ,(parse '(c (q (* ($) this))
+                       (c (c (q (? args
+                                   (c (* calr arg1)
+                                      (* (c (> args) ctx) this))
+                                   ~))
+                             (c ($) ~))
+                          defs))))
     ("l" . ,(parse '(c (q (? args
                              (c (*^ arg1)
                                 (*^ (c (q l) (> args))))))
                        non-rec-fexpr-ctx)))
     ("fex-gate" . ,(parse '(c (q (l (q c)
-                                  (l (q q) arg1)
-                                  (l (q c)
-                                     (l (q l)
-                                        (l (q q) arg1)
-                                        (q ($)))
-                                     (q defs))))
-                            non-rec-fexpr-ctx)))
-    
+                                    (l (q q) arg2)
+                                    (l (q c)
+                                       (l (q l)
+                                          (l (q q) arg2)
+                                          (q ($)))
+                                       (l (q q) defs))))
+                              non-rec-fexpr-ctx)))
+    ("!fex-gate" . ,(parse '(c (q (* calr 
+                                     (* calr
+                                        (c (q fex-gate) args))))
+                               non-rec-fexpr-ctx)))
+
     ))                ;^^context capturing problem?
 ;evaluating in caller context - deflist ambiguity
 ;is non-deflist context capture a problem?
@@ -175,10 +186,88 @@
 (kreck '(1 2 3) '($))
 ;(kreck '(1 2 3) '(w (> args)))
 (kreck '(1 2 3) '(l (> args) 1))
-(kreck '(1 2 3) '(fex-gate (c arg1 arg2)))
-(kreck '(1 2 3) '(* ($) (fex-gate (c arg1 arg2))))
-(kreck '(1 2 3) '((* ($) (fex-gate (c arg1 arg1))) (> arg1)))
 (kreck '((1 2) 3 4)
-       '((* ($) (fex-gate (l arg1 (*^ arg1)))) (> arg1)))
+       '((* ($) (fex-gate dump (l arg1 (*^ arg1)))) (> arg1)))
+(kreck '((1 2) 3 4)
+       '((!fex-gate dump (l arg1 (*^ arg1))) (> arg1)))
+;(kreck '((1 2) 3 4)
+;       '(((fex-gate dump (l arg1 (*^ arg1)))) (> arg1)))
+;^^ why not that
+;explain confusion over fex-gate eval
+;and the kerfuffle with (< arg1)
 
 ;^nope
+
+;pretty-printing
+
+(defun my-format (stm str &rest args)
+  (let ((res (apply #'format nil str args)))
+    (format stm "~a" res)
+    (length res)))
+(my-format t "~a" '(1 2 3))
+
+(defun print-list-vert (expr indent)
+  (let ((indent-res (pretty-print (car expr)
+                                  indent
+                                 )))
+    (if (cdr expr)
+        (progn
+          (format t "~%")
+          (print-list-vert (cdr expr) indent))
+        indent-res)))
+
+;rename to "print-members"?
+
+(defun pretty-print-list (expr horz indent)
+  (let ((indent-res (pretty-print (car expr)
+                               indent)))
+    (if (consp (cdr expr))
+        (if (> horz 0)
+            (progn
+              (format t " ")
+              (pretty-print-list (cdr expr)
+                                 (- horz 1)
+                                 (+ indent-res 1)))
+            (progn
+              (format t "~%")
+              (dotimes (_ indent) (format t " "))
+              (pretty-print-list (cdr expr)
+                                 0
+                                 indent)))
+        (if (cdr expr)
+            ($$-> indent-res
+              (+ $$ (my-format t " . "))
+              (pretty-print (cdr expr) $$))
+            indent-res))))
+;newlines reset indent (obviously!)
+;treating first element differently
+; it is always treated the same
+
+;list vert beginning with nl
+;expr checked
+
+
+(defun pretty-print (expr &optional (indent 0))
+  (if (atom expr)
+      (+ indent (my-format t "~a" expr))
+      ($$-> indent
+        (+ $$ (my-format t "(")) 
+        (pretty-print-list expr 1 $$) ;version with empty lists?
+        (+ $$ (my-format t ")")))))
+
+;(pretty-print '((1 2 3) 3 4))
+;(pretty-print '(1 . 1))
+(pretty-print (kreck '() '(fex-gate dump (l arg1 (*^ arg1)))))
+
+
+#|
+(defun pretty-print-list (expr indent)
+  (let ((indent-res (pretty-print (car expr)
+                                  0
+                                 )))
+    (if (cdr expr)
+        (print-list-vert (cdr expr)
+                         indent-res
+                        )
+        indent-res)))
+|#

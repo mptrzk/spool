@@ -36,5 +36,37 @@ metanotes vs metaspool
 
 pock & kreck have similar topics
 
-non-stupid recursion with name
-	add (name . rec) to defs
+
+a principled approach to exploratory notetaking
+	conflicting taxonomy problem
+		  style & topic
+		styles
+			undistilled
+				tag
+				exploration
+					plan
+					dilemma
+			distilled
+				exploration
+				prose
+		common topics  ?metatopics?
+			index
+			meta
+			errors
+			old stuff
+	other problems
+		too many files
+		orphaned files
+			orphaned info in general
+			old stuff ends up being in the way
+				I like to keep it
+				It has trailing relevance
+				It takes time and effort to organize it
+		duplicates
+	I end up not reading notes after all
+		There's no obvious way to start
+		files create barriers
+	when are files created
+		topic differences
+		writing near irrelevant stuff
+	[move to spool]

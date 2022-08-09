@@ -1,3 +1,22 @@
+proving that deflist is deterministic
+	enforcing that
+or maybe not
+	just precomputing it
+
+call_exop in c impl
+	checking for validity of exops
+
+cycle-proofing gc is good anyway
+	cycles might be useful
+	for SnC cycle-proofing is not that hard
+
+if I were to write the c stuff again:
+	all global state is instantiable and bindable
+	use of error log
+
+
+calling closures inops
+
 why word checking
 	just "eq" requires interning
 	interning requires consing onto previous deflist

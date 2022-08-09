@@ -9,6 +9,10 @@ programming patterns?
 						like what sits where in an s-exp
 
 
+IDEs
+	vim, emacs, wonky stuff
+	bloated IDEs
+
 tests
 	in language without proofs tests are mostly concerned with making sure that
 		the program doesn't do what we wouldn't want it to do
@@ -21,7 +25,7 @@ bugs
 	learn from important bugs
 		how did I make it?
 		how did I find it?
-	learn from bugs tha
+	learn from bugs thay
 
 big bugs
 	that thread bug
