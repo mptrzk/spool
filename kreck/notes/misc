@@ -1,3 +1,435 @@
+==================================================
+;TODO
+
+
+refactor notes
+write about what am I doing
+bootstrapping
+replace
+stateful interpreter
+atom problems
+server in C
+ooze
+
+==================================================
+;STORY
+
+;;MAP
+So I wanted to build a programming language
+forth
+	rpn
+metaprogramming
+lisp
+stopa's lisp
+dayvan
+nock
+	subject
+	"LC is simpler"
+pock
+	more lisp-like than nock
+	no bignums
+	just leaves
+		booleans,
+		numbers
+	simpler to implement
+		nock's slot
+	refcounts
+	substitution macros
+	more refcounts
+	reluctance to implement sugary ops
+	the application op
+	abc
+		the fustercluck of not writing tests
+	making it implicit
+	dynamic macros
+	the big internalization problem
+kreck
+	original idea
+	fexprs
+problem of defs
+	symbols
+		what are they
+		problems
+need for internal system
+design considerations
+	variable scopes
+difference between static & dynamic def resolution
+	comparison
+	static resolution
+		why?
+	dynamic resolution
+		why is it cool
+			it allows more stuff to be done in kreck
+		substitution semantics
+		getter semantics
+		an example of difference
+		naive approach
+		the cost of it
+getter and substitution semantics
+	the tradeoffs
+getter semantics
+	triple eval power problem
+why subst semantics?
+	removing dynamic name resolution
+	convenient code calling
+		it would be (stuff) with getter semantics
+		 and it would have to be an inop
+internal code generation
+
+
+==================================================
+;RESOLVED
+
+"getdef" to "evdef"?
+	you can have getdef too
+		and use it in stuff like replace
+
+
+==================================================
+;FUTURE
+
+inspecting exops
+sane editor
+browser stuff
+jets
+type system
+compilation
+zk stuff
+
+==================================================
+;BOOTSTRAPPING
+
+simple bootstrapper
+	builds a coherent deflist
+
+rules for using deflists for bootstraping
+
+definition of deflist coherence
+
+useful incoherent deflists?
+	stuff using its own deflists
+
+coherence by immediate reduction
+
+coherent redefinition
+
+reduced & symbolic
+non-symbolic?
+
+rtpl
+	read, transition, print, loop
+	like repl, but transition does more stuff since defs are not to be manipulated as a side effect
+	evaluates stuff using rtpl deflist
+		only few ops used to manipulate returned state
+
+I don't use repls anyway
+
+do I want transitions that both give response and alter state?
+
+definition miss exception
+
+provisional internal deflist generator
+
+get- and post- like ops?
+	&*
+	&%
+
+==================================================
+;GLOSSARY
+
+internal - 
+external - 
+
+inop
+exop
+
+aremhic - arguably even more homoiconic
+
+deflist -
+
+atom - 
+cell -
+symbol - 
+literal - expression that evaluates to itself 
+
+symbolic code
+symbolic reduction
+non-symbolic/reduced code
+
+
+coherent deflist - 
+
+runes - ???
+
+==================================================
+;RUNES
+
+list
+	~ - nil
+	! - macro stuff
+	@ - name stuff
+		not apply?
+		name stuff could be #
+	* - eval stuff
+	: - construction
+	? - conditionals
+		how about predicates?
+			sidethought - predicates in LC
+	| - proofs
+	& - ?state?
+	% - update
+	/ - ???
+
+softer than in hoon
+semantic shorthand
+
+==================================================
+;STUPID
+
+
+should repl be an exop
+	the argument for it
+		it must be implemented in order to have a repl (obviously)
+		the principle of non-gymnastics
+	almost certainly no
+		why???
+			too complicated?
+^^ why is this stupid?
+	I don't want a repl
+		
+
+==================================================
+;WACKY
+
+pock that supports literals and improper lists
+
+==================================================
+;UNDISTILLED
+
+reframing kreck without the notion of atom?
+	literals
+
+if (nil . x) means a literal, is nil an exop?
+	no
+		it would have to be (nil x)
+if (nil  x) means a literal, is nil an exop?
+	it can be in general
+	it cannot be if atom value is an exop address
+		
+
+pock is not a subset of kreck
+	kreck has atomic exops
+	pock has literal exops
+
+pock used to call inops differently
+
+pock inops used to mean different thing also
+	without exops being literals
+	
+
+parse(expr, symop)
+	symop can even be an inop!
+
+ways of dealing with names
+
+what's a symbol anyway
+
+symbol is a thing that has a name that gets evaluated to 
+stuff assigned to that name within the execution environment
+	how about my def evaling
+
+symbol is a thing that has a name that gets evaluated to 
+stuff assigned to that name within the execution environment
+
+^^ uniqueness in scope?
+
+what's a name?
+
+most recent solution - "symbols"
+	(<evdef-op> name)
+
+non-symbolic solution
+	parser uses deflist
+
+^^but this can do less
+		symbols only live in strings
+	argnames?
+	stuff like "otherwise"?
+	qq?
+
+symbols for pock under the bridge
+	I didn't consider dynamic name resolution
+
+having dynamic names makes writng working code simpler
+reduction can be added later
+
+why it might be kinda ugly
+	irregularity
+	a hack with using fuction
+
+
+
+isn't evdef 'n stuff just adding complexity?
+	
+
+internality
+	using inops
+	using kreck code
+	not using external code other than exops
+
+aremhicity
+	subject?
+
+move gc stuff to c?
+	yay
+	nay
+
+patterns?
+	lazy let
+	eager let
+
+;subj-replace
+
+takes path & value
+
+path is a list of car-ops & cdr-ops that threaded from subj gives the desired object
+
+($p > > <) = (< (> (> ($))))
+
+replace for non-threaded paths
+	cons application of flipped op to path arg with recursion of path arg 
+	cons arg order depends on path arg
+
+replace with stuff like "args"?
+	using symbolic code?
+	using reduced code?
+
+replace without redundant traversal
+
+using a zipper?
+
+reduction in replace
+	
+
+
+
+
+;misc?
+
+
+layers
+		what do they mean
+	0 - interpreter
+		eval & gc
+	1 - basic exops
+		$'<>:*?
+	2 - exops that 
+
+"="?
+	yay
+	nay
+		if you have to wonder what semantics would it have, it shouldn't be here
+	if so:
+		eq?
+		equal?
+
+low level stuff should not get in the way when writing high level code
+this shouldn't be accomplished by flashing stuff
+	an example - writing interpreters in too restrictive language
+flashes should preserve end program semantics
+
+compilation
+
+
+;here
+
+basic exops shouldn't feel out of place when used in higher level programs
+
+should box be an op?
+	yay
+		consing nil to something looks a bit out of place
+		it behaves like an op
+	nay
+		more complicated
+		implementing it as nil is more than trivial even in C
+
+kreck has atoms, pock has boxes
+	should kreck have boxes too?
+		yay
+			pock becomes a subset of kreck
+			words, strings, stuff like that
+		nay
+			additional complexity
+
+not binding yourself to a specific type of complexity
+
+name resolution is something you can just add
+
+it would be nice if parser operated both on strings and streams
+	would it really?
+	why would you parse unbuffered text?
+
+the dumb parser uses reduced getdef
+	it has to
+
+should the dumb parser be a basic exop
+	yay
+		it's required to bootstrap stuff
+		the principle of not tarpitting
+			or something
+	nay
+		it's a bit complicated
+	
+
+pock isn't the old pock
+
+why is apply implicit?
+	it's everywhere
+	it makes things simpler
+		how?
+		substitution?
+
+repl state as just closure
+	transition is application with input code as arguments
+
+doer does
+	it's a function that takes stuff and returns another doer
+		rly? whatever...
+	doer is a subject which:
+		has a member called state
+		defines a transition operator
+		defines a return operator 
+	doing it quick, doing it well
+
+printing done dumb
+	putchar, putstring
+	laziness?
+
+(do-in x)	
+
+subject modifying with implicit return in the end
+
+weird evals
+	doer
+		
+
+aura propagation
+	
+executable auras?
+	just higher order printing functions?
+	weird evaluator?
+		printed stuff put in subj
+
+booting
+	code evaluated with basic exops
+	getdef as a basic exop
+
+fexpr inops, regularity
+	all exops are fexprs aswell
+	can do lazy stuff
+	internalizes bootstrapping
+
+
 proving that deflist is deterministic
 	enforcing that
 or maybe not

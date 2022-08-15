@@ -29,3 +29,7 @@ internally parsed stuff works like externally parsed stuff, but is more powerful
 [is it phil, or more like distilled design stuff?]
 it's really odd that I haven't realized it till now
 
+small bootstrap - least throw-away code
+"it's really ugly when it's complex, you need it, and then you can throw it away"
+	what would happen without symbols
+	fexprs?

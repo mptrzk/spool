@@ -75,12 +75,15 @@
       (kreck-eval subj (cadr args))  
       (kreck-eval subj (caddr args))))
 
-(defun defget-op (subj args)
+(defun getdef-op (subj args)
   (let* ((key (car args))
          (res (assoc key (cddr subj) :test #'equal)))
     (if res
-        (kreck-eval subj (cdr res))
+        (cdr res)
         (error (format nil "def ~a not found~%" key)))))
+
+(defun evdef-op (subj args)
+  (kreck-eval subj (getdef-op subj args)))
 
 (defun debug-op (subj args)
   (format t "evaluating ~a:~%" (cons '!d (unparse args)))
@@ -94,7 +97,7 @@
 
 (defun parse (expr)
   (cond ((null expr) nil)
-        ((symbolp expr) (list #'defget-op
+        ((symbolp expr) (list #'evdef-op
                               (string-downcase expr)))
         ((consp expr) (cons (parse (car expr))
                             (parse (cdr expr))))
@@ -102,7 +105,7 @@
 
 (defun unparse (expr)
   (cond ((atom expr) expr)
-        ((and (eq (car expr) #'defget-op)
+        ((and (eq (car expr) #'evdef-op)
               (stringp (cadr expr)))
          (let ((s (read-from-string (cadr expr)))) 
            s))
@@ -127,7 +130,8 @@
     ("c" . ,#'cons-op)  
     ("*" . ,#'eval-op)
     ("?" . ,#'if-op)
-    ("@" . ,#'defget-op)
+    ("@" . ,#'getdef-op)
+    ("*@" . ,#'evdef-op)
     ("!d" . ,#'debug-op)
     ("args" . ,(parse '(< ($))))
     ("arg1" . ,(parse '(< args)))
@@ -216,7 +220,6 @@
           (print-list-vert (cdr expr) indent))
         indent-res)))
 
-;rename to "print-members"?
 
 (defun pretty-print-list (expr horz indent)
   (let ((indent-res (pretty-print (car expr)
@@ -239,17 +242,11 @@
               (+ $$ (my-format t " . "))
               (pretty-print (cdr expr) $$))
             indent-res))))
-;newlines reset indent (obviously!)
-;treating first element differently
-; it is always treated the same
-
-;list vert beginning with nl
-;expr checked
 
 
 (defun pretty-print (expr &optional (indent 0))
   (if (atom expr)
-      (+ indent (my-format t "~a" expr))
+      (+ indent (my-format t "~s" expr))
       ($$-> indent
         (+ $$ (my-format t "(")) 
         (pretty-print-list expr 1 $$) ;version with empty lists?
@@ -260,14 +257,18 @@
 (pretty-print (kreck '() '(fex-gate dump (l arg1 (*^ arg1)))))
 
 
-#|
-(defun pretty-print-list (expr indent)
-  (let ((indent-res (pretty-print (car expr)
-                                  0
-                                 )))
-    (if (cdr expr)
-        (print-list-vert (cdr expr)
-                         indent-res
-                        )
-        indent-res)))
-|#
+
+;rplc
+(defun rplc (path val)
+  (let ((op (car path))
+        (arg (cadr path)))
+    (cond ((equal op '$) val)
+          (t (rplc arg
+                   (cond ((eq op '<)
+                          (list 'c val (list '> arg)))
+                         ((eq op '>)
+                          (list 'c (list '< arg) val))
+                         (t (error "foo"))))))))
+
+(kreck '(1 2 3) (rplc '(< ($)) 777))
+

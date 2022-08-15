@@ -1,0 +1,5 @@
+isa
+	registers
+		pc, flags, general purpose
+
+is link register necessary?

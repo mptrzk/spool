@@ -8,6 +8,9 @@ programming patterns?
 					structural?
 						like what sits where in an s-exp
 
+problems of marrying to acyclic data structures
+problems of mutability
+	can break stuff outside of scope
 
 IDEs
 	vim, emacs, wonky stuff

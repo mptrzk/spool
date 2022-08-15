@@ -1,6 +1,63 @@
+==================================================
+;DESCRIPTION
 
-pld
-	programming language design stuff
+This file contains notes about notes
+
+==================================================
+;TODO
+
+==================================================
+;RESOLVED
+
+meta vs index
+	meta has thoughts
+	index has layout and descriptions
+
+==================================================
+;UNDISTILLED
+
+reorganization of "kreck" folder in kreck, or general org notes?
+
+why not make all notes in one file?
+
+misc in misc?
+
+undistilled vs uncategorized
+
+
+files happen when one category is so distinct it deserves it's own space
+
+"problems of marrying to acyclic data structures"
+	in kreck
+
+"generic note files:"
+	does it belong in "meta" or "org"?
+
+"why folders for rewrites instead of git versions?"
+	it belongs in index
+	is it better to ask "folders or git versions"
+		it's resolved for now
+		maybe reframe it as a yay/nay
+
+problem with "index"
+	it sounds like it should contain just the index
+	solution
+		call it something else like "layout"
+		put 
+	does the master "todo" belong there?
+		if so, the better name would be "org"
+
+are all notes for organization?
+	what is organization?
+		where stuff is and what it means
+	
+
+usefulness of "DISTILLED" section
+	does it mean "RESOLVED"?
+
+
+
+[move]
 pth
 	programming theory
 	shouldn't "pld" be in it?
@@ -8,21 +65,30 @@ pth
 		nay
 
 
+[move]
+merge typo into kreck?
+	not important
+
 should every note file describe itself?
 	yay
 	nay
 		there are meta files
 
+metanotes vs metaspool
+	isn't metaspool just notes?
 should meta files describe stuff other than notes
 	yay
 	nay
+by metaspool I meant stuff that refers to "where stuff is" in the project
+this can be called "organization"
+this can be also called ""
 
-meta vs index
-	meta has thoughts
-	index has layout and descriptions
+"meta" notes are just notes about notes
+
 
 isn't index just "tree" command?
-	index is more for others or for me that forgot what filenames mean
+	index is more for others or for me that forgot what file names mean
+	it's for consistency
 
 distilling notes
 avoiding duplication
@@ -31,13 +97,17 @@ meta vs metaphil?
 	meta is with respect to the entire project
 	metaphil is about the philosophy
 	metaphilosophy in philosophy file?
+	"merge typo into kreck?"
 
-metanotes vs metaspool
 
 pock & kreck have similar topics
 
 
 a principled approach to exploratory notetaking
+	what?
+		notetaking intended to help exploring stuff
+		semantic bloat?
+			what?
 	conflicting taxonomy problem
 		  style & topic
 		styles
@@ -47,13 +117,8 @@ a principled approach to exploratory notetaking
 					plan
 					dilemma
 			distilled
-				exploration
+				map
 				prose
-		common topics  ?metatopics?
-			index
-			meta
-			errors
-			old stuff
 	other problems
 		too many files
 		orphaned files
@@ -69,4 +134,49 @@ a principled approach to exploratory notetaking
 	when are files created
 		topic differences
 		writing near irrelevant stuff
-	[move to spool]
+
+styles in one file, topics in many
+
+note problems are aesthetic problems
+	aesthetic problems are dangerous
+
+interleaving taxonomies
+	topic
+		style
+			topic
+
+styles
+	scope description
+	definition
+	prose
+	conclusions
+	thought pointers
+	undistilled
+	todo
+
+microstyles
+	yay/nay
+
+it would be nice to have vim with a navbar
+	org in emacs?
+
+old stuff
+wrong stuff
+blunders
+
+thought ash
+
+
+==================================================
+;ASH
+
+"common topics  ?metatopics?"
+	no, that would mean topics about topics
+
+common topics  ?metatopics?
+	index //aren't those styles aswell?
+	meta
+	errors
+	old stuff
+^^ those aren't topics, they're styles
+

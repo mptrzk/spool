@@ -1,0 +1,38 @@
+
+
+2 text areas
+left acts as an editor
+right is for displaying stuff
+
+
+
+editor markup language?
+	why?
+		tree aware editing, wide cursors, stuff like that
+	yay
+	nay
+		complicated
+		may be clunky
+
+
+
+;text approach
+
+top level detection
+	just have a table with positions of top level parentheses
+	before inserting new parenthesis, check the cursor position and modify the table if needed
+
+textarea doesn't track lines
+
+line postitions change after each insertion
+
+lazy lines?
+
+;structured approach
+
+
+zipper cursor
+
+linebraks as elements
+
+

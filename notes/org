@@ -1,0 +1,49 @@
+==================================================
+;DESCRIPTION
+
+==================================================
+;LAYOUT
+
+spool
+	notes
+		pld
+			programming language design stuff
+		pth
+			programming theory
+	kreck
+		a weird metaprogramming oriented language
+		subprojects
+			typo
+				a type system
+			pock
+				an axiomatic kreck-like programming language
+			tephra
+				a simple vm
+			ooze
+				a text editor
+	board6
+		a keyboard using only few keys
+	old
+		dayvan
+			an attempt at typeless lisp
+		mur
+			an attempt at 
+
+==================================================
+;UNDISTILLED
+
+
+generic note files:
+	meta
+	phil
+	misc
+	old
+
+kreck notes and the substuff
+	they shouldn't be about it
+		they sometimes are, but stuff can be moved to what's inside
+		nothing weird
+	[rewrite in less broken way]
+
+
+	

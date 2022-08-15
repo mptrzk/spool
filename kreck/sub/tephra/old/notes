@@ -1,0 +1,283 @@
+context and entry
+
+context:
+	parent
+	flags
+	name
+
+compilation
+	function:
+		
+
+musts
+	funcalls explicit
+
+is every entry named?
+
+
+wtypes
+	literal
+	litend
+	varcall
+	fcall
+	
+example syntax:
+	fun def:
+		Fn F4 sqrt: x eps:1e-4
+
+		Fn (F4 sqrt) (F4 x eps:1e-4)
+
+		F4 Fn sqrt : F4 x eps=1e-4
+			
+		(F4 a eps:e-1 sqrt) Fn
+
+		Fn F4 sqrt a eps:1e-4
+
+		Fn F4 sqrt a 1e-4:eps
+			
+		
+
+contexts:
+	can similar operations look different in different contexts?
+		var declaration in function head and impl
+
+unforthisms:
+	No explicit stack operations
+	syntax for 
+
+
+Assignment by prefix or as standalone operator
+	prefix
+		yep
+		nah
+			+= ? 
+				not atomic (requires read)
+	operator
+		yep
+			optimizing compiler needs IR anyway [citation needed]
+		nah
+			not simply parsable
+
+ideaFUCK
+	data description mode ?structure?
+		funargs as structs
+		defaults
+	computation mode ?implementation?
+	naming structs
+		externally
+		internally
+			sucks
+		how bout funs?
+	types
+		?
+			type declaration in struct mode
+			casting in impl mode
+		
+
+problem with assignment
+	assignment in fn declarations vs definitions
+
+passing by value and reference?
+
++= as a syntactic macro
+
+how meta is too meta?
+
+s-expressions n' shiet
+
+metest meta:
+	
+
+model program:
+	language features:
+		only standard library
+		classes and objects
+		type casting
+		runtime polymorphism
+		polymorphic containers ???
+		default values
+		modules
+		iterators
+		higher order functions
+	implementation features:
+		sorting
+	suggestions:
+	- game
+		economic
+			on grid
+			euclidean distance
+			bidding
+			tui
+	- genetic x
+		
+	- sorting something
+
+bottom up approach:
+	forth but mine	
+
+can nested control structures be implemented by overloading scope operators?
+
+return stack???
+
+different parens for different modes 
+	postpone
+
+meta stack
+explicit scoping words
+scopes as s-exps
+
+lambdas
+
+=================================================
+
+why vm?
+	CISC sucks
+
+vm
+	registers
+		
+	instructions
+		ldr
+		str
+		int aritm
+		uint aritm
+		float aritm (later)
+		bitwise
+	literals
+		i1248
+		u1248
+
+
+
+
+stack machine optimization
+
+==================================================
+combinator based approach
+not all words compile by themselves
+why would it suck?
+	needlessly many meta levels
+
+==================================================
+
+memory outside only by builtins
+
+todo
+	vm & repl
+		cli
+		hexdump
+		input buffer
+			mapping?
+	basic syntax
+	meta semantics & syntax
+	scoping
+	typing
+		variable len types
+	wraped and raw stacks
+
+mapping:
+	buffers
+	stacks
+	defs
+		atomics
+			read
+			write
+			ariths
+
+		composites
+
+next & exit in forth
+
+stack related atomics will be implemented in C ???
+
+
+- is0:
+	ldr
+	str
+	jmp
+	jnz
+	lit
+
+- is1:
+	ldr
+	ldrc
+	str
+	strc
+
+
+branch
+	- atomic
+		jnz with cmp
+	- write to pc
+		sucks, because needs cond which still uses atomic branching
+	- every instruction possibly conditional?
+		fast?
+	- cond instruction? //move to duds
+		more consistent with typing ???
+			each instruction which is influenced by stack acts like a procedure
+		sucks because it's jnz but retarded
+
+jnz as a macro
+
+problem of literals
+	- jump separated data fragments
+	- multibyte instructions
+	- literals stored on the stack <<<WACKY (OR SHIT?) (OR UNWIELDY) (OR IMPOSSIBLE?)
+
+problem of IO
+	- special instructions
+		inp
+		out
+	- async?
+		smells like broken state
+	- interrupt?
+
+better xxd:
+	what?
+		color bytes according to addr/val
+	how?
+		- auxillary color buffer
+		- format callback
+
+instruction size
+	- 1
+		255 instructions is more than enough
+	- 2
+		allows wacky literals
+
+wacky literals:
+	if MSB of an opcode is 1, it gets pushed on the stack
+
+type theory
+lisp
+
+storing all levels
+	src, meta, raw
+	skimming
+
+flags
+
+stack manipulation opcodes?
+	loc?
+	pick?
+		not needed
+	neither?
+
+
+Redcode-like instruction set
+	one opcode memset
+	kinda unwieldy with forth
+
+constants after code, accessed just by LDR
+	their address though
+
+ldr with offset?
+
+special variables
+	stack base
+	stack frame
+	stack top
+	heap address
+	program counter
+	current constant table
+

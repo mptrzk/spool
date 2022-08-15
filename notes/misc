@@ -18,5 +18,5 @@ debugger for lispy stuff
 
 
 a tail call is an evaluation such that in it's implementation, it is redundant to push a frame
-	
-frontend slime server
+
+I wanted to explain in detail the whole kreck thing
