@@ -4,7 +4,17 @@
 This file contains notes about notes
 
 ==================================================
+;SECTIONS
+
+
+
+==================================================
 ;TODO
+
+ponder org vs meta
+kick "aremhicity" file
+	[is it meta or org]
+section naming
 
 ==================================================
 ;RESOLVED
@@ -13,8 +23,15 @@ meta vs index
 	meta has thoughts
 	index has layout and descriptions
 
+section map in a file
+	sure
+
 ==================================================
 ;UNDISTILLED
+
+vim macro to generate section list?
+
+meta glossary?
 
 reorganization of "kreck" folder in kreck, or general org notes?
 

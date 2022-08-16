@@ -1,26 +1,47 @@
 ==================================================
+;SECTIONS
+
+SECTIONS
+TODO
+WRITEUP
+RESOLVED
+FUTURE
+GLOSSARY
+RUNES
+BOOTSTRAPPING
+STUPID
+WACKY
+EXPR VS FUN INOPS
+UNDISTILLED
+OLD
+
+
+==================================================
 ;TODO
 
-
+remove dynamic macro
+definition with reduction
 refactor notes
-write about what am I doing
+fexpr vs fun
+	rewrite
 bootstrapping
+write about what am I doing
 replace
 stateful interpreter
 atom problems
 server in C
 ooze
 
-==================================================
-;STORY
 
-;;MAP
+==================================================
+;WRITEUP
+
 So I wanted to build a programming language
 forth
 	rpn
 metaprogramming
 lisp
-stopa's lisp
+Stopa's lisp
 dayvan
 nock
 	subject
@@ -43,6 +64,7 @@ pock
 	making it implicit
 	dynamic macros
 	the big internalization problem
+	ABC gc
 kreck
 	original idea
 	fexprs
@@ -93,46 +115,9 @@ sane editor
 browser stuff
 jets
 type system
+formal proofs
 compilation
 zk stuff
-
-==================================================
-;BOOTSTRAPPING
-
-simple bootstrapper
-	builds a coherent deflist
-
-rules for using deflists for bootstraping
-
-definition of deflist coherence
-
-useful incoherent deflists?
-	stuff using its own deflists
-
-coherence by immediate reduction
-
-coherent redefinition
-
-reduced & symbolic
-non-symbolic?
-
-rtpl
-	read, transition, print, loop
-	like repl, but transition does more stuff since defs are not to be manipulated as a side effect
-	evaluates stuff using rtpl deflist
-		only few ops used to manipulate returned state
-
-I don't use repls anyway
-
-do I want transitions that both give response and alter state?
-
-definition miss exception
-
-provisional internal deflist generator
-
-get- and post- like ops?
-	&*
-	&%
 
 ==================================================
 ;GLOSSARY
@@ -146,6 +131,7 @@ exop
 aremhic - arguably even more homoiconic
 
 deflist -
+	like a namespace?
 
 atom - 
 cell -
@@ -180,8 +166,79 @@ list
 	% - update
 	/ - ???
 
+% for fexprs?
 softer than in hoon
 semantic shorthand
+
+{}[] in runes?
+	yay
+		stuff's going to be regular, it won't be used as brackets
+	nay
+		misleading
+			but the whole thing is a bit misleading for someone new
+
+==================================================
+;BOOTSTRAPPING
+
+
+fixed starting deflist
+
+kreck-start?
+
+reset
+	resets deflist to default
+
+exemplary recursive fexpr
+	just another "list"?
+
+subject threading?
+
+bootstrapper
+	takes a deflist
+	evals an expression
+	conses it onto a deflist
+
+subject-oriented bootstrapper
+	evals stuff using its own deflist
+
+
+bootstrapper that evals an expression using the input deflist
+
+bootstrapper that builds a coherent deflist
+
+rules for using deflists for bootstraping
+
+definition of deflist coherence
+
+useful incoherent deflists?
+	stuff using its own deflists
+
+coherence by immediate reduction
+
+coherent redefinition
+
+reduced & symbolic
+non-symbolic?
+
+rtpl
+	read, transition, print, loop
+	like repl, but transition does more stuff since defs are not to be manipulated as a side effect
+	evaluates stuff using rtpl deflist
+		only few ops used to manipulate returned state
+
+I don't use repls anyway
+
+do I want transitions that both give response and alter state?
+
+definition miss exception
+
+provisional internal deflist generator
+
+get- and post- like ops?
+	&*
+	&%
+
+
 
 ==================================================
 ;STUPID
@@ -203,8 +260,49 @@ should repl be an exop
 
 pock that supports literals and improper lists
 
+kreck without "?"
+	church-style truth
+
+==================================================
+;FEXPR VS FUN INOPS
+
+
+exop
+	a fexpr...
+	it's a fexpr and not a function to allow the ops to be general
+inop
+	a funcall
+		it's funcall not fexp, to make expressions simple
+	but don't I want generality from internal stuff also?
+		buut that would require explicit evals in the closures
+		and another call to put it in the subj 
+		and it would have to be done almost always, which is ugly
+			is it really?
+		but isn't it ugly for exops also?
+			for exops it's just some calls appended on top of the code
+			for inops it's a complicated expression with an eval
+				is it really complicated?
+
+
 ==================================================
 ;UNDISTILLED
+
+
+layer separation on example of interpretter with a heap image
+	what about fn addresses
+		whatever, exop-apply implementation is not specified
+			should it be?
+				yay
+					examples like that
+				nay
+					avoiding implementantion details
+
+are fexprs really useful?
+	most metaprogramming can be better done with static macros
+		rly?
+
+it seems that fexprs just come in handy in kreck
+
 
 reframing kreck without the notion of atom?
 	literals
@@ -212,9 +310,12 @@ reframing kreck without the notion of atom?
 if (nil . x) means a literal, is nil an exop?
 	no
 		it would have to be (nil x)
-if (nil  x) means a literal, is nil an exop?
+if (nil x) means a literal, is nil an exop?
 	it can be in general
 	it cannot be if atom value is an exop address
+
+nil has no value
+
 		
 
 pock is not a subset of kreck
@@ -1106,30 +1207,18 @@ multi-defines, internal defines, is using external deflist internally OK?
 
 exop macros?
 
-exop
-	a fexpr...
-	it's a fexpr and not a function to allow the ops to be general
-inop
-	a funcall
-		it's funcall not fexp, to make expressions simple
-	but don't I want generality from internal stuff also?
-		buut that would require explicit evals in the closures
-		and another call to put it in the subj
-		and it would have to be done almost always, which is ugly
-		but isn't it ugly for exops also?
-			for inops it's just some calls appended on top of the code
-			for exops it's a complicated expression with an eval
-				is it really complicated?
-
 an exop
 
 a case for dynamic variable name resolution
 		no need for auras
 		might make things easier
 	but
-		shallower metaprogrammability 
+		shallower metaprogrammability
+				rly?
 			type system becomes external
+				nope!
 			building an internal type system becomes ugly
+				how?
 
 less lispy kreck is simpler kreck
 	only atomp
