@@ -6,9 +6,11 @@ TODO
 WRITEUP
 RESOLVED
 FUTURE
-GLOSSARY
+TERMINOLOGY
 RUNES
 BOOTSTRAPPING
+CLOSURE CALL PROBLEM
+SCOPES
 STUPID
 WACKY
 EXPR VS FUN INOPS
@@ -22,6 +24,7 @@ OLD
 remove dynamic macro
 definition with reduction
 refactor notes
+rename fexpr-gate
 fexpr vs fun
 	rewrite
 bootstrapping
@@ -120,7 +123,7 @@ compilation
 zk stuff
 
 ==================================================
-;GLOSSARY
+;TERMINOLOGY
 
 internal - 
 external - 
@@ -138,6 +141,11 @@ cell -
 symbol - 
 literal - expression that evaluates to itself 
 
+static macro
+dynamic macro
+
+quasiquote
+
 symbolic code
 symbolic reduction
 non-symbolic/reduced code
@@ -146,6 +154,8 @@ non-symbolic/reduced code
 coherent deflist - 
 
 runes - ???
+
+rename fexpr-gate?
 
 ==================================================
 ;RUNES
@@ -239,6 +249,102 @@ get- and post- like ops?
 	&%
 
 
+==================================================
+;CLOSURE CALL PROBLEM
+
+preevaluated inop can't capture caller subject, so args can't be evaled
+
+solutions
+	CL-like funcall
+		ugly
+	returning code?
+		code is not an inop
+	additional eval for inop application?
+		complicated
+	calr from application?
+		yay
+		nay
+			breaks TCO?
+				rly?
+			does normal calr break TCO?
+	
+
+==================================================
+;SCOPES
+
+[rewrite after fixing the issue]
+caller vs captured
+	caller captures the subj where the inop is constructed
+		does it make inops that use calr more complicated?
+			only if you plan to use them as anonymous functions
+				rly?
+				would that be useful for anything?
+					argument evaluation!!!
+
+
+nested scopes?
+
+deflist as list of alists?
+	defget assocs each list
+		noo, it's still just code
+	calr needs to be involved
+
+better name - captured
+captured defs depend on caller scope
+
+getcapt
+	describe solution using it
+		subj contains an alist of captured variables
+		(@* name) = (<getcapt> name)
+
+	is it deterministic?
+
+caplist?
+
+renaming locs?
+	env?
+
+staticizability
+
+
+non-scope definitons?
+
+static macros?
+	deflist and scope passed by macro to macros it expands
+	scoping macros receive scope in subj
+
+difference between solutions using static macros and not using them
+
+locdefs
+updefs?
+globdefs?
+
+subj threading?
+	op defined with a subj, inherits its locs
+unintentional capture?
+
+explicit capture?
+
+"let*" like semantics seem simple with subj threading
+
+going static by design?
+	yay
+	nay
+
+going dynamic with intent of deterministic deflist reduction
+
+simple lexical closure example
+	a -> (b -> (l a b))
+
+the problem
+	the name of outer function argument should refer to outer function argument in inner function deflist
+
+nesting defadds?
+
+imperative-looking let
+	subject modifying
+	for single variable
+	
 
 ==================================================
 ;STUPID

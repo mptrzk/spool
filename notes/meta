@@ -29,6 +29,14 @@ section map in a file
 ==================================================
 ;UNDISTILLED
 
+GLOSSARY -> TERMINOLOGY
+index -> org
+	describe that
+
+"MISC" in "misc"?
+	file budding
+	remove "UNDISTILLED"
+
 vim macro to generate section list?
 
 meta glossary?
