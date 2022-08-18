@@ -1,30 +1,35 @@
 ==================================================
 ;SECTIONS
 
-SECTIONS
-TODO
-WRITEUP
-RESOLVED
-FUTURE
-TERMINOLOGY
-RUNES
-BOOTSTRAPPING
-CLOSURE CALL PROBLEM
-SCOPES
-STUPID
-WACKY
-EXPR VS FUN INOPS
-UNDISTILLED
-OLD
+sections
+todo
+writeup
+resolved
+future
+terminology
+runes
+bootstrapping
+deflist inop problem
+closure call problem
+scopes
+stupid
+wacky
+expr vs fun inops
+undistilled
+old
 
 
 ==================================================
 ;TODO
 
-remove dynamic macro
+terminology of ops
+clean up TERMINOLOGY
+fix the closure call problem
+"old" section
+rename fexpr-gate
+override dynamic macro
 definition with reduction
 refactor notes
-rename fexpr-gate
 fexpr vs fun
 	rewrite
 bootstrapping
@@ -128,6 +133,44 @@ zk stuff
 internal - 
 external - 
 
+op -
+
+closure - op that generates a pre-evaluated context 
+	that's just implementation
+
+op application
+	subj, args
+	function in mathematical sense
+
+the wrong way of doing it
+	inop = (code . ctx)
+	it gets applied as such:
+		*[subj, (inop args)] = *[(args . ctx), code]
+		it's wrong because ctx doesn't depend on subject
+	op is something that can encode any computable function of "subj" and "args"
+		rly?
+		"encode"
+			make the result of application depend of
+power in op being a result of an expression
+
+
+why defev instead of defget
+	"A is a definition of B" means they can be substituted in an expression
+
+vestigial quote?
+
+power
+	doing more with less
+
+the kinds of answers to why
+	what can you do
+	implementation
+	what it means
+		what?
+
+version with defget
+	is it substitutive for the op?
+
 inop
 exop
 
@@ -140,6 +183,9 @@ atom -
 cell -
 symbol - 
 literal - expression that evaluates to itself 
+
+gate
+	recursive inop
 
 static macro
 dynamic macro
@@ -156,6 +202,11 @@ coherent deflist -
 runes - ???
 
 rename fexpr-gate?
+
+[section for terminological kerfuffle?]
+op
+"is the stuff evaluated an op getter, or the op itself?"
+	difference - when the result is an exop
 
 ==================================================
 ;RUNES
@@ -189,7 +240,6 @@ semantic shorthand
 
 ==================================================
 ;BOOTSTRAPPING
-
 
 fixed starting deflist
 
@@ -250,24 +300,51 @@ get- and post- like ops?
 
 
 ==================================================
+;DEFLIST INOP PROBLEM
+
+removing cons in hardcoded inop defs
+	as in external def pock?
+	this doesn't happen in unreduced kreck
+
+inop constructor and quote in deflists
+
+memoize inop?
+	q*
+
+==================================================
 ;CLOSURE CALL PROBLEM
 
 preevaluated inop can't capture caller subject, so args can't be evaled
 
+non-solutions
+	returning code?
+		code is not an inop
+
 solutions
 	CL-like funcall
 		ugly
-	returning code?
-		code is not an inop
 	additional eval for inop application?
 		complicated
+			rly?
+				one more eval is one more eval
+		makes more sense anyway
+			inop vs closure
+			op is something that acts on the subject and args
 	calr from application?
 		yay
 		nay
 			breaks TCO?
 				rly?
-			does normal calr break TCO?
-	
+				does normal calr break TCO?
+					no
+		how about:
+			internal implicit TCO-friendly apply?
+				how?
+			seems really hacky
+			irregularity with exops
+
+calr with recursion/threading stays the same
+implicit calr would force the subject to grow
 
 ==================================================
 ;SCOPES

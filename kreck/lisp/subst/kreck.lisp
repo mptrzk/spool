@@ -40,13 +40,16 @@
   (if (or (atom form)
           (null (car form)))
       form
-      (let ((op (kreck-eval subj (car form)))
-            (args (cdr form)))
-        (if (atom op)
-            (funcall op subj args)
-            (kreck-eval (cons args (cdr op))
-                        (car op))))))
+      (kreck-apply subj
+                   (kreck-eval subj (car form))
+                   (cdr form))))
 
+(defun kreck-apply (subj op args)
+  (if (atom op)
+      (funcall op subj args)
+      (let ((op-res (kreck-eval subj op)))
+        (kreck-eval (cons args (cdr op-res))
+                    (car op-res)))))
 
 ;exops
 
@@ -146,51 +149,51 @@
                                           (c ($)
                                              ~))
                                        defs)))
-    ("^*" . ,(parse '(c (q (* (* calr (q calr))
+    ("^*" . ,(parse '(q (c (q (* (* calr (q calr))
                               (* calr arg1)))
-                        non-rec-fexpr-ctx)))
+                        non-rec-fexpr-ctx))))
 
-    ("w" . ,(parse '(c (q (c (^* arg1) ~))
-                       non-rec-fexpr-ctx)))
+    ("w" . ,(parse '(q (c (q (c (^* arg1) ~))
+                       non-rec-fexpr-ctx))))
 
-    ("l" . ,(parse '(c (q (* ($) this))
+    ("l" . ,(parse '(q (c (q (* ($) this))
                        (c (c (q (? args
                                    (c (* calr arg1)
                                       (* (c (> args) ctx) this))
                                    ~))
                              (c ($) ~))
-                          defs))))
-    ("fex-gate" . ,(parse '(c (q (l (q c)
-                                    (l (q q) arg2)
-                                    (l (q c)
-                                       (l (q l)
-                                          (l (q q) arg2)
-                                          (q ($)))
+                          defs)))))
+    ("fex-gate" . ,(parse '(q (c (q (l (q c)
+                                       (l (q q) arg2)
+                                       (l (q c)
+                                          (l (q l)
+                                             (l (q q) arg2)
+                                             (q ($)))
                                           (l (q q)
                                              (c (c (< (> arg1))
                                                    (q (c this ctx)))
                                                 defs)))))
-                              non-rec-fexpr-ctx)))
-    ("!fex-gate" . ,(parse '(c (q (* calr 
+                                 non-rec-fexpr-ctx))))
+    ("!fex-gate" . ,(parse '(q (c (q (* calr 
                                      (* calr
                                         (c (q fex-gate) args))))
-                               non-rec-fexpr-ctx)))
+                               non-rec-fexpr-ctx))))
 
-    ("$@c" . ,(parse '(c (q (c (^* (q args))
+    ("$@c" . ,(parse '(q (c (q (c (^* (q args))
                                (c (^* (q locs))
                                   (c (c (< (> arg1))
                                         (^* arg2))
                                      (^* (q defs))))))
-                         non-rec-fexpr-ctx)))
+                         non-rec-fexpr-ctx))))
 
-    ("$->" . ,(parse '(!fex-gate $->
+    ("$->" . ,(parse '(q (!fex-gate $->
                                  (? args 
                                     (* (c (> args)
                                           (c (l this
                                                 (^* arg1))
                                              defs))
                                        this)
-                                    calr))))
+                                    calr)))))
     ))
 
 ;fex-gate context capturing problem?
@@ -208,7 +211,7 @@
 (kreck '(1 2 3) '(l (> args) 1))
 (kreck '(1 2 3) '(fex-gate dump (l arg1 (^* arg1))))
 (kreck '((1 2) 3 4)
-       '((* ($) (fex-gate dump (l arg1 (^* arg1)))) (> arg1)))
+       '((fex-gate dump (l arg1 (^* arg1))) (> arg1)))
 (kreck '((1 2) 3 4)
        '((!fex-gate dump (l arg1 (^* arg1))) (> arg1)))
 (kreck '(1 2 3) '($@c foo (q ($))))
