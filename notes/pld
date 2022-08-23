@@ -20,9 +20,16 @@ garbage
 	?deterministic automatic management?
 		the thing that rust & ats do
 
+[move?]
 the bug with SnC and the feature that would fix it
 	Can't use this function without assignment
 	or maybe that's just C's fault?
 	or imperative langauages' fault?
 state & return value
 mutation as implicit return value
+
+js
+	C-flavored lisp not based on linked lists
+		why lisp?
+			reflection
+				meh?

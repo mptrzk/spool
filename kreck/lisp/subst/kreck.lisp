@@ -37,8 +37,7 @@
 ;kreck
 
 (defun kreck-eval (subj form)
-  (if (or (atom form)
-          (null (car form)))
+  (if (atom form)
       form
       (kreck-apply subj
                    (kreck-eval subj (car form))
@@ -78,15 +77,15 @@
       (kreck-eval subj (cadr args))  
       (kreck-eval subj (caddr args))))
 
-(defun getdef-op (subj args)
+(defun defet-op (subj args)
   (let* ((key (car args))
          (res (assoc key (cddr subj) :test #'equal)))
     (if res
         (cdr res)
         (error (format nil "def ~a not found~%" key)))))
 
-(defun evdef-op (subj args)
-  (kreck-eval subj (getdef-op subj args)))
+(defun defev-op (subj args)
+  (kreck-eval subj (defet-op subj args)))
 
 (defun debug-op (subj args)
   (format t "evaluating ~a:~%" (cons '!d (unparse args)))
@@ -100,7 +99,7 @@
 
 (defun parse (expr)
   (cond ((null expr) nil)
-        ((symbolp expr) (list #'evdef-op
+        ((symbolp expr) (list #'defev-op
                               (string-downcase expr)))
         ((consp expr) (cons (parse (car expr))
                             (parse (cdr expr))))
@@ -108,7 +107,7 @@
 
 (defun unparse (expr)
   (cond ((atom expr) expr)
-        ((and (eq (car expr) #'evdef-op)
+        ((and (eq (car expr) #'defev-op)
               (stringp (cadr expr)))
          (let ((s (read-from-string (cadr expr)))) 
            s))
@@ -118,10 +117,10 @@
 (defun def-make (name &rest expr)
   (cons name (parse (car expr))))
 
-(defun kreck (args form)
-  (unparse (kreck-eval (cons (parse args)
-                             (cons nil *defs*))
-                       (parse form))))
+(defmacro kreck (args &body form)
+  `(unparse (kreck-eval (cons (parse (quote ,args))
+                              (cons nil *defs*))
+                        (parse (quote ,(car form))))))
 
 
 (defparameter *defs*
@@ -133,70 +132,67 @@
     ("c" . ,#'cons-op)  
     ("*" . ,#'eval-op)
     ("?" . ,#'if-op)
-    ("$@" . ,#'getdef-op)
-    ("$@*" . ,#'evdef-op)
+    ("$@" . ,#'defet-op)
+    ("$@*" . ,#'defev-op)
     ("!d" . ,#'debug-op)
     ("args" . ,(parse '(< ($))))
     ("arg1" . ,(parse '(< args)))
     ("arg2" . ,(parse '(< (> args))))
-    ("arg3" . ,(parse '(< (> (> args)))))
     ("ctx" . ,(parse '(> ($))))
     ("locs" . ,(parse '(< (> ($)))))
     ("defs" . ,(parse '(> (> ($)))))
     ("this" . ,(parse '(< locs)))
     ("calr" . ,(parse '(< (> locs))))
-    ("non-rec-fexpr-ctx" . ,(parse '(c (c ~
-                                          (c ($)
-                                             ~))
-                                       defs)))
+    ("non-rec-inop-ctx" . ,(parse '(c (c ~
+                                         (c ($)
+                                            ~))
+                                      defs)))
     ("^*" . ,(parse '(q (c (q (* (* calr (q calr))
-                              (* calr arg1)))
-                        non-rec-fexpr-ctx))))
+                                 (* calr arg1)))
+                           non-rec-inop-ctx))))
 
     ("w" . ,(parse '(q (c (q (c (^* arg1) ~))
-                       non-rec-fexpr-ctx))))
+                          non-rec-inop-ctx))))
 
     ("l" . ,(parse '(q (c (q (* ($) this))
-                       (c (c (q (? args
-                                   (c (* calr arg1)
-                                      (* (c (> args) ctx) this))
-                                   ~))
-                             (c ($) ~))
-                          defs)))))
-    ("fex-gate" . ,(parse '(q (c (q (l (q c)
-                                       (l (q q) arg2)
-                                       (l (q c)
-                                          (l (q l)
-                                             (l (q q) arg2)
-                                             (q ($)))
-                                          (l (q q)
-                                             (c (c (< (> arg1))
-                                                   (q (c this ctx)))
-                                                defs)))))
-                                 non-rec-fexpr-ctx))))
-    ("!fex-gate" . ,(parse '(q (c (q (* calr 
-                                     (* calr
-                                        (c (q fex-gate) args))))
-                               non-rec-fexpr-ctx))))
+                          (c (c (q (? args
+                                      (c (* calr arg1)
+                                         (* (c (> args) ctx) this))
+                                      ~))
+                                (c ($) ~))
+                             defs)))))
+
 
     ("$@c" . ,(parse '(q (c (q (c (^* (q args))
-                               (c (^* (q locs))
-                                  (c (c (< (> arg1))
-                                        (^* arg2))
-                                     (^* (q defs))))))
-                         non-rec-fexpr-ctx))))
-
-    ("$->" . ,(parse '(q (!fex-gate $->
-                                 (? args 
-                                    (* (c (> args)
-                                          (c (l this
-                                                (^* arg1))
-                                             defs))
-                                       this)
-                                    calr)))))
+                                  (c (^* (q locs))
+                                     (c (c (< (> arg1))
+                                           (^* arg2))
+                                        (^* (q defs))))))
+                            non-rec-inop-ctx))))
+    ("$->" . ,(parse '(q (c (q (* ($) this))
+                            (c (l (q (? args 
+                                        (* (c (> args)
+                                              (c (l this
+                                                    (^* arg1))
+                                                 defs))
+                                           this)
+                                        calr))
+                                  ($))
+                               defs)))))
+    #|
+    ("$->" . ,(parse '(gate (? args 
+                               (* (c (> args)
+                                     (c (l this
+                                           (^* arg1))
+                                        defs))
+                                  this)
+                               calr))))
+    |#
     ))
 
-;fex-gate context capturing problem?
+
+
+;gate context capturing problem?
 ;evaluating in caller context - deflist ambiguity
 ;is non-deflist context capture a problem?
 ;is it desirable?
@@ -206,28 +202,75 @@
 ;^*^ in fn definitions?
 
 
-(kreck '(1 2 3) '($))
-;(kreck '(1 2 3) '(w (> args)))
-(kreck '(1 2 3) '(l (> args) 1))
-(kreck '(1 2 3) '(fex-gate dump (l arg1 (^* arg1))))
-(kreck '((1 2) 3 4)
-       '((fex-gate dump (l arg1 (^* arg1))) (> arg1)))
-(kreck '((1 2) 3 4)
-       '((!fex-gate dump (l arg1 (^* arg1))) (> arg1)))
-(kreck '(1 2 3) '($@c foo (q ($))))
-(kreck '((1 2) 2 3)
-       '($-> ($@c foo (q ($)))
-             ($@c bar (q (> ($))))
-             ($@c baz (q (c (q (< (^* arg1)))
-                            non-rec-fexpr-ctx)))
-             (l (baz args)
-                (baz (> args)))))
-;(kreck '((1 2) 3 4)
-;       '(((fex-gate dump (l arg1 (^* arg1)))) (> arg1)))
-;^^ why not that
-;explain confusion over fex-gate eval
-;and the kerfuffle with (< arg1)
 
-;^nope
+(kreck (1 2 3) ($))
+;(kreck (1 2 3) (w (> args)))
+(kreck (1 2 3) (l (> args) 1))
+;(kreck (1 2 3) (gate (q (l arg1 (^* arg1)))))
+;(kreck ((1 2) 3 4)
+;  ((gate (q (l arg1 (^* arg1)))) (> arg1)))
+(kreck (1 2 3) ($@c foo (q ($))))
+(kreck ((1 2) 3) ($-> 1))
+(kreck ((1 2) 2 3)
+  ($-> ($@c foo (q (q ($))))
+       ($@c bar (q (q (> ($)))))
+       ($@c baz (q (q (c (q (< (^* arg1)))
+                         non-rec-inop-ctx)))) 
+       ($@c q* (q (q (c (q (l (q q) (^* arg1)))
+                        non-rec-inop-ctx))))
+       ($@c r-op-loader (q (q (* ($) this))))
+       ($@c e-op-loader (q (q (* (c (* calr
+                                       (c (q l) args))
+                                    ctx)
+                                 this))))
+       #|
+       ($@c gate
+            (q (q (c e-op-loader
+                     (c (l (q (l (q c)
+                                 (l (q q) arg1)
+                                 (l (q c)
+                                    (l (q l)
+                                       (l (q q) arg3)
+                                       (q ($))
+                                       (l (q q) calr))
+                                    (l (q q)
+                                       (c (c (q "rec")
+                                             (q (q (c this ctx))))
+                                          (? (> args)
+                                             arg2
+                                             defs))))))
+                           ($))
+                        defs)))))
+       |# ;when does the loader evaluate?
+       ($@c gate
+            (q (q (c e-op-loader
+                     (c (l (q (l (q c)
+                                 (q r-op-loader)
+                                 (l (q c)
+                                    (l (q l)
+                                       (l (q q) arg1)
+                                       (q ($))
+                                       (l (q q) calr))
+                                    (l (q q)
+                                       (c (c (q "rec")
+                                             (q (q (c this ctx))))
+                                          (? (> args)
+                                             arg2
+                                             defs))))))
+                           ($))
+                        defs)))))
 
+       ($@c makr (q (< (> (> locs)))))
+       ($@c dump
+            (q* (gate (q (l arg1 (^* arg1))))))
+       #|
+       ($@c fn
+            (q* (gate (gate (l )))))
+       |#
+       (l (dump (> (q (1 2 3))))
+          ;((gate (q (rec))))
+          )))
+
+;many ways
+;gates defined with deflist arg?
 

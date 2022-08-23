@@ -3,11 +3,13 @@
 
 sections
 todo
+design
 writeup
 resolved
 future
 terminology
 runes
+server
 bootstrapping
 deflist inop problem
 closure call problem
@@ -15,34 +17,59 @@ scopes
 stupid
 wacky
 expr vs fun inops
-undistilled
+uncategorized
 old
 
 
 ==================================================
 ;TODO
 
-terminology of ops
 clean up TERMINOLOGY
-fix the closure call problem
-"old" section
-rename fexpr-gate
-override dynamic macro
+terminology of ops
 definition with reduction
 refactor notes
 fexpr vs fun
 	rewrite
+writeup
+
+functionality
+	lamdas
+	symbolic reduction
+	replace
+
 bootstrapping
-write about what am I doing
-replace
-stateful interpreter
-atom problems
-server in C
+	reduce starting deflist
+saner deflists
+internal parsing
+
+dealing with errors
+
+server
+
 ooze
 
+server in C
+atom problems
+
+"old" section
+
+==================================================
+;DESIGN
+
+language that would be mostly written in itself when starting from low level
+make clever stuff easy to do starting from a low level language
+no gymnastics
+as few crutches as possible
+access to machine stuff
+
+if it's easier to write in asm, it should be primodial
 
 ==================================================
 ;WRITEUP
+
+explanatory
+chronological
+kerfuffles
 
 So I wanted to build a programming language
 forth
@@ -98,13 +125,14 @@ difference between static & dynamic def resolution
 getter and substitution semantics
 	the tradeoffs
 getter semantics
-	triple eval power problem
+	triple eval power problem [meh]
 why subst semantics?
 	removing dynamic name resolution
 	convenient code calling
 		it would be (stuff) with getter semantics
 		 and it would have to be an inop
 internal code generation
+
 
 
 ==================================================
@@ -134,24 +162,26 @@ internal -
 external - 
 
 op -
+inop - 
+exop - 
 
-closure - op that generates a pre-evaluated context 
-	that's just implementation
+code -
+
+snippet - a definition that's pure code
 
 op application
 	subj, args
 	function in mathematical sense
 
-the wrong way of doing it
-	inop = (code . ctx)
-	it gets applied as such:
-		*[subj, (inop args)] = *[(args . ctx), code]
-		it's wrong because ctx doesn't depend on subject
-	op is something that can encode any computable function of "subj" and "args"
-		rly?
-		"encode"
-			make the result of application depend of
-power in op being a result of an expression
+primodial exop - exop that's 
+
+eop - eager op
+	all args are evaluated with respect to caller subj
+
+closure - op that generates a pre-evaluated context 
+	that's just implementation
+
+
 
 
 why defev instead of defget
@@ -171,8 +201,6 @@ the kinds of answers to why
 version with defget
 	is it substitutive for the op?
 
-inop
-exop
 
 aremhic - arguably even more homoiconic
 
@@ -208,6 +236,7 @@ op
 "is the stuff evaluated an op getter, or the op itself?"
 	difference - when the result is an exop
 
+
 ==================================================
 ;RUNES
 
@@ -239,14 +268,32 @@ semantic shorthand
 			but the whole thing is a bit misleading for someone new
 
 ==================================================
+;SERVER
+
+deflist corruption
+
+==================================================
 ;BOOTSTRAPPING
 
-fixed starting deflist
+$-> without using "gate"?
+	think about that later
 
-kreck-start?
+fixed starting deflist
+stuff I want
+	basic exops
+	parts of subject
+	l
+	$->
+	$@*
+	*^
+		yay
+		nay
+
 
 reset
 	resets deflist to default
+
+boot expression
 
 exemplary recursive fexpr
 	just another "list"?
@@ -302,19 +349,42 @@ get- and post- like ops?
 ==================================================
 ;DEFLIST INOP PROBLEM
 
-removing cons in hardcoded inop defs
-	as in external def pock?
-	this doesn't happen in unreduced kreck
+stack overflow
+	cause-omitting a quote
+	what happened?
+
+unintuitive stuff
+	additional quote in the deflist for defs that don't refer to args/locs
+	even more confusing with procedural defs
 
 inop constructor and quote in deflists
 
 memoize inop?
 	q*
+	not needed?
+
+removing cons in hardcoded inop defs
+	as in external def pock?
+	this doesn't happen in unreduced kreck
 
 ==================================================
 ;CLOSURE CALL PROBLEM
 
 preevaluated inop can't capture caller subject, so args can't be evaled
+
+the wrong way of doing it
+	inop = (code . ctx)
+	it gets applied as such:
+		*[subj, (inop args)] = *[(args . ctx), code]
+		it's wrong because ctx doesn't depend on subject
+	op is something that can encode any computable function of "subj" and "args"
+		rly?
+		"encode"
+			make the result of application depend of
+power in op being a result of an expression
+
+later
+	describe with hindsight
 
 non-solutions
 	returning code?
@@ -468,8 +538,53 @@ inop
 
 
 ==================================================
-;UNDISTILLED
+;UNCATEGORIZED
 
+always double quote with "$@c"?
+
+op that creates a gate and wraps it around argument evaluator?
+
+can problem with fexprs be mitigated with a type system?
+
+(gate (loader f-loader) (deflist caller-defs)
+  code)
+
+code as an r-arg or e-arg
+
+calr
+makr
+
+argument tapes
+	raw
+	eager
+		get's evaluated with respect to caller
+	lazy
+
+sane gate construction
+	loader as arg?
+
+args & closures
+
+subject where the gate was created
+
+dynamic vs lexical scope
+
+rewrite "gate" using @->?
+
+fexprs for quote omission
+
+gate initializers
+	eager
+	with named arguments
+
+"gate" as eop?
+	yay
+	nay
+
+
+possibility explosion
+
+deflist inference for symbolic reduction
 
 layer separation on example of interpretter with a heap image
 	what about fn addresses

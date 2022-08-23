@@ -1,3 +1,7 @@
+kreck as macro?
+	no quotes
+	body
+
 improper lists with boxes are ambiguous
 	nil would have to be a boxed nil, that is "(())" to avoid ambiguity
 
