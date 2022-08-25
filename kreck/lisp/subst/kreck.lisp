@@ -138,15 +138,18 @@
     ("args" . ,(parse '(< ($))))
     ("arg1" . ,(parse '(< args)))
     ("arg2" . ,(parse '(< (> args))))
+    ("arg3" . ,(parse '(< (> (> args)))))
     ("ctx" . ,(parse '(> ($))))
     ("locs" . ,(parse '(< (> ($)))))
     ("defs" . ,(parse '(> (> ($)))))
     ("this" . ,(parse '(< locs)))
     ("calr" . ,(parse '(< (> locs))))
+
     ("non-rec-inop-ctx" . ,(parse '(c (c ~
                                          (c ($)
                                             ~))
                                       defs)))
+
     ("^*" . ,(parse '(q (c (q (* (* calr (q calr))
                                  (* calr arg1)))
                            non-rec-inop-ctx))))
@@ -169,6 +172,7 @@
                                            (^* arg2))
                                         (^* (q defs))))))
                             non-rec-inop-ctx))))
+
     ("$->" . ,(parse '(q (c (q (* ($) this))
                             (c (l (q (? args 
                                         (* (c (> args)
@@ -178,17 +182,7 @@
                                            this)
                                         calr))
                                   ($))
-                               defs)))))
-    #|
-    ("$->" . ,(parse '(gate (? args 
-                               (* (c (> args)
-                                     (c (l this
-                                           (^* arg1))
-                                        defs))
-                                  this)
-                               calr))))
-    |#
-    ))
+                               defs)))))))
 
 
 
@@ -204,26 +198,17 @@
 
 
 (kreck (1 2 3) ($))
-;(kreck (1 2 3) (w (> args)))
 (kreck (1 2 3) (l (> args) 1))
-;(kreck (1 2 3) (gate (q (l arg1 (^* arg1)))))
-;(kreck ((1 2) 3 4)
-;  ((gate (q (l arg1 (^* arg1)))) (> arg1)))
 (kreck (1 2 3) ($@c foo (q ($))))
 (kreck ((1 2) 3) ($-> 1))
 (kreck ((1 2) 2 3)
-  ($-> ($@c foo (q (q ($))))
-       ($@c bar (q (q (> ($)))))
-       ($@c baz (q (q (c (q (< (^* arg1)))
-                         non-rec-inop-ctx)))) 
-       ($@c q* (q (q (c (q (l (q q) (^* arg1)))
+  ($-> ($@c q* (q (q (c (q (l (q q) (^* arg1)))
                         non-rec-inop-ctx))))
        ($@c r-op-loader (q (q (* ($) this))))
        ($@c e-op-loader (q (q (* (c (* calr
                                        (c (q l) args))
                                     ctx)
                                  this))))
-       #|
        ($@c gate
             (q (q (c e-op-loader
                      (c (l (q (l (q c)
@@ -236,25 +221,7 @@
                                     (l (q q)
                                        (c (c (q "rec")
                                              (q (q (c this ctx))))
-                                          (? (> args)
-                                             arg2
-                                             defs))))))
-                           ($))
-                        defs)))))
-       |# ;when does the loader evaluate?
-       ($@c gate
-            (q (q (c e-op-loader
-                     (c (l (q (l (q c)
-                                 (q r-op-loader)
-                                 (l (q c)
-                                    (l (q l)
-                                       (l (q q) arg1)
-                                       (q ($))
-                                       (l (q q) calr))
-                                    (l (q q)
-                                       (c (c (q "rec")
-                                             (q (q (c this ctx))))
-                                          (? (> args)
+                                          (? arg2
                                              arg2
                                              defs))))))
                            ($))
@@ -262,15 +229,19 @@
 
        ($@c makr (q (< (> (> locs)))))
        ($@c dump
-            (q* (gate (q (l arg1 (^* arg1))))))
-       #|
-       ($@c fn
-            (q* (gate (gate (l )))))
-       |#
+            (q* (gate r-op-loader ~
+                      (q (l arg1 (^* arg1))))))
        (l (dump (> (q (1 2 3))))
-          ;((gate (q (rec))))
-          )))
-
+          r-op-loader)))
+;use cases for $@c without q?
+;q in gate definition or loader definition?
+  ;gate! look at the gate's own loader
 ;many ways
 ;gates defined with deflist arg?
-
+;is there still a need for the last arg of "gate" to be evaluated?
+;^does that matter? - wrappers
+;easy scope gate - finding "makr" in the deflist
+; requires symbolic defs
+;all defs scoped?
+;if deflist empty, search makr's deflist
+;outr, calr, makr

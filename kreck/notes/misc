@@ -9,6 +9,7 @@ resolved
 future
 terminology
 runes
+necessary eval
 server
 bootstrapping
 deflist inop problem
@@ -16,7 +17,7 @@ closure call problem
 scopes
 stupid
 wacky
-expr vs fun inops
+fexpr vs fun inops
 uncategorized
 old
 
@@ -31,6 +32,7 @@ refactor notes
 fexpr vs fun
 	rewrite
 writeup
+explain loader qutoe kerfuffle
 
 functionality
 	lamdas
@@ -138,6 +140,9 @@ internal code generation
 ==================================================
 ;RESOLVED
 
+loader quote kerfuffle
+	[eplain]
+
 "getdef" to "evdef"?
 	you can have getdef too
 		and use it in stuff like replace
@@ -167,7 +172,8 @@ exop -
 
 code -
 
-snippet - a definition that's pure code
+??? - code that isn't an op
+
 
 op application
 	subj, args
@@ -184,10 +190,6 @@ closure - op that generates a pre-evaluated context
 
 
 
-why defev instead of defget
-	"A is a definition of B" means they can be substituted in an expression
-
-vestigial quote?
 
 power
 	doing more with less
@@ -225,6 +227,7 @@ symbolic reduction
 non-symbolic/reduced code
 
 
+
 coherent deflist - 
 
 runes - ???
@@ -232,6 +235,11 @@ runes - ???
 rename fexpr-gate?
 
 [section for terminological kerfuffle?]
+
+why defev instead of defget
+	"A is a definition of B" means they can be substituted in an expression
+
+
 op
 "is the stuff evaluated an op getter, or the op itself?"
 	difference - when the result is an exop
@@ -266,6 +274,18 @@ semantic shorthand
 	nay
 		misleading
 			but the whole thing is a bit misleading for someone new
+
+==================================================
+;NECESSARY EVAL
+
+inop getter
+	lexical closures
+		free manipulation of thereof
+			free of the closure itself
+
+evdef
+	ease of symbolic reduction through substitution
+
 
 ==================================================
 ;SERVER
@@ -539,6 +559,33 @@ inop
 
 ==================================================
 ;UNCATEGORIZED
+
+subj layout
+	(args locs outr . defs)
+	locs = ???
+
+just args?
+	(args this outr . defs)
+	outr = (calr . makr)
+
+mutual recursion
+	is calr a problem?
+			does it break TCO?
+		no, as long as you keep stuff you recurse with the same calr
+		is it safe otherwise?
+			discarding the calr
+	!!! recursion is not normal calls
+
+tail call with cons is obviously not TCO-able
+
+
+gates with loaders
+
+[meta]
+	meta section
+	gates
+	subj layout
+
 
 always double quote with "$@c"?
 
