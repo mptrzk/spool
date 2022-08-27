@@ -205,34 +205,68 @@
   ($-> ($@c q* (q (q (c (q (l (q q) (^* arg1)))
                         non-rec-inop-ctx))))
        ($@c r-op-loader (q (q (* ($) this))))
-       ($@c e-op-loader (q (q (* (c (* calr
-                                       (c (q l) args))
-                                    ctx)
+       ($@c $*args (q (c (* calr ;explain single quote
+                            (c (q l) args))
+                         ctx)))
+       ($@c e-op-loader (q (q (* $*args
                                  this))))
+       
+       ;TODO make it accessible only inside gates
+       ;rearrange subj to simplify rec?
+       ;describe what it does
+       ($@c rec (q (q (c this
+                         (c (l this
+                               (c args
+                                  (c (l this
+                                        ~
+                                        makr)
+                                     defs))
+                               makr)
+                            defs)))))
        ($@c gate
             (q (q (c e-op-loader
                      (c (l (q (l (q c)
-                                 (l (q q) arg1)
+                                 (l (q q) arg2)
                                  (l (q c)
                                     (l (q l)
-                                       (l (q q) arg3)
+                                       (l (q q) arg2)
                                        (q ($))
-                                       (l (q q) calr))
+                                       (l (q q) calr) 
+                                       )
                                     (l (q q)
-                                       (c (c (q "rec")
-                                             (q (q (c this ctx))))
-                                          (? arg2
-                                             arg2
-                                             defs))))))
+                                       (? arg1
+                                          arg1
+                                          defs)))))
                            ($))
                         defs)))))
 
        ($@c makr (q (< (> (> locs)))))
+
        ($@c dump
-            (q* (gate r-op-loader ~
+
+            (q* (gate ~
                       (q (l arg1 (^* arg1))))))
+       ($@c dup
+            (q* (gate ~
+                      (q ($-> $*args (l arg1 arg1))))))
+       ($@c $!d (q* (gate ~ (q (< (c calr (!d (^* arg1))))))));useful msg?
+       ($@c map
+            (q* (gate ~
+                      (q ($-> $*args
+                              (? arg2
+                                 (c (arg1 (< arg2))
+                                    (rec arg1 (> arg2)))
+                                 ~))))))
+       #| ;eval, print and drop
+       ($@c map
+            (q* (gate ~
+                      (q ($-> $*args (? (!d arg2) (arg1 arg2) 0))))))
+       |#
+       ($@c freeze (q* (gate ~ (q (rec)))))
        (l (dump (> (q (1 2 3))))
-          r-op-loader)))
+          (map dup (q (1 2 3)))
+          ;(freeze)
+          )))
 ;use cases for $@c without q?
 ;q in gate definition or loader definition?
   ;gate! look at the gate's own loader
@@ -245,3 +279,9 @@
 ;all defs scoped?
 ;if deflist empty, search makr's deflist
 ;outr, calr, makr
+;making $@c an eop?
+;list of locals a local def in deflist
+;vars, evvar, separate reduction
+;consider fexprs being too much hassle
+;arg-evaluator?
+;exploding ctx problem

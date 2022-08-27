@@ -13,7 +13,9 @@ necessary eval
 server
 bootstrapping
 deflist inop problem
-closure call problem
+closure call problem [rearrange?]
+exploding ctx problem
+rec arg eval problem
 scopes
 stupid
 wacky
@@ -65,6 +67,8 @@ as few crutches as possible
 access to machine stuff
 
 if it's easier to write in asm, it should be primodial
+
+convenience on top of generality
 
 ==================================================
 ;WRITEUP
@@ -286,6 +290,9 @@ inop getter
 evdef
 	ease of symbolic reduction through substitution
 
+*q
+	so that gates can be both added to deflists and used as closures
+
 
 ==================================================
 ;SERVER
@@ -437,6 +444,24 @@ calr with recursion/threading stays the same
 implicit calr would force the subject to grow
 
 ==================================================
+;EXPLODING CTX PROBLEM
+
+==================================================
+;REC ARG EVAL PROBLEM
+
+does recursion fail because of calr?
+	yes
+rec arg eval problem
+ calr & subj
+
+so tco works after all when calr is just set to ($)? 
+	it doesn't, it exhaused the heap
+	why didn't it exhaust the stack?
+		because it doesn't go "i need to eval Y before I finish evaling X",
+		it just conses stuff
+	is it TR sans cons?
+
+==================================================
 ;SCOPES
 
 [rewrite after fixing the issue]
@@ -560,6 +585,16 @@ inop
 ==================================================
 ;UNCATEGORIZED
 
+other way of metaprogramming - macros
+	ease of bootstrap
+	ease of use
+	power
+
+
+outr in locs?
+	yay
+	nay
+
 subj layout
 	(args locs outr . defs)
 	locs = ???
@@ -567,6 +602,11 @@ subj layout
 just args?
 	(args this outr . defs)
 	outr = (calr . makr)
+
+proper list
+	(args locs outr defs)
+	simpler definitions
+		rly?
 
 mutual recursion
 	is calr a problem?
