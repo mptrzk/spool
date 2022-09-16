@@ -1,3 +1,8 @@
+first class associative data structures seem kinda cool
+  - lisp has assoc lists
+  - assoc lists are meh
+  - hashtables are also meh
+  
 
 programming patterns?
 	aren't patterns mostly just missing features?
@@ -58,3 +63,13 @@ OOP
 		instance syntactically
 	object in ontology and grammar 
 		
+javaisms
+  forcing OOP
+  short funcitons
+  long names
+
+names should fit the mental context
+long names are better if you have to recall from far away
+short names are better if you use them many times close by
+
+top-down, bottom-up - pn, rpn

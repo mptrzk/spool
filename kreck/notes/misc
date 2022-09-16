@@ -35,6 +35,10 @@ fexpr vs fun
 	rewrite
 writeup
 explain loader qutoe kerfuffle
+section for "apply"
+	compare kreck's apply with old pock or lisp's apply
+		eager evaluation and need of using calr
+			implicit ?encoding? in pock 
 
 functionality
 	lamdas
@@ -60,6 +64,8 @@ atom problems
 ==================================================
 ;DESIGN
 
+stateless metaprogramming
+
 language that would be mostly written in itself when starting from low level
 make clever stuff easy to do starting from a low level language
 no gymnastics
@@ -68,10 +74,13 @@ access to machine stuff
 
 if it's easier to write in asm, it should be primodial
 
+power should have future
+
 convenience on top of generality
 
 ==================================================
 ;WRITEUP
+
 
 explanatory
 chronological
@@ -167,6 +176,10 @@ zk stuff
 ==================================================
 ;TERMINOLOGY
 
+metaprogramming
+deep metaprogramming
+metaprogramming as first class feature
+
 internal - 
 external - 
 
@@ -176,8 +189,15 @@ exop -
 
 code -
 
-??? - code that isn't an op
+op's code
+	not opcode, that would be confusing
+	body?
 
+??? - code that isn't an op
+	
+
+clean call - doesn't fill up the heap
+	what about args?	
 
 op application
 	subj, args
@@ -192,7 +212,13 @@ closure - op that generates a pre-evaluated context
 	that's just implementation
 
 
-
+??? - exop only code
+	atomized
+??? -	code that reduces to exop only code
+	atomizable
+	symbolically atomizable
+??? - code that executes only one evaluation
+	external?
 
 
 power
@@ -282,16 +308,45 @@ semantic shorthand
 ==================================================
 ;NECESSARY EVAL
 
+Aren't there too many evals?
+There are nested quotes everywhere, preventing the evals from doing stuff
+Are they necessary?
+	for some cool stuff
+	in use cases where they repeat often or are confusing, there should be wrappers
+
+eagerness of evaluation is determined by the op [move to "apply" section]
+getter is op-agnostic
+
 inop getter
-	lexical closures
-		free manipulation of thereof
+	lexical closures which can eval their args using subj
+		free manipulation thereof
 			free of the closure itself
+				???
+				no funcall-like stuff
+	is it really needed thouh?
+		getter can be an op		
+		a bit funcall like
+
+explicit call?
+	sux
+
+
+why not use subj as an implicit argument
+	tco works for stack, but garbage is generated
+	couldn't cleanly recurse with "apply" syntax		
+		why?
+			the outermost evalation would be application, which would create garbage
+			to recurse cleanly one would have to wrap the call in eval expression
+				rly?
+					wouldn't wrapping the op's code work?
+
 
 evdef
 	ease of symbolic reduction through substitution
 
 *q
 	so that gates can be both added to deflists and used as closures
+
 
 
 ==================================================
@@ -585,7 +640,52 @@ inop
 ==================================================
 ;UNCATEGORIZED
 
-other way of metaprogramming - macros
+a case for vector subj
+  discarding stuff from a vector is O(1)
+  but for persistant vectors it's O(n)
+    still faster than for lists
+      rly? you often reuse parts of lists
+
+why doesn't external arg evaluation need consing?
+
+syntax and semantics of each symbol
+vv
+
+*[s (f . a]] = *[(a . s) f]  
+  f can bring stuff into subj using q, c and *
+
+*[(d . s) (f . a]] = *[(d a . s) f]
+*[(s . d) (f . a]] = *[((a . s) . d) f]
+*[s ((f . d) . a)] = *[(a s . d) f]
+^^ that's bad, because by default the operator carries its language
+  isn't that the point?
+
+*[s ((f . m) . a)] = *[((a . s) . m) f]
+^^ m is not needed, quote can be used
+  no, because the formula must be evaluated for the quote to mean something
+
+some evals give power which isn't often needed, and can be walked around sometimes
+
+are conses from recursion neatly droppable?
+
+hash labeled debugging
+
+$*args that snip calr
+
+$*args snips calr
+rec puts subj in calr
+
+are other functions borken now?
+	only rec snips calr
+		that doesn't mean that gates are broken
+
+
+new op application
+	*(subj, (op . args)) = *((args . subj), op)
+		but deflist!
+
+
+the other way of metaprogramming - macros
 	ease of bootstrap
 	ease of use
 	power

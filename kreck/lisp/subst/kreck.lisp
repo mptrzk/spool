@@ -207,7 +207,7 @@
        ($@c r-op-loader (q (q (* ($) this))))
        ($@c $*args (q (c (* calr ;explain single quote
                             (c (q l) args))
-                         ctx)))
+                         (c (l this ~ makr) defs))))
        ($@c e-op-loader (q (q (* $*args
                                  this))))
        
@@ -216,15 +216,11 @@
        ;describe what it does
        ($@c rec (q (q (c this
                          (c (l this
-                               (c args
-                                  (c (l this
-                                        ~
-                                        makr)
-                                     defs))
+                               ($)
                                makr)
                             defs)))))
        ($@c gate
-            (q (q (c e-op-loader
+            (q (q (c (q (* $*args this))
                      (c (l (q (l (q c)
                                  (l (q q) arg2)
                                  (l (q c)
@@ -257,19 +253,17 @@
                                  (c (arg1 (< arg2))
                                     (rec arg1 (> arg2)))
                                  ~))))))
-       #| ;eval, print and drop
-       ($@c map
-            (q* (gate ~
-                      (q ($-> $*args (? (!d arg2) (arg1 arg2) 0))))))
-       |#
        ($@c freeze (q* (gate ~ (q (rec)))))
        (l (dump (> (q (1 2 3))))
           (map dup (q (1 2 3)))
           ;(freeze)
           )))
+;aliases that make sense
 ;use cases for $@c without q?
+  ;loading expr from another deflist
 ;q in gate definition or loader definition?
   ;gate! look at the gate's own loader
+  ;what?
 ;many ways
 ;gates defined with deflist arg?
 ;is there still a need for the last arg of "gate" to be evaluated?
@@ -285,3 +279,4 @@
 ;consider fexprs being too much hassle
 ;arg-evaluator?
 ;exploding ctx problem
+; (* $*args this) vs ($-> $*args this)
