@@ -62,14 +62,25 @@ OOP
 		type semantically
 		instance syntactically
 	object in ontology and grammar 
+
+
+
+"it's like real world"
+  it's like how you talk about stuff in natural language
 		
 javaisms
   forcing OOP
   short funcitons
   long names
 
+getters & setters
+enforcing encapsulation to walk around it
+objects with no data
+
 names should fit the mental context
 long names are better if you have to recall from far away
 short names are better if you use them many times close by
 
 top-down, bottom-up - pn, rpn
+
+mutability and object persistance

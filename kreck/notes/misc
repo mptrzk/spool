@@ -651,7 +651,7 @@ why doesn't external arg evaluation need consing?
 syntax and semantics of each symbol
 vv
 
-*[s (f . a]] = *[(a . s) f]  
+*[s (f . a)]] = *[(a . s) f]  
   f can bring stuff into subj using q, c and *
 
 *[(d . s) (f . a]] = *[(d a . s) f]
@@ -660,9 +660,14 @@ vv
 ^^ that's bad, because by default the operator carries its language
   isn't that the point?
 
-*[s ((f . m) . a)] = *[((a . s) . m) f]
+*[s ((f . c) . a)] = *[((a . s) . c) f]
 ^^ m is not needed, quote can be used
   no, because the formula must be evaluated for the quote to mean something
+
+^^ (arg1 . stuff) is impossible
+
+
+the language should come from op by default
 
 some evals give power which isn't often needed, and can be walked around sometimes
 
