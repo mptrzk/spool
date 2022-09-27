@@ -57,13 +57,28 @@ just bugs
 stumps
 	big bugs	
 
+==================================================
 OOP
+
 	associating function with one of it's arguments datatype
 		type semantically
 		instance syntactically
 	object in ontology and grammar 
 
+it's almost like associating functions with and instance of one of its arguments' datatype
+and generalizing it afterwards
 
+nail-oriented carpentry
+
+taxonomy
+
+people might like it because it feels like they're doing stuff thats forgiving
+
+spurious instntiation
+
+state
+
+hiding state
 
 "it's like real world"
   it's like how you talk about stuff in natural language
@@ -84,3 +99,88 @@ short names are better if you use them many times close by
 top-down, bottom-up - pn, rpn
 
 mutability and object persistance
+
+single dispatch is easy
+
+objects should be called cells or plants or creatures or whatever
+
+==================================================
+FUNCTIONAL PROGRAMMING
+
+it's less dogmatic than OOP
+
+it's not function-oriented
+
+you don't do church numerals
+
+intuitiveness of imperative programming
+
+thinking hard about simple problems
+
+==================================================
+ABSOLUTELY IDIOTIC PROGRAMMING
+
+absolutely idiotic approach to generating quality through intellectual work
+
+When evaluated against all that can be known,
+you are not smart, I am not smart, neither was John von Neumann, neither is any being
+whose problem solving skills are above our comprehesion.
+
+foolish stuff
+  nail oriented carpentry
+  implicit type conversion
+    when it's not bad
+      numbers
+      bytestring -> unicode?
+
+intuition and reason
+
+what are you trying to be smart for?
+why do you think that's smart?
+
+stupid to smart is easier than smart to smart
+
+making you less idiotic if it won't make you more foolish
+
+being unwilling to learn is foolish
+
+deleting all old source files is foolish
+
+being bold is not necessarily foolish
+
+minimizing cognitive load to solve the problem well
+
+shifting goalposts
+  maybe theye were in the wrong place?
+
+know when you are shifting goalposts
+
+silliness is foolishness minus the bad stuff
+
+stop writing classes
+stop even writing functions or loops
+
+consider the cost of translation between abstractions
+
+in functional languages the easiest abstraction to translate from might not be the default
+it may be a monad or something
+
+when is it useful to do a single use procedure?
+  getting in the way of context
+
+stuff like "which arguments do I need"
+
+a snippet's ugliness might depend on its surroundings
+
+You'll be lazy anyway
+
+fixation on immutability considered harmful
+mutating a dict
+  it's not meant to be 'state'
+
+
+what databases are really for
+
+not for providing datastructures
+
+for not caring about the logistics of data storage

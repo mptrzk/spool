@@ -27,6 +27,13 @@ old
 ==================================================
 ;TODO
 
+bug section
+  move from other stuff
+  stack overflow
+  heap overflow
+inop semantics
+  discuss different ways of doing it
+  including no-inop
 clean up TERMINOLOGY
 terminology of ops
 definition with reduction
@@ -186,6 +193,7 @@ external -
 op -
 inop - 
 exop - 
+
 
 code -
 
@@ -432,7 +440,7 @@ get- and post- like ops?
 ;DEFLIST INOP PROBLEM
 
 stack overflow
-	cause-omitting a quote
+	cause - omitting a quote
 	what happened?
 
 unintuitive stuff
@@ -639,6 +647,8 @@ inop
 
 ==================================================
 ;UNCATEGORIZED
+
+descripitons using sets?
 
 a case for vector subj
   discarding stuff from a vector is O(1)
