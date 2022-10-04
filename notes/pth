@@ -68,11 +68,27 @@ OOP
 it's almost like associating functions with and instance of one of its arguments' datatype
 and generalizing it afterwards
 
+mathematical description of an object
+  a compound datatype
+  methods
+    functions
+    associated namespace
+  encapsulation
+  inheritance
+  polymorphism
+
 nail-oriented carpentry
+
+I have nothing against using a lot of nails
+What I find foolish is "Let's approach the problem in such a way that we can use nails to solve it"
+
+all abstractions have their cost
 
 taxonomy
 
 people might like it because it feels like they're doing stuff thats forgiving
+
+application of a tool can't become a metric
 
 spurious instntiation
 
@@ -89,6 +105,8 @@ javaisms
   long names
 
 getters & setters
+  aren't they useful for wrappers?
+    references instead?
 enforcing encapsulation to walk around it
 objects with no data
 
@@ -178,9 +196,21 @@ fixation on immutability considered harmful
 mutating a dict
   it's not meant to be 'state'
 
+beauty
+
+consider the value in the ugly
+
+don't do 
+
+
+==================================================
+TECH
+
+sexps vs text
 
 what databases are really for
-
 not for providing datastructures
+they are for abstracting away the logistics of data storage
+  rly?
 
-for not caring about the logistics of data storage
+

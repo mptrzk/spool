@@ -10,6 +10,7 @@ future
 terminology
 runes
 necessary eval
+inop semantics
 server
 bootstrapping
 deflist inop problem
@@ -19,7 +20,6 @@ rec arg eval problem
 scopes
 stupid
 wacky
-fexpr vs fun inops
 uncategorized
 old
 
@@ -250,6 +250,13 @@ deflist -
 atom - 
 cell -
 symbol - 
+  meant to symbolize, which is
+  meant to be mapped to something as a whole
+  meant to be treated as a part of some language
+  the important property is that it's unique
+    in which way
+    in lisps they share a memory address
+  strings are different
 literal - expression that evaluates to itself 
 
 gate
@@ -355,6 +362,48 @@ evdef
 *q
 	so that gates can be both added to deflists and used as closures
 
+
+
+==================================================
+;INOP SEMANTICS
+
+?inner? - code's car is always an exop
+
+
+eager - args are evaluated
+  pros
+    makes stuff easy
+  cons
+    irregular
+    can't do metaprogramming internally without quotes and evals
+
+
+lazy
+opinionated
+unopinionated
+
+
+[pasted from removed section]
+exop
+	a fexpr...
+	it's a fexpr and not a function to allow the ops to be general
+inop
+	a funcall
+		it's funcall not fexp, to make expressions simple
+	but don't I want generality from internal stuff also?
+		buut that would require explicit evals in the closures
+		and another call to put it in the subj 
+		and it would have to be done almost always, which is ugly
+			is it really?
+		but isn't it ugly for exops also?
+			for exops it's just some calls appended on top of the code
+			for inops it's a complicated expression with an eval
+				is it really complicated?
+
+==================================================
+;PARSING
+
+implicit symbol
 
 
 ==================================================
@@ -623,27 +672,6 @@ pock that supports literals and improper lists
 
 kreck without "?"
 	church-style truth
-
-==================================================
-;FEXPR VS FUN INOPS
-
-
-exop
-	a fexpr...
-	it's a fexpr and not a function to allow the ops to be general
-inop
-	a funcall
-		it's funcall not fexp, to make expressions simple
-	but don't I want generality from internal stuff also?
-		buut that would require explicit evals in the closures
-		and another call to put it in the subj 
-		and it would have to be done almost always, which is ugly
-			is it really?
-		but isn't it ugly for exops also?
-			for exops it's just some calls appended on top of the code
-			for inops it's a complicated expression with an eval
-				is it really complicated?
-
 
 ==================================================
 ;UNCATEGORIZED

@@ -33,3 +33,13 @@ js
 		why lisp?
 			reflection
 				meh?
+
+tree format
+
+language aiming for a self-hosting compiler
+lisp with fixed dict
+dynamic scope?
+
+js has a nice feel when you do it right
+  maybe it's the dynamism?
+  more lambdas
