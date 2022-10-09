@@ -293,6 +293,8 @@ op
 ==================================================
 ;RUNES
 
+a bit informal
+
 list
 	~ - nil
 	! - macro stuff
@@ -304,10 +306,11 @@ list
 	? - conditionals
 		how about predicates?
 			sidethought - predicates in LC
-	| - proofs
+	| - proof stuff
 	& - ?state?
 	% - update
 	/ - ???
+
 
 % for fexprs?
 softer than in hoon
@@ -367,7 +370,29 @@ evdef
 ==================================================
 ;INOP SEMANTICS
 
-?inner? - code's car is always an exop
+
+syntax
+explicit - exop that applies an inop
+  that might be good, because inops are way less efficient than well writen exops 
+implicit - apply inop when car of the form is not an atom
+  more lispy
+  symbol substitution works!
+
+
+
+*[subj ((code . clos) . args)] = *[(subj (code . clos) . args) code]
+don't have to construct gates
+symop looks at (>><> $)
+^^ eval!
+  is it necessary?
+    k want it there so that the op can be a result of an expression
+this way, in contrast with the previous one should allow recursing by using "this"
+as a function
+
+snipping happens anyway
+context building largely unnecessary
+inop getter, inop expr, and the returned closure design consideration
+
 
 
 eager - args are evaluated
@@ -675,6 +700,8 @@ kreck without "?"
 
 ==================================================
 ;UNCATEGORIZED
+
+functors, iterators and the like
 
 descripitons using sets?
 
