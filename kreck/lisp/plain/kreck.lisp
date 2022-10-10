@@ -78,15 +78,15 @@
          (res (assoc key (cddadr subj) :test #'equal)))
     (if res
         (cdr res)
-        (error (format nil "def ~a not found~%" key)))))
+        (error (format nil "def ~s not found~%" key)))))
 
 (defun defev-op (subj args)
   (kreck-eval subj (defget-op subj args)))
 
 (defun debug-op (subj args)
-  (format t "evaluating ~a:~%" (cons '!d (unparse args)))
+  (format t "evaluating ~s:~%" (cons '!d (unparse args)))
   (let ((res (kreck-eval subj (car args))))
-    (format t "  ~a~%" (unparse res))
+    (format t "  ~s~%" (unparse res))
     res))
 
 ;defs
@@ -133,25 +133,71 @@
     ("calr" . ,(parse '(< ($)))) 
     ("this" . ,(parse '(< (> ($))))) 
     ("args" . ,(parse '(> (> ($))))) 
+    ("arg1" . ,(parse '(< args)))
+    ("arg2" . ,(parse '(< (> args))))
     ("code" . ,(parse '(< this))) 
     ("clos" . ,(parse '(< (> this)))) 
     ("defs" . ,(parse '(> (> this)))) 
-    ("l-dyn" . ,(parse '(c (q eargs)
-                           (c ~ defs))))
-    ("eargs" . ,(parse '(? args
+    ("l" . ,(parse '(c (q (? args
                                  (c (* calr (< args))
                                     (* (c calr
                                           (c this 
                                              (> args)))
                                        code))
-                                 ~)))))
+                                 ~))
+                           (c ~ defs))))
+    ("eargs" . ,(parse '(* calr (c (q l) args))))
+    ("snip" . ,(parse '(c ~ (c this eargs)))) 
+    ("$->" . ,(parse '(c (q (? args 
+                               (* (c (* calr (< args))
+                                     (c this
+                                        (> args)))
+                                  code)
+                               calr))
+                         (c ~ defs))))
+    ("foo" . ,(parse '(c (q ($-> snip ;TODO remove
+                                 (? arg1
+                                    (c (c (< arg1) (< arg1))
+                                       (this (> arg1)))
+                                    ~)))
+                         (c ~ defs))))
+    ("$@c" . ,(parse '(c (q (c (* calr (q calr))
+                               (c (c (* calr (q code))
+                                     (c ~
+                                        (c (c (< (> arg1))
+                                              (* calr arg2))
+                                           (* calr (q defs)))))
+                                  (* calr (q args)))))
+                         (c ~ defs))))))
 
+;TODO inops with quote?
+;nah, the expr would contain symbol "defs"
 
+;todo split snip and eargs
+;rewrite eargs as subj modifying
 
 ;(untrace kreck-eval)
 ;(kreck (1 2 3) foo) << INCORRECT USAGE
-(kreck (1 2 3) (l-dyn (> args) (> args)))
-;(kreck (1 2 3) (l (> args) 1))
+;(kreck (1 2 3) (l (> args)))
+;(kreck (1 2 3) (foo (> args)))
+;(kreck (1 2 3) ($-> snip)) << impossible, no calr
 ;(kreck (1 2 3) ($@c foo (q ($))))
-;(kreck ((1 2) 3) ($-> 1))
+;(kreck (1 2 3) ($-> ($@c a 1) defs))
+(kreck (1 2 3)
+  ($-> ($@c a (l (q q)
+                 (c (q ($-> snip (c arg1 arg1)))
+                    (c ~ defs))))
+       ($@c inop (l (q q)
+                    (c (q (l (q q)
+                             (c (* calr arg1)
+                                (c ~ defs))))
+                       (c ~ defs))))
+       ;(a (l 1 2))
+       ($@c b (inop (q ($-> snip (c arg1 arg1)))))
+       ($@c fn (inop (l (q $->) (q snip) (* calr arg1))))
+       ;(b (l 1 2))
+       (!d (inop (q (c arg1 arg1))))
+       ;((!d (inop)) 1) ;TODO ???
+       1
+       ))
 
