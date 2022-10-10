@@ -195,11 +195,13 @@
                               (c ~ defs)))
                         (c ~ defs))))
        ;(a (l 1 2))
-       ($@c fn (q* (inop (inop (l (q $->) (q snip) (* calr arg1))))))
+       ($@c fn (q* (inop (q ((l (q $->) (q snip) (* calr arg1)))))))
+       ;inop not found, because it wasn't defined before itself
+       ;no?
        ($@c b (q* (inop (q ($-> snip (c arg1 arg1))))))
        ;(b (l 1 2))
        ($@c x (q* (inop (q (c arg1 arg1)))))
-       (< (fn))
+       (fn (q (c arg1 arg1)))
        ;((fn (q (c arg1 arg1))) (l (> args)))
        ))
 
