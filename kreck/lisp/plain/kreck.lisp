@@ -147,7 +147,7 @@
                                  ~))
                            (c ~ defs))))
     ("eargs" . ,(parse '(* calr (c (q l) args))))
-    ("snip" . ,(parse '(c ~ (c this eargs)))) 
+    ("fn-snip" . ,(parse '(c ~ (c this eargs)))) 
     ("$->" . ,(parse '(c (q (? args 
                                (* (c (* calr (< args))
                                      (c this
@@ -155,7 +155,7 @@
                                   code)
                                calr))
                          (c ~ defs))))
-    ("foo" . ,(parse '(c (q ($-> snip ;TODO remove
+    ("foo" . ,(parse '(c (q ($-> fn-snip ;TODO remove
                                  (? arg1
                                     (c (c (< arg1) (< arg1))
                                        (this (> arg1)))
@@ -170,38 +170,49 @@
                                   (* calr (q args)))))
                          (c ~ defs))))))
 
-;TODO inops with quote?
+;TODO inops with top quote?
 ;nah, the expr would contain symbol "defs"
 
-;todo split snip and eargs
+;todo split fn-snip and eargs?
 ;rewrite eargs as subj modifying
 
-;(untrace kreck-eval)
-;(kreck (1 2 3) foo) << INCORRECT USAGE
 ;(kreck (1 2 3) (l (> args)))
 ;(kreck (1 2 3) (foo (> args)))
-;(kreck (1 2 3) ($-> snip)) << impossible, no calr
 ;(kreck (1 2 3) ($@c foo (q ($))))
 ;(kreck (1 2 3) ($-> ($@c a 1) defs))
 (kreck (1 2 3)
   ($-> ($@c a (l (q q)
-                 (c (q ($-> snip (c arg1 arg1)))
+                 (c (q ($-> fn-snip (c arg1 arg1)))
                     (c ~ defs))))
        ($@c q* (l (q q)
                   (c (q (l (q q)
                            (* calr arg1)))
                      (c ~ defs))))
        ($@c inop (q* (c (q (c (* calr arg1)
-                              (c ~ defs)))
-                        (c ~ defs))))
+                              (c ~ (* calr (q defs))))) 
+                        (c ~ defs))));TODO explain bugfix
        ;(a (l 1 2))
-       ($@c fn (q* (inop (q ((l (q $->) (q snip) (* calr arg1)))))))
+       ($@c fn (q* (inop (q (inop (l (q $->)
+                                     (q fn-snip)
+                                     (* calr arg1)))))))
        ;inop not found, because it wasn't defined before itself
        ;no?
-       ($@c b (q* (inop (q ($-> snip (c arg1 arg1))))))
+       ($@c b (q* (inop (q ($-> fn-snip (c arg1 arg1))))))
        ;(b (l 1 2))
        ($@c x (q* (inop (q (c arg1 arg1)))))
-       (fn (q (c arg1 arg1)))
+       ((fn (q (c arg1 arg1))) (l arg1 arg2))
        ;((fn (q (c arg1 arg1))) (l (> args)))
        ))
-
+;TODO slight reorganization of subj after application
+;(args calr . this) = (args calr code defs . other)
+;TODO replace dynamically scoped ops
+;simple "let" and reducibility
+;reducibility and determinism
+;section about symbolic reduction
+;symbolic reduction and eval
+;hinted defs
+;lazy let
+;irreducibility hint
+;bootstrapping using a non-inop deflist
+;a case for deget symop?
+; no q*

@@ -10,12 +10,14 @@ resolved
 future
 terminology
 runes
+symbols
+metaprogramming
 necessary eval
 inop semantics
 server
 bootstrapping
 deflist inop problem
-closure call problem [rearrange?]
+closure call problem
 exploding ctx problem
 rec arg eval problem
 scopes
@@ -77,10 +79,26 @@ c not found
 q not found
   forgetting about q*
 fn krefuffle
+  "inop" inop built inops with the deflist it was defined against,
+    not the deflist inherited from subj in which it was called
+trying to eval snip with the root subj
 
 
 ==================================================
 ;DESIGN
+
+regularity - not expecting doing things differently
+
+avoiding leaking lower level
+the direction
+
+implementations of stuff
+  hardwired, primodial exops, inops, compiled exops
+
+leaving the room 
+  stuff that can be replaced with better stuff shouldn't be hardwired
+
+example of symops
 
 stateless metaprogramming
 
@@ -99,6 +117,23 @@ convenience on top of generality
 ==================================================
 ;WRITEUP
 
+kreck story
+Imagine you're on a desert island with no computers...
+You stumble upon a big black box
+  lights
+  buttons
+  big red button
+  knob
+kreck approach
+this approach is a bit wrong
+  some throw away stuff is too good
+
+a computer with no software
+
+pock story
+  urbit story
+  designing for the many
+  designing for one person
 
 explanatory
 chronological
@@ -201,12 +236,15 @@ metaprogramming as first class feature
 internal - 
 external - 
 
-op -
+op - operator
+  can be applied to stuff
+exop - external operator
+  primodial exop - exop that's 
 inop - 
-exop - 
 
 
-code -
+expression - stuff that kreck can evaluate in a defined way
+  not possibly crashing
 
 op's code
 	not opcode, that would be confusing
@@ -218,11 +256,16 @@ op's code
 clean call - doesn't fill up the heap
 	what about args?	
 
+caller (calr)
+
+caller snipping
+  removing calr from the subject in order to prevent filling up the heap
+  [todo - describe in detail]
+
 op application
 	subj, args
 	function in mathematical sense
 
-primodial exop - exop that's 
 
 eop - eager op
 	all args are evaluated with respect to caller subj
@@ -335,6 +378,65 @@ semantic shorthand
 			but the whole thing is a bit misleading for someone new
 
 ==================================================
+;SYMBOLS
+
+
+
+symbol
+"thing that represents something"
+  well gee, stuff means stuff
+
+symbols in binaries
+  funciton addresses change
+
+
+symbols in lisp
+implicit symbols in kreck
+
+most importantly, symbols are not literals
+  how do you tell them apart?
+    you know what the literals eval to just after parsing
+
+aren't they just strings?
+  implementation
+  evalueation
+
+uses of symbols
+  quick comparison
+  resolution during eval
+
+
+how kreck does it
+
+symbols are parsed to (symop name)
+
+rationale for non-atomic symbols
+  atomic symbols require hardwiring
+  hardwiring creates inflexibility
+    deflist must be at a hardwired locus
+
+
+mostly typeless
+
+symbolic reduction
+arising naturally from where deflists are?
+  contrast with previous inop semantics
+
+==================================================
+;METAPROGRAMMING
+
+metaprogramming - programming the language itself
+
+good, bad and ugly
+  powah
+  responsibility
+  mess
+
+how kreck turns it up to 11
+
+fexprs and macros
+
+==================================================
 ;NECESSARY EVAL
 
 Aren't there too many evals?
@@ -435,12 +537,6 @@ inop
 			for exops it's just some calls appended on top of the code
 			for inops it's a complicated expression with an eval
 				is it really complicated?
-
-==================================================
-;PARSING
-
-implicit symbol
-
 
 ==================================================
 ;SERVER
@@ -711,6 +807,9 @@ kreck without "?"
 
 ==================================================
 ;UNCATEGORIZED
+
+::, $-> should be primodial exops
+  easier to write than as inops
 
 functors, iterators and the like
 
@@ -1183,6 +1282,7 @@ so the substitutive semantics aren't substitutive after all?
 	no, it's just that the old pock didn't evaluate stuff
 
 on the island I would write getdef as an inop
+  whaat that's retarded?
 
 (args . ctx)
 (args loc . defs)
@@ -1917,7 +2017,7 @@ register machines aren't scary! you can just compile stupid code
 that doesn't move stuff between registers
 
 ==================================================
-OLD
+;OLD
 
 
 testing for full heap inside gc function body or outside?
