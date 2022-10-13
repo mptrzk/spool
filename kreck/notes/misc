@@ -12,6 +12,7 @@ terminology
 runes
 symbols
 metaprogramming
+typing
 necessary eval
 inop semantics
 server
@@ -102,6 +103,8 @@ example of symops
 
 stateless metaprogramming
 
+encouraging runtime determinism
+
 language that would be mostly written in itself when starting from low level
 make clever stuff easy to do starting from a low level language
 no gymnastics
@@ -127,6 +130,10 @@ You stumble upon a big black box
 kreck approach
 this approach is a bit wrong
   some throw away stuff is too good
+    debugging
+  maybe make it detachable?
+    
+the software disappears
 
 a computer with no software
 
@@ -437,6 +444,32 @@ how kreck turns it up to 11
 fexprs and macros
 
 ==================================================
+;TYPING
+
+typing is
+  automating reasoning
+  infering properties
+
+what is typing for
+  checking for bugs
+  optimization
+
+negative property
+
+why types and not sets?
+
+how quote makes it hard
+
+property list as type?
+
+problem with subj
+
+statements about deflists
+
+exops
+
+
+==================================================
 ;NECESSARY EVAL
 
 Aren't there too many evals?
@@ -687,8 +720,10 @@ solutions
 calr with recursion/threading stays the same
 implicit calr would force the subject to grow
 
-==================================================
+=================================================
 ;EXPLODING CTX PROBLEM
+
+was that the heap overflow thingy?
 
 ==================================================
 ;REC ARG EVAL PROBLEM
@@ -807,6 +842,14 @@ kreck without "?"
 
 ==================================================
 ;UNCATEGORIZED
+
+atoms as boxes
+
+boxing and unboxing
+  enabling and disabling traversal
+
+GC objects
+  box flag separate from GC atom flag
 
 ::, $-> should be primodial exops
   easier to write than as inops
