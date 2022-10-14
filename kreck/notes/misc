@@ -468,6 +468,13 @@ statements about deflists
 
 exops
 
+is car nil?
+is car code
+
+is it castable to X
+is it aliasable to X
+  does it make sense?
+
 
 ==================================================
 ;NECESSARY EVAL

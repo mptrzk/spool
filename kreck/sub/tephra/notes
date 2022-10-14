@@ -3,3 +3,64 @@ isa
 		pc, flags, general purpose
 
 is link register necessary?
+
+link register vs frame pointer
+  link register is for where the IP returns to
+
+is "branch with link" a pseudoinstruction?
+x:
+  mov r1 ip       //r1 = x
+  add r1 (y - x)
+  b
+y:
+
+generic "set register to local label"
+
+set r1 (y - .)
+<stuff>
+y:
+
+
+general local lable pseudoinstruction
+values of x and y
+  at compile time - offsets from the beginning of section
+  at run time - memory addreses
+  memory addresses
+relative values
+
+how do absolute jumps work then?
+
+
+
+good toy ISA
+  no 11-bit stuff
+
+not being smart with registers
+
+abstracting away gp registers
+blocks
+  data manipulation
+    reads -> writes
+    preserve frame pointer
+      all the time or from start to end?
+  control
+    branches, frames and the like
+    preserve frame data?
+instruction pointer ends up after block of instructions
+
+forth words
+forth next
+
+procedure call
+  push args
+  p
+
+reads - globals, locals, constants
+writes - globals, locals
+
+
+
+C without variable names
+
+good VM
+  preserves time complexity

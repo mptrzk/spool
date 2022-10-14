@@ -43,3 +43,9 @@ dynamic scope?
 js has a nice feel when you do it right
   maybe it's the dynamism?
   more lambdas
+
+common lisp paradox
+  regular syntax
+  not parsable withhout a lisp interpreter because of the reader macros
+
+
