@@ -42,8 +42,9 @@
       (let ((op (kreck-eval subj (car form)))) 
         (if (atom op) 
             (funcall op subj (cdr form))
-            (kreck-eval (cons subj
-                              (cons op (cdr form))) (car op))))))
+            (kreck-eval (cons (cdr form)
+                              (cons subj op))
+                        (car op))))))
 
 
 ;exops
@@ -75,7 +76,7 @@
 
 (defun defget-op (subj args)
   (let* ((key (car args))
-         (res (assoc key (cddadr subj) :test #'equal)))
+         (res (assoc key (cadddr subj) :test #'equal)))
     (if res
         (cdr res)
         (error (format nil "def ~s not found~%" key)))))
@@ -114,7 +115,7 @@
   (cons name (parse (car expr))))
 
 (defmacro kreck (args &body form)
-  `(unparse (kreck-eval (quote (nil (nil nil ,@*defs*) ,@args))
+  `(unparse (kreck-eval (parse (quote (,args nil nil ,*defs*)))
                         (parse (quote ,(car form))))))
 
 
@@ -130,89 +131,57 @@
     ("$@" . ,#'defget-op)
     ("$@*" . ,#'defev-op)
     ("!d" . ,#'debug-op)
-    ("calr" . ,(parse '(< ($)))) 
-    ("this" . ,(parse '(< (> ($))))) 
-    ("args" . ,(parse '(> (> ($))))) 
+    ("args" . ,(parse '(< ($)))) 
+    ("ctx" . ,(parse '(> ($)))) 
+    ("calr" . ,(parse '(< (> ($))))) 
+    ("this" . ,(parse '(> (> ($))))) 
     ("arg1" . ,(parse '(< args)))
     ("arg2" . ,(parse '(< (> args))))
     ("code" . ,(parse '(< this))) 
-    ("clos" . ,(parse '(< (> this)))) 
-    ("defs" . ,(parse '(> (> this)))) 
+    ("defs" . ,(parse '(< (> this)))) 
+    ("clos" . ,(parse '(> (> this)))) 
     ("l" . ,(parse '(c (q (? args
                                  (c (* calr (< args))
-                                    (* (c calr
-                                          (c this 
-                                             (> args)))
+                                    (* (c (> args) ctx)
                                        code))
                                  ~))
-                           (c ~ defs))))
+                           (c defs ~))))
     ("eargs" . ,(parse '(* calr (c (q l) args))))
-    ("fn-snip" . ,(parse '(c ~ (c this eargs)))) 
-    ("$->" . ,(parse '(c (q (? args 
-                               (* (c (* calr (< args))
-                                     (c this
-                                        (> args)))
+    ("fn-snip" . ,(parse '(c eargs (c ~ this)))) 
+    ("$->" . ,(parse '(l (q (? args 
+                               (* (c (> args)
+                                     (c (* calr (< args))
+                                        this)) 
                                   code)
                                calr))
-                         (c ~ defs))))
-    ("foo" . ,(parse '(c (q ($-> fn-snip ;TODO remove
-                                 (? arg1
-                                    (c (c (< arg1) (< arg1))
-                                       (this (> arg1)))
-                                    ~)))
-                         (c ~ defs))))
-    ("$@c" . ,(parse '(c (q (c (* calr (q calr))
-                               (c (c (* calr (q code))
-                                     (c ~
-                                        (c (c (< (> arg1))
-                                              (* calr arg2))
-                                           (* calr (q defs)))))
-                                  (* calr (q args)))))
-                         (c ~ defs))))))
+                         defs)))
+    ("$@c" . ,(parse '(l (q (l (* calr (q args))
+                               (* calr (q calr))
+                               (* calr (q code))
+                               (c (c (< (> arg1))
+                                     (* calr arg2))
+                                  (* calr (q defs)))))
+                         defs)))  
+    ))
 
-;TODO inops with top quote?
-;nah, the expr would contain symbol "defs"
 
-;todo split fn-snip and eargs?
-;rewrite eargs as subj modifying
-
-;(kreck (1 2 3) (l (> args)))
-;(kreck (1 2 3) (foo (> args)))
-;(kreck (1 2 3) ($@c foo (q ($))))
-;(kreck (1 2 3) ($-> ($@c a 1) defs))
+(kreck (1 2 3) (l (> args) (> args)))
+(kreck (1 2 3) ((l (q ($-> fn-snip args)) defs) (> args)))
 (kreck (1 2 3)
   ($-> ($@c a (l (q q)
-                 (c (q ($-> fn-snip (c arg1 arg1)))
-                    (c ~ defs))))
+                 (l (q ($-> fn-snip (c arg1 arg1)))
+                    defs)))
        ($@c q* (l (q q)
-                  (c (q (l (q q)
+                  (l (q (l (q q)
                            (* calr arg1)))
-                     (c ~ defs))))
-       ($@c inop (q* (c (q (c (* calr arg1)
-                              (c ~ (* calr (q defs))))) 
-                        (c ~ defs))));TODO explain bugfix
-       ;(a (l 1 2))
+                     defs)))
+       ($@c inop (q* (l (q (l (* calr arg1)
+                              (* calr (q defs)))) 
+                        defs)))
        ($@c fn (q* (inop (q (inop (l (q $->)
                                      (q fn-snip)
                                      (* calr arg1)))))))
-       ;inop not found, because it wasn't defined before itself
-       ;no?
        ($@c b (q* (inop (q ($-> fn-snip (c arg1 arg1))))))
-       ;(b (l 1 2))
        ($@c x (q* (inop (q (c arg1 arg1)))))
        ((fn (q (c arg1 arg1))) (l arg1 arg2))
-       ;((fn (q (c arg1 arg1))) (l (> args)))
        ))
-;TODO slight reorganization of subj after application
-;(args calr . this) = (args calr code defs . other)
-;TODO replace dynamically scoped ops
-;simple "let" and reducibility
-;reducibility and determinism
-;section about symbolic reduction
-;symbolic reduction and eval
-;hinted defs
-;lazy let
-;irreducibility hint
-;bootstrapping using a non-inop deflist
-;a case for deget symop?
-; no q*

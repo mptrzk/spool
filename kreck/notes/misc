@@ -422,12 +422,31 @@ rationale for non-atomic symbols
   hardwiring creates inflexibility
     deflist must be at a hardwired locus
 
+symop semantics
+  to eval or not to eval
+  [check necessary eval]
+  cool stuff
+  ease of reduction 
+    rly
+  math
+
+stuff without q*
+  [probably writen here somewhere]
+
 
 mostly typeless
 
 symbolic reduction
 arising naturally from where deflists are?
   contrast with previous inop semantics
+
+simple "let" and reducibility
+reducibility and determinism
+section about symbolic reduction
+symbolic reduction and eval
+hinted defs
+lazy let
+irreducibility hint
 
 ==================================================
 ;METAPROGRAMMING
@@ -586,6 +605,9 @@ deflist corruption
 ==================================================
 ;BOOTSTRAPPING
 
+
+TODO update
+
 $-> without using "gate"?
 	think about that later
 
@@ -656,6 +678,8 @@ get- and post- like ops?
 	&*
 	&%
 
+replace dynamically scoped ops
+bootstrapping using a non-inop deflist
 
 ==================================================
 ;DEFLIST INOP PROBLEM
@@ -849,6 +873,13 @@ kreck without "?"
 
 ==================================================
 ;UNCATEGORIZED
+
+simple dilemmas section
+  simple but not quite obvious design decisions
+
+(args calr . this) = (args calr code defs . other)
+
+>-wrap
 
 atoms as boxes
 
