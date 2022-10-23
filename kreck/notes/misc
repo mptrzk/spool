@@ -17,6 +17,7 @@ necessary eval
 inop semantics
 server
 bootstrapping
+implementation
 deflist inop problem
 closure call problem
 exploding ctx problem
@@ -47,7 +48,7 @@ explain loader qutoe kerfuffle
 section for "apply"
 	compare kreck's apply with old pock or lisp's apply
 		eager evaluation and need of using calr
-			implicit ?encoding? in pock 
+			implicit ?encoding? in pock
 
 functionality
 	lamdas
@@ -96,7 +97,7 @@ the direction
 implementations of stuff
   hardwired, primodial exops, inops, compiled exops
 
-leaving the room 
+leaving the room
   stuff that can be replaced with better stuff shouldn't be hardwired
 
 example of symops
@@ -132,7 +133,7 @@ this approach is a bit wrong
   some throw away stuff is too good
     debugging
   maybe make it detachable?
-    
+
 the software disappears
 
 a computer with no software
@@ -240,14 +241,14 @@ metaprogramming
 deep metaprogramming
 metaprogramming as first class feature
 
-internal - 
-external - 
+internal -
+external -
 
 op - operator
   can be applied to stuff
 exop - external operator
-  primodial exop - exop that's 
-inop - 
+  primodial exop - exop that's
+inop -
 
 
 expression - stuff that kreck can evaluate in a defined way
@@ -277,7 +278,7 @@ op application
 eop - eager op
 	all args are evaluated with respect to caller subj
 
-closure - op that generates a pre-evaluated context 
+closure - op that generates a pre-evaluated context
 	that's just implementation
 
 
@@ -308,9 +309,9 @@ aremhic - arguably even more homoiconic
 deflist -
 	like a namespace?
 
-atom - 
+atom -
 cell -
-symbol - 
+symbol -
   meant to symbolize, which is
   meant to be mapped to something as a whole
   meant to be treated as a part of some language
@@ -318,7 +319,7 @@ symbol -
     in which way
     in lisps they share a memory address
   strings are different
-literal - expression that evaluates to itself 
+literal - expression that evaluates to itself
 
 gate
 	recursive inop
@@ -334,7 +335,7 @@ non-symbolic/reduced code
 
 
 
-coherent deflist - 
+coherent deflist -
 
 runes - ???
 
@@ -355,6 +356,7 @@ op
 ;RUNES
 
 a bit informal
+Runes are natural language
 
 list
 	~ - nil
@@ -384,51 +386,70 @@ semantic shorthand
 		misleading
 			but the whole thing is a bit misleading for someone new
 
+
 ==================================================
 ;SYMBOLS
 
 
-
 symbol
-"thing that represents something"
-  well gee, stuff means stuff
+  "thing that represents something"
+    well gee, stuff means stuff
+  from wiki, in context of lisp
+    intered string
+      meh definition
 
 symbols in binaries
   funciton addresses change
 
-
 symbols in lisp
-implicit symbols in kreck
-
-most importantly, symbols are not literals
-  how do you tell them apart?
-    you know what the literals eval to just after parsing
-
-aren't they just strings?
-  implementation
-  evalueation
+  interned strings
+    can be compared by eq
+      everything can, but for symbols it holds that...
+      whereas for strings...
 
 uses of symbols
   quick comparison
   resolution during eval
 
+but coudn't you just use strings if you didn't care about a bit of the slowdown?
+  most importantly, symbols are not literals
+    how do you tell them apart?
+      you know what the literals eval to just after parsing
+      value not dependent on context
+  [example]
+
+problems with symbols
+  a lot of hardwiring
+    hardwiring creates inflexibility
+    deflist must be at a hardwired locus
+  packages add mess
+    example - common lisp
+
+implicit symbols in kreck
 
 how kreck does it
 
-symbols are parsed to (symop name)
+symbols are parsed (symop name)
 
-rationale for non-atomic symbols
-  atomic symbols require hardwiring
-  hardwiring creates inflexibility
-    deflist must be at a hardwired locus
 
 symop semantics
   to eval or not to eval
   [check necessary eval]
   cool stuff
-  ease of reduction 
+  ease of reduction
     rly
-  math
+  like definitions in math
+
+
+symeq
+association semantics
+  the rune
+  strings as keys
+  symbols as keys
+  anything as keys
+
+  you can use symbols as assoc keys
+    symops use strings as assoc keys
 
 stuff without q*
   [probably writen here somewhere]
@@ -545,7 +566,7 @@ evdef
 
 syntax
 explicit - exop that applies an inop
-  that might be good, because inops are way less efficient than well writen exops 
+  that might be good, because inops are way less efficient than well writen exops
 implicit - apply inop when car of the form is not an atom
   more lispy
   symbol substitution works!
@@ -589,7 +610,7 @@ inop
 		it's funcall not fexp, to make expressions simple
 	but don't I want generality from internal stuff also?
 		buut that would require explicit evals in the closures
-		and another call to put it in the subj 
+		and another call to put it in the subj
 		and it would have to be done almost always, which is ugly
 			is it really?
 		but isn't it ugly for exops also?
@@ -682,6 +703,12 @@ replace dynamically scoped ops
 bootstrapping using a non-inop deflist
 
 ==================================================
+;IMPLEMENTATION
+
+interning?
+  [definition]
+
+==================================================
 ;DEFLIST INOP PROBLEM
 
 stack overflow
@@ -764,7 +791,7 @@ does recursion fail because of calr?
 rec arg eval problem
  calr & subj
 
-so tco works after all when calr is just set to ($)? 
+so tco works after all when calr is just set to ($)?
 	it doesn't, it exhaused the heap
 	why didn't it exhaust the stack?
 		because it doesn't go "i need to eval Y before I finish evaling X",
@@ -773,6 +800,30 @@ so tco works after all when calr is just set to ($)?
 
 ==================================================
 ;SCOPES
+
+description
+
+loc@*
+  args vs subj
+
+rules for deflists in scope stack
+
+
+=========================
+;;old stuff
+
+complicated way
+  closure contains local defs
+
+just a deflist with makr lookup on miss
+  lisp
+  why kreck can't do it like this
+    evdef symop
+      are they really necessary
+      couldn't stuff like "args" just be "(args)"?
+        but symbolic reduction!
+
+
 
 [rewrite after fixing the issue]
 caller vs captured
@@ -907,7 +958,7 @@ why doesn't external arg evaluation need consing?
 syntax and semantics of each symbol
 vv
 
-*[s (f . a)]] = *[(a . s) f]  
+*[s (f . a)]] = *[(a . s) f]
   f can bring stuff into subj using q, c and *
 
 *[(d . s) (f . a]] = *[(d a . s) f]
@@ -1081,11 +1132,11 @@ ways of dealing with names
 
 what's a symbol anyway
 
-symbol is a thing that has a name that gets evaluated to 
+symbol is a thing that has a name that gets evaluated to
 stuff assigned to that name within the execution environment
 	how about my def evaling
 
-symbol is a thing that has a name that gets evaluated to 
+symbol is a thing that has a name that gets evaluated to
 stuff assigned to that name within the execution environment
 
 ^^ uniqueness in scope?
@@ -1144,7 +1195,7 @@ path is a list of car-ops & cdr-ops that threaded from subj gives the desired ob
 ($p > > <) = (< (> (> ($))))
 
 replace for non-threaded paths
-	cons application of flipped op to path arg with recursion of path arg 
+	cons application of flipped op to path arg with recursion of path arg
 	cons arg order depends on path arg
 
 replace with stuff like "args"?
@@ -1170,7 +1221,7 @@ layers
 		eval & gc
 	1 - basic exops
 		$'<>:*?
-	2 - exops that 
+	2 - exops that
 
 "="?
 	yay
@@ -1245,7 +1296,7 @@ doer does
 	doer is a subject which:
 		has a member called state
 		defines a transition operator
-		defines a return operator 
+		defines a return operator
 	doing it quick, doing it well
 
 printing done dumb
@@ -1452,10 +1503,10 @@ minimal version
 	[formal descriptions of exops & inops]
 	op getter => inop | exop
 	*(subj, inop) = closure = (code . ctx)
-	@(closure, args) = *((args . ctx), code) 
+	@(closure, args) = *((args . ctx), code)
 	
 
-evlis is redundant for interpreter with 
+evlis is redundant for interpreter with
 evlis
 list
 another fork?
@@ -1506,7 +1557,7 @@ dyn, but simpler
 	@ is find and eval
 		not just find?
 			ponder the "too many evals" thing
-		(@ key) 
+		(@ key)
 	subj = (args ctx . dict)
 	dict is a list of alists
 		why not an alist?
@@ -1697,7 +1748,7 @@ infinite loop test with SnC
 		is it really tail recursive
 			it doesn't seggie if gc get's called every loop
 
-separate preprocessing layer? 
+separate preprocessing layer?
 	static macro expansion
 
 TODO
@@ -2009,7 +2060,7 @@ nil
 				[to phil] is this question approachable in a good way?
 		nay
 			although nils are atoms, they have to be dealt with very differently
-			since kreck is untyped, 
+			since kreck is untyped,
 	zero atom
 		yay
 			simpler predicates
@@ -2103,7 +2154,7 @@ that doesn't move stuff between registers
 
 testing for full heap inside gc function body or outside?
 	inside
-		condition is not duplicated in different functions that use 
+		condition is not duplicated in different functions that use
 			it shouldn't be!!! [unexpected refactor]
 	outside
 

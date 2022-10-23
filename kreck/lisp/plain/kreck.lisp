@@ -52,6 +52,10 @@
 (defun subj-op (subj args) 
   subj)
 
+(defun equal-op (subj args) 
+  (equal (kreck-eval subj (car args))
+         (kreck-eval subj (cadr args))))
+
 (defun quot-op (subj args) 
   (car args))
 
@@ -90,6 +94,7 @@
     (format t "  ~s~%" (unparse res))
     res))
 
+
 ;defs
 
 
@@ -115,13 +120,14 @@
   (cons name (parse (car expr))))
 
 (defmacro kreck (args &body form)
-  `(unparse (kreck-eval (parse (quote (,args nil nil ,*defs*)))
+  `(unparse (kreck-eval (parse (quote (,args nil nil ,*defs* nil nil)))
                         (parse (quote ,(car form))))))
 
 
 (defparameter *defs*
   `(("~" . nil)
     ("$" . ,#'subj-op)
+    ("=" . ,#'equal-op)
     ("q" . ,#'quot-op)  
     ("<" . ,#'car-op)  
     (">" . ,#'cdr-op)  
@@ -137,9 +143,11 @@
     ("this" . ,(parse '(> (> ($))))) 
     ("arg1" . ,(parse '(< args)))
     ("arg2" . ,(parse '(< (> args))))
+    ("arg3" . ,(parse '(< (> (> args)))))
     ("code" . ,(parse '(< this))) 
     ("defs" . ,(parse '(< (> this)))) 
-    ("clos" . ,(parse '(> (> this)))) 
+    ("makr" . ,(parse '(< (> (> this))))) 
+    ("locs" . ,(parse '(< (> (> (> this)))))) 
     ("l" . ,(parse '(c (q (? args
                                  (c (* calr (< args))
                                     (* (c (> args) ctx)
@@ -148,6 +156,7 @@
                            (c defs ~))))
     ("eargs" . ,(parse '(* calr (c (q l) args))))
     ("fn-snip" . ,(parse '(c eargs (c ~ this)))) 
+    #|
     ("$->" . ,(parse '(l (q (? args 
                                (* (c (> args)
                                      (c (* calr (< args))
@@ -155,6 +164,16 @@
                                   code)
                                calr))
                          defs)))
+    |#
+    ;that isn't tail-recursive?
+    ("$->" . ,(parse '(l (q (? (> args) 
+                               (* (c (> args)
+                                     (c (* calr (< args))
+                                        this)) 
+                                  code)
+                               (* calr (< args))))
+                         defs)))
+    ;can it be turned tail-recursive by checking (> args?)
     ("$@c" . ,(parse '(l (q (l (* calr (q args))
                                (* calr (q calr))
                                (* calr (q code))
@@ -163,6 +182,7 @@
                                   (* calr (q defs)))))
                          defs)))  
     ))
+
 
 
 (kreck (1 2 3) (l (> args) (> args)))
@@ -176,12 +196,85 @@
                            (* calr arg1)))
                      defs)))
        ($@c inop (q* (l (q (l (* calr arg1)
-                              (* calr (q defs)))) 
+                              (* calr (q defs))
+                              calr)); fn-snip?
                         defs)))
+       #|
        ($@c fn (q* (inop (q (inop (l (q $->)
                                      (q fn-snip)
                                      (* calr arg1)))))))
-       ($@c b (q* (inop (q ($-> fn-snip (c arg1 arg1))))))
-       ($@c x (q* (inop (q (c arg1 arg1)))))
-       ((fn (q (c arg1 arg1))) (l arg1 arg2))
+       |#
+       ($@c fn (q* (l (q (l (l (q $->)
+                               (q fn-snip)
+                               (* calr arg1))
+                            (* calr (q defs))
+                            calr)); fn-snip?
+                      defs)))
+       ;((fn (q (c arg1 arg1))) (l arg1 arg2))
+       ($@c woo (q* (fn (q (? arg2
+                              (c (c (< (> (< arg2)))
+                                    (l (q <) arg1))
+                                 (this (l (q >) arg1)
+                                       (> arg2))) ;3rd arg?
+                              ~)))))
+       ;removing quotes from inop/fn/$@c args?
+        ;code that turned out useless
+       ;explicit subj as arg?
+       ;assoc
+       ;@
+       ;append
+       ;symstr
+       ;refactor using sym-to-string
+        ;it's just an alias for <>, but it's more readable
+        ;like with evals in $-> definition
+       ($@c map (q* (fn (q (? arg2
+                              (c (arg1 (< arg2))
+                                 (this arg1 (> arg2)))
+                              ~)))))
+       ($@c append (q* (fn (q (? arg1
+                                 (c (< arg1)
+                                    (this (> arg1) arg2))
+                                 arg2)))))
+       ($@c @ (q* (fn (q (? arg2
+                            (? (= arg1 (< (< arg2)))
+                               (< arg2)
+                               (this arg1 (> arg2)))
+                            ~)))))
+       ($@c loc@* (q* (fn (q (? (@ arg1 (* arg2 (q locs)))
+                                (* arg2
+                                   (> (@ arg1 (* arg2 (q locs)))))
+                                (? (* arg2 (q makr))
+                                   (this arg1 (* arg2 (q makr)))
+                                   ~))))))
+       ;^must pass makr
+       ;^problem of reduction not preserving order of optimality
+       ;kerfuffle with strings
+       ;rename @ to assoc?
+       ($@c nfn (q* (l (q (l (l (q $->)
+                                (q fn-snip)
+                                (* calr arg2))
+                             (append (map (fn (q (c (< (> arg1))
+                                                    (l (q loc@*)
+                                                       (< (> arg1))
+                                                       (q ($))))))
+                                          (* calr arg1))
+                                     (* calr (q defs))) ;snippin that
+                             calr
+                             (woo (q args) (* calr arg1))))
+                       defs)))
+       ;(@ (q "b") (q (("a" . 1) ("b" . 2) ("c" . 3))))
+       ;(map (fn (q (l arg1 arg1))) (q (1 2 3)))
+       ;((fn (q (woo (q args) (q (a b c)) locs))))
+       ;(((nfn (q (x y)) (q (nfn (q (z)) (q (c (< locs)
+       ;                                       (* makr (q locs)))))))))
+       ;(((nfn (q (x y)) (q (nfn (q (z)) (q z)))) 1 2) 3)
+       ;^^same problem with defs
+       ;test without doing tró fn
+       ;making ops using threaded modifiers
+       ;(append (q (1 2 3)) (q (3 4)))
+       ;(= (q (1 . 1)) (c 1 1))
+       ;((fn (q (this))))
        ))
+;print op
+
+
