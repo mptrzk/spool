@@ -12,7 +12,7 @@ terminology
 runes
 symbols
 metaprogramming
-typing
+preprocessing
 necessary eval
 inop semantics
 server
@@ -457,17 +457,11 @@ stuff without q*
 
 mostly typeless
 
-symbolic reduction
-arising naturally from where deflists are?
-  contrast with previous inop semantics
+representing code in identifiable form
 
-simple "let" and reducibility
-reducibility and determinism
-section about symbolic reduction
-symbolic reduction and eval
-hinted defs
-lazy let
-irreducibility hint
+symbolic reduction
+
+
 
 ==================================================
 ;METAPROGRAMMING
@@ -484,7 +478,7 @@ how kreck turns it up to 11
 fexprs and macros
 
 ==================================================
-;TYPING
+;PREPROCESSING
 
 typing is
   automating reasoning
@@ -514,6 +508,33 @@ is car code
 is it castable to X
 is it aliasable to X
   does it make sense?
+
+symbolic reduction
+arising naturally from where deflists are?
+  contrast with previous inop semantics
+
+simple "let" and reducibility
+reducibility and determinism
+section about symbolic reduction
+symbolic reduction and eval
+hinted defs
+lazy let
+irreducibility hint
+
+eval what is known
+
+reducing interpreter
+  treats ops differently
+
+must refer to (> (> ($))) to be known
+
+"probe"
+  returns known/unknown
+
+reduction and debugging
+
+
+ 
 
 
 ==================================================
@@ -924,6 +945,20 @@ kreck without "?"
 
 ==================================================
 ;UNCATEGORIZED
+
+funarg problem
+  written about it somewhere
+    probably pld/pth
+
+cleanup
+  move/remove comments
+  unnecessary evals and quotes used to suppress them
+    $@q
+    inop
+    fn
+    nfn
+
+write tests
 
 simple dilemmas section
   simple but not quite obvious design decisions

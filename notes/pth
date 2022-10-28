@@ -206,7 +206,7 @@ writing C feels different
 functions come automagically
 
 ==================================================
-TECH
+;TECH
 
 sexps vs text
 
@@ -215,4 +215,24 @@ not for providing datastructures
 they are for abstracting away the logistics of data storage
   rly?
 
+==================================================
+;UNCATEGORIZED 
 
+syntax & semantics
+
+semantically different loops with the same behavior
+syntax tree isomorphism
+  C-like vs go-like if
+
+semantics vs behavior
+  executable code
+
+if it works, there's some truth to it
+if there's some truth to it, it doesn't mean it's good
+
+the sin of simplifying stuff that's isn't there yet
+  sometimes it's justified
+
+forth
+  chuck moore on principia mathematica
+  forth is just too bad

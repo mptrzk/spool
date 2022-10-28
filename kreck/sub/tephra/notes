@@ -27,6 +27,7 @@ values of x and y
   at run time - memory addreses
   memory addresses
 relative values
+^^ fixed virtual addresses?
 
 how do absolute jumps work then?
 
@@ -53,7 +54,9 @@ forth next
 
 procedure call
   push args
-  p
+  push stack frame
+  push link pointer?
+  branch and link
 
 reads - globals, locals, constants
 writes - globals, locals
@@ -62,5 +65,59 @@ writes - globals, locals
 
 C without variable names
 
+
+forth
+
+understanding:
+  next
+  branch
+  constants
+
+intermixing builtins and words
+
 good VM
   preserves time complexity
+
+orthogonal instruction set
+
+benchmark for machine comparison
+  factorial
+  use godbolt!
+  
+
+machine comparison
+  x86
+    cisc
+    thousands of instructions
+    variable length, hard to decode/encode
+  6502
+    arithmetic works directly on memory addrs
+  Z80
+    in comparison to 6502
+      more registers 
+      supposedly less instructions to do a thing
+      more variable instruction times
+      more instructions?
+      [read more!]
+    CISC??
+  RISC I-IV?
+  RISC V
+  arm
+    looks easier than RISC V
+  mips
+  powerpc
+  lua bytecode
+    register based
+  C# bytecode
+  jvm
+    stack based
+  clisp vm
+  SECD
+  MCODE
+    "task as:
+      stack ptr
+      env ptr
+      prog ptr"
+  lisp machine
+  forth machines
+  

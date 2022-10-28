@@ -267,7 +267,7 @@
        ;((fn (q (woo (q args) (q (a b c)) locs))))
        ;(((nfn (q (x y)) (q (nfn (q (z)) (q (c (< locs)
        ;                                       (* makr (q locs)))))))))
-       ;(((nfn (q (x y)) (q (nfn (q (z)) (q z)))) 1 2) 3)
+       (((nfn (q (x y)) (q (nfn (q (z)) (q z)))) 1 2) 3)
        ;^^same problem with defs
        ;test without doing tró fn
        ;making ops using threaded modifiers
