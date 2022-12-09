@@ -121,6 +121,14 @@ convenience on top of generality
 ==================================================
 ;WRITEUP
 
+what?
+It's a lisp (According to mark Tarver), but more lispy, more powerful,
+more bare-bones and easier to implement well
+  stuff like functions, recursion, types, symbols isn't hardwired
+  general operator applications
+    treats args as code
+    no hardwired distinction between eager functions, macro
+
 kreck story
 Imagine you're on a desert island with no computers...
 You stumble upon a big black box
@@ -136,7 +144,9 @@ this approach is a bit wrong
 
 the software disappears
 
+
 a computer with no software
+
 
 pock story
   urbit story
@@ -152,6 +162,11 @@ forth
 	rpn
 metaprogramming
 lisp
+  powerful and (relatively) sane metaprogramming
+  insane metaprogramming
+    opcode level
+    text level
+    forth
 Stopa's lisp
 dayvan
 nock
@@ -555,12 +570,9 @@ inop getter
 			free of the closure itself
 				???
 				no funcall-like stuff
-	is it really needed thouh?
+	is it really needed though?
 		getter can be an op		
 		a bit funcall like
-
-explicit call?
-	sux
 
 
 why not use subj as an implicit argument
@@ -573,8 +585,15 @@ why not use subj as an implicit argument
 					wouldn't wrapping the op's code work?
 
 
-evdef
-	ease of symbolic reduction through substitution
+defev vs. defget
+  defgev
+    ease of symbolic reduction through substitution
+    don't have to compute where to store stuff in the new subj
+  defget
+    lexical scope is just inheriting a deflist
+      you can do that with defget if you quote stuff
+        but then when you reduce the deflist, you get call by name
+          do you?
 
 *q
 	so that gates can be both added to deflists and used as closures
@@ -591,7 +610,8 @@ explicit - exop that applies an inop
 implicit - apply inop when car of the form is not an atom
   more lispy
   symbol substitution works!
-
+   
+with explicit syntax, you must know whether the op-expr returns an inop or exop
 
 
 *[subj ((code . clos) . args)] = *[(subj (code . clos) . args) code]
@@ -946,17 +966,86 @@ kreck without "?"
 ==================================================
 ;UNCATEGORIZED
 
-funarg problem
-  written about it somewhere
-    probably pld/pth
+machine state description in the subj?
+  after all "environment is explicit"
+  this seems a bit wrong
+environment contains everything that you need to compute the right result
+
+machine introspection is possible with some wild west ops
+
+[move to kreck]
+is multi-package interning really necessary
+  on a system scale it is
+
+
+lisp-like list evaluation
+  vs stuff like lambda calculus
+  is it just eager vs lazy?
+
+expression composition
+  ...takes stuff and evaluates it
+
+universal object 
+  length
+  number of children
+  children
+  data
+
+not code golf
+
+interning problem
+  interning is stateful
+  state is mathematically complicated
+
+krecky combinators are to SKI like natural deduction to hilbert style deduction 
+
+enironment is easily manipulated by programs
+
+splitting snip and eargs
+
+eargs
+
+eval-args
+calr-snip
+
+illusivity of estimating run speed
+
+rec instead of snipping?
+  yay
+    it's less confusing when TCO is explicit
+    it can be used with any inop
+      is that good
+    can use calr for stuff other than evaling args
+  nay
+    is it even possible with the new semantics?
+      just mock-call
+    
+nfn as fn with explicit deflist
+
+is tail-recursing on non-eager stuff even useful?
+
+faux aesthetics?
+        
+methods using calr?
+  -> operator
 
 cleanup
   move/remove comments
   unnecessary evals and quotes used to suppress them
     $@q
+      no
     inop
+      no, fn uses l
+      how about not using "inop" for fn?
+        copying code
     fn
     nfn
+waste of time?
+
+
+funarg problem
+  written about it somewhere
+    probably pld/pth
 
 write tests
 

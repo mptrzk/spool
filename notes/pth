@@ -58,12 +58,39 @@ stumps
 	big bugs	
 
 ==================================================
-OOP
+;OOP
 
-	associating function with one of it's arguments datatype
-		type semantically
-		instance syntactically
-	object in ontology and grammar 
+it models one aspect of natural language
+  meaning of a verb depends on one noun
+
+textbook definition
+  pillars
+    abstraction
+      what it really is
+      what people say it is
+    encapsulation
+      what it really is
+      what people say it is
+    inheritance
+      what it really is
+      what people say it is
+    polymorphism
+      what it really is
+      what people say it is
+  other pillars
+    modularity
+    concurrency
+  stuff that gets misattributed
+
+java
+state
+scala?
+
+
+associating function with one of it's arguments datatype
+  type semantically
+  instance syntactically
+object in ontology and grammar 
 
 it's almost like associating functions with and instance of one of its arguments' datatype
 and generalizing it afterwards
@@ -82,11 +109,20 @@ nail-oriented carpentry
 I have nothing against using a lot of nails
 What I find foolish is "Let's approach the problem in such a way that we can use nails to solve it"
 
+functional programming is more like nailless carpentry
+
 all abstractions have their cost
 
 taxonomy
 
-people might like it because it feels like they're doing stuff thats forgiving
+an oop object is not fundamental in any meaningful way
+
+
+If you can do something in stateless way as well as in stateful way, you choose the former.
+
+people might like it because it feels like they're getting stuff done
+  and the stuff they're getting done is forgiving
+you're drawing boxes around semantics
 
 application of a tool can't become a metric
 
@@ -123,7 +159,19 @@ single dispatch is easy
 objects should be called cells or plants or creatures or whatever
 
 ==================================================
-FUNCTIONAL PROGRAMMING
+;FUNCTIONAL PROGRAMMING
+
+math is simpler
+- but I don't do math
+- yes you do
+- but it isn't simpler
+- it's simpler in general
+- it may seem harder, because the logic is explicid
+  you are used to doing some simple temporal logic, because you live in physical world
+
+time
+
+in physical world stuff stays the same
 
 it's less dogmatic than OOP
 
@@ -135,8 +183,13 @@ intuitiveness of imperative programming
 
 thinking hard about simple problems
 
+algebraic types
+
+
 ==================================================
 ABSOLUTELY IDIOTIC PROGRAMMING
+
+meh
 
 absolutely idiotic approach to generating quality through intellectual work
 
@@ -204,6 +257,7 @@ don't do
 
 writing C feels different
 functions come automagically
+  that's because the stuff I did was simple
 
 ==================================================
 ;TECH
@@ -217,6 +271,8 @@ they are for abstracting away the logistics of data storage
 
 ==================================================
 ;UNCATEGORIZED 
+
+when you get stuff like "pimpl" pattern
 
 syntax & semantics
 
@@ -235,4 +291,4 @@ the sin of simplifying stuff that's isn't there yet
 
 forth
   chuck moore on principia mathematica
-  forth is just too bad
+  forth just scales too badly

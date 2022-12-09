@@ -156,6 +156,7 @@
                            (c defs ~))))
     ("eargs" . ,(parse '(* calr (c (q l) args))))
     ("fn-snip" . ,(parse '(c eargs (c ~ this)))) 
+    ("snip" . ,(parse '(c args (c ~ this)))) 
     #|
     ("$->" . ,(parse '(l (q (? args 
                                (* (c (> args)
@@ -250,6 +251,10 @@
        ;^problem of reduction not preserving order of optimality
        ;kerfuffle with strings
        ;rename @ to assoc?
+       ($@c rec (q* (inop (q  (* (* calr snip)
+                                 (c (* calr arg1)
+                                    (> args)))))))
+       ;^ must snip 2 levels deep
        ($@c nfn (q* (l (q (l (l (q $->)
                                 (q fn-snip)
                                 (* calr arg2))
@@ -267,13 +272,13 @@
        ;((fn (q (woo (q args) (q (a b c)) locs))))
        ;(((nfn (q (x y)) (q (nfn (q (z)) (q (c (< locs)
        ;                                       (* makr (q locs)))))))))
-       (((nfn (q (x y)) (q (nfn (q (z)) (q z)))) 1 2) 3)
+       ;(((nfn (q (x y)) (q (nfn (q (z)) (q z)))) 1 2) 3)
        ;^^same problem with defs
        ;test without doing tró fn
        ;making ops using threaded modifiers
        ;(append (q (1 2 3)) (q (3 4)))
        ;(= (q (1 . 1)) (c 1 1))
-       ;((fn (q (this))))
+       ((inop (q (this))))
        ))
 ;print op
 
